@@ -108,7 +108,7 @@
 </main>
 <script>
 const $ = id => document.getElementById(id);
-let job = null, jdMeta = {title:'', company:'', url:''}, sheetUrl = '';
+let job = null, jdMeta = {title:'', company:'', url:''}, sheetUrl = '', trackerDirty = false;
 const esc = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 const md = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 
@@ -131,6 +131,10 @@ api('/api/status').then(s => {
 }).catch(() => {});
 
 $('jd').addEventListener('input', () => { $('fetchmsg').textContent = ''; $('genmsg').textContent = ''; });
+// A freshly pasted job description is not the one we fetched earlier, so drop the old company/title.
+$('jd').addEventListener('paste', () => { jdMeta = {title:'', company:'', url:''}; });
+// Remember when the user hand-edits the tracker fields so we don't overwrite their typing.
+['tco', 'trole'].forEach(id => $(id).addEventListener('input', () => { trackerDirty = true; }));
 $('url').addEventListener('keydown', e => { if (e.key === 'Enter') $('fetch').click(); });
 
 $('fetch').onclick = async () => {
@@ -150,15 +154,20 @@ $('go').onclick = async () => {
   const m = $('genmsg'); $('fetchmsg').textContent = '';
   if ($('jd').value.trim().length < 80) { m.className = 'msg err'; m.textContent = 'Paste the job description above first (at least a few sentences).'; return; }
    m.className = 'msg'; m.textContent = 'Tailoring and compiling (can take up to a minute)...'; $('go').disabled = true;
-  try { job = await api('/api/generate', {base:$('base').value, jd:$('jd').value, mock:$('mock').checked}); m.textContent = ''; render(); }
+  try {
+    job = await api('/api/generate', {base:$('base').value, jd:$('jd').value, mock:$('mock').checked});
+    m.textContent = '';
+    // New job: refresh the tracker fields (unless the user typed in them) and clear the old "Added ..." message.
+    if (!trackerDirty) { $('tco').value = jdMeta.company || ''; $('trole').value = jdMeta.title || ''; }
+    $('trackmsg').textContent = '';
+    render();
+  }
   catch (e) { m.className = 'msg err'; m.textContent = e.message; }
   $('go').disabled = false;
 };
 
 function render() {
   $('trackCard').classList.remove('hide');
-  if (!$('tco').value) $('tco').value = jdMeta.company || '';
-  if (!$('trole').value) $('trole').value = jdMeta.title || '';
   $('report').classList.remove('hide'); $('slotsCard').classList.remove('hide');
   $('summary').innerHTML = `<b>${esc(job.base_name)} base</b>${job.base_reason ? ' <span class="sub">(' + esc(job.base_reason) + ')</span>' : ''}<br>${esc(job.summary || '')}`;
   const fill = job.fill_pct;
@@ -226,6 +235,7 @@ $('track').onclick = async () => {
   try {
     const r = await api('/api/track', {job_id: job.job_id, company: $('tco').value, role: $('trole').value});
     m.className = 'msg okc';
+    trackerDirty = false;  // logged; the next tailored job should refill these fields
     m.innerHTML = r.mode === 'google' ? `Added ${esc(r.company)}: ${esc(r.role)}. <a href="${r.drive_url}" target="_blank">Resume PDF</a> · <a href="${r.sheet_url}" target="_blank">Open sheet</a>` : `Saved locally: ${esc(r.job)}`;
   } catch (e) { m.className = 'msg err'; m.textContent = e.message; }
   $('track').disabled = false;
