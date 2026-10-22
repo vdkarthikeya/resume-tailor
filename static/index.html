@@ -5,16 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Resume Tailor</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
-  /* Palette: blush #EDB5AC, cream #FBEBD5, navy #2F4B6E, sage #6E8F83, mist #BED3CE */
-  :root { --bg:#fbebd5; --paper:#fff8ec; --card:#fff8ec; --ink:#243b57; --mute:#6c7b84; --line:#d9c9ae; --acc:#2f4b6e; --onacc:#fbebd5; --blush:#edb5ac; --sage:#6e8f83; --mist:#bed3ce;
-          --ok:#3f6f62; --warn:#a8553d; --bad:#9e3a32; --add:#dfeae6; --del:#f7dcd6; --shadow:0 1px 0 rgba(47,75,110,.06), 0 10px 26px -18px rgba(47,75,110,.45);
-          --ui:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif; --text:var(--ui); --display:"Syncopate","Helvetica Neue",Arial,sans-serif; }
-  @media (prefers-color-scheme: dark) { :root:not([data-theme=light]) { --bg:#182739; --paper:#20334b; --card:#20334b; --ink:#fbebd5; --mute:#a7b6bd; --line:#3b5473; --acc:#edb5ac; --onacc:#1b2c42; --ok:#9fcabc; --warn:#f0b49f; --bad:#ff9e92; --add:#27483f; --del:#523038; --shadow:0 12px 28px -18px rgba(0,0,0,.7); } }
+  /* Palette: espresso #261311, copper #c4895a, parchment #f1e6d6, forest #1f3b34 */
+  :root { --bg:#261311; --paper:#321b17; --card:#321b17; --ink:#f1e6d6; --mute:#b5a392; --line:#503630; --acc:#c4895a; --onacc:#261311; --blush:#c4895a; --sage:#2f5a4e; --mist:#3d2420;
+          --ok:#94c7ad; --warn:#e3a574; --bad:#ff9f90; --add:#213a33; --del:#4a2824; --shadow:0 12px 28px -16px rgba(0,0,0,.8);
+          --ui:"Lora",Georgia,"Times New Roman",serif; --text:var(--ui); --display:"Syncopate","Helvetica Neue",Arial,sans-serif; color-scheme:dark; }
   * { box-sizing:border-box; }
   body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.6 var(--text); }
-  .swatch { display:flex; height:10px; } .swatch i { flex:1; } .swatch i:nth-child(1){background:var(--blush)} .swatch i:nth-child(2){background:#fbebd5} .swatch i:nth-child(3){background:#2f4b6e} .swatch i:nth-child(4){background:var(--sage)} .swatch i:nth-child(5){flex:2.2;background:var(--mist)}
+  .swatch { display:flex; height:10px; } .swatch i { flex:1; } .swatch i:nth-child(1){background:#c4895a} .swatch i:nth-child(2){background:#f1e6d6} .swatch i:nth-child(3){background:#7a4a2e} .swatch i:nth-child(4){background:#2f5a4e} .swatch i:nth-child(5){flex:2.2;background:#3d2420}
   header { padding:26px 32px 14px; text-align:center; max-width:1280px; margin:0 auto; }
   h1 { font:400 clamp(22px,3.4vw,32px)/1.1 var(--display); letter-spacing:.22em; margin:0; color:var(--ink); padding-left:.22em; }  .sub { color:var(--mute); font:13px var(--ui); } #status { display:block; margin-top:10px; font-size:12px; }
   main { display:grid; grid-template-columns:minmax(340px,490px) 1fr; gap:24px; padding:14px 32px 56px; align-items:start; max-width:1280px; margin:0 auto; }
@@ -32,7 +31,7 @@
   button { padding:8px 16px; border-radius:2px; border:1px solid var(--acc); background:transparent; color:var(--acc); font:600 13px var(--ui); cursor:pointer; transition:background .15s, color .15s; }
   button:hover:not(:disabled) { background:var(--mist); } 
   button.primary { background:var(--acc); border-color:var(--acc); color:var(--onacc); width:100%; margin-top:12px; padding:11px; font-size:14px; }
-  button.primary:hover:not(:disabled) { background:var(--sage); border-color:var(--sage); color:#fff; }
+  button.primary:hover:not(:disabled) { background:#d9a074; border-color:#d9a074; color:var(--onacc); }
   button:disabled { opacity:.5; cursor:wait; }
   .msg { font:13px var(--ui); margin-top:6px; } .err { color:var(--bad); } .okc { color:var(--ok); } .warnc { color:var(--warn); }
   .chips { display:flex; flex-wrap:wrap; gap:6px; } .chip { background:var(--bg); border:1px solid var(--line); border-radius:99px; padding:2px 11px; font:12px var(--ui); }
@@ -43,14 +42,14 @@
   .slot-h { display:flex; justify-content:space-between; gap:8px; align-items:center; font:600 14px var(--ui); }
   .slot-h label { margin:0; font:400 12px var(--ui); display:flex; gap:6px; align-items:center; }
   .b { font-size:13px; padding:5px 10px; border-radius:2px; margin:4px 0; white-space:pre-wrap; border-left:3px solid transparent; }
-  .b.old { background:var(--del); border-left-color:var(--blush); text-decoration:line-through; text-decoration-color:rgba(0,0,0,.25); opacity:.85; } .b.new { background:var(--add); border-left-color:var(--sage); } .b.same { color:var(--mute); }
+  .b.old { background:var(--del); border-left-color:var(--blush); text-decoration:line-through; text-decoration-color:rgba(255,255,255,.35); opacity:.85; } .b.new { background:var(--add); border-left-color:#5f9a85; } .b.same { color:var(--mute); }
   details { font:12px var(--ui); color:var(--mute); margin:2px 0 4px 8px; } details q { display:block; margin:2px 0; } .nf { color:var(--bad); }
   .tabs { display:flex; gap:6px; margin-bottom:8px; } .tabs button.on { background:var(--acc); color:var(--onacc); border-color:var(--acc); }
-  .chip.k-ok { border-color:var(--sage); background:var(--add); color:var(--ok); } .chip.k-warn { border-color:var(--blush); background:var(--del); color:var(--warn); }
+  .chip.k-ok { border-color:#5f9a85; background:var(--add); color:var(--ok); } .chip.k-warn { border-color:#c4895a; background:var(--del); color:var(--warn); }
   .hide { display:none; } ul { margin:4px 0 0 18px; padding:0; } .actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
   a { color:var(--acc); }
   a.btn { text-decoration:none; padding:9px 18px; border-radius:2px; border:1px solid var(--acc); background:var(--acc); color:var(--onacc); font:600 13px var(--ui); } a.btn.alt { background:transparent; color:var(--acc); }
-  a.btn:hover { background:var(--sage); border-color:var(--sage); color:#fff; }
+  a.btn:hover { background:#d9a074; border-color:#d9a074; color:var(--onacc); }
   .sub[style*="margin-top"] { font-size:12px; font-weight:600; }
 </style>
 </head>
