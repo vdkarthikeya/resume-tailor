@@ -62,10 +62,10 @@
   <section>
     <div class="card">
       <h2>1. Job</h2>
-      <label for="url">Job link (Greenhouse, Lever, Ashby, most company career pages)</label>
+      <label for="url">Job link (optional: Greenhouse, Lever, Ashby, most career pages)</label>
       <div class="row"><input type="text" id="url" placeholder="https://boards.greenhouse.io/..."><button id="fetch">Fetch</button></div>
       <div class="msg" id="fetchmsg"></div>
-      <label for="jd">Job description (fetched text lands here, or paste it)</label>
+      <label for="jd">Job description. Paste the full text here if the link misses anything.</label>
       <textarea id="jd" placeholder="Paste the job description..."></textarea>
     </div>
     <div class="card">
@@ -130,19 +130,26 @@ api('/api/status').then(s => {
     $('tracksub').innerHTML = s.tracker === 'google' ? `Logging to your <a href="${s.sheet_url}" target="_blank">Google Sheet</a> and Drive folder.` : 'Google not connected yet: saving to the local applications/ folder (see README to connect your Sheet).';
 }).catch(() => {});
 
+$('jd').addEventListener('input', () => { $('fetchmsg').textContent = ''; $('genmsg').textContent = ''; });
+$('url').addEventListener('keydown', e => { if (e.key === 'Enter') $('fetch').click(); });
+
 $('fetch').onclick = async () => {
-  const m = $('fetchmsg'); m.className = 'msg'; m.textContent = 'Fetching...'; $('fetch').disabled = true;
+  const m = $('fetchmsg'); m.className = 'msg';
+  if (!$('url').value.trim()) { m.textContent = 'No link? No problem. Just paste the job text in the box below.'; return; }
+  m.textContent = 'Fetching...'; $('fetch').disabled = true;
   try {
     const r = await api('/api/fetch-jd', {url: $('url').value});
     jdMeta = {title: r.title, company: r.company, url: r.url};
     $('jd').value = (r.title ? r.title + (r.company ? ' at ' + r.company : '') + '\n\n' : '') + r.text;
     m.className = 'msg okc'; m.textContent = `Got ${r.text.length.toLocaleString()} characters via ${r.source}. Check it looks right.`;
-  } catch (e) { m.className = 'msg err'; m.textContent = e.message; }
+  } catch (e) { m.className = 'msg err'; m.textContent = e.message + ' You can paste the job text in the box below instead.'; }
   $('fetch').disabled = false;
 };
 
 $('go').onclick = async () => {
-  const m = $('genmsg'); m.className = 'msg'; m.textContent = 'Tailoring and compiling (can take up to a minute)...'; $('go').disabled = true;
+  const m = $('genmsg'); $('fetchmsg').textContent = '';
+  if ($('jd').value.trim().length < 80) { m.className = 'msg err'; m.textContent = 'Paste the job description above first (at least a few sentences).'; return; }
+   m.className = 'msg'; m.textContent = 'Tailoring and compiling (can take up to a minute)...'; $('go').disabled = true;
   try { job = await api('/api/generate', {base:$('base').value, jd:$('jd').value, mock:$('mock').checked}); m.textContent = ''; render(); }
   catch (e) { m.className = 'msg err'; m.textContent = e.message; }
   $('go').disabled = false;
