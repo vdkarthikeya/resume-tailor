@@ -45,12 +45,17 @@ def google_ready() -> bool:
     return webhook_cfg() is not None
 
 
+def stamp() -> str:
+    import datetime
+    return datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S")
+
+
 def log_application(pdf: Path, tex: Path, company: str, role: str) -> dict:
     company = company.strip()
     role = clean_role(role, company)
     if not company or not role:
         raise ValueError("Company and role are required.")
-    stem = f"{safe(company)} - {safe(role)}"
+    stem = f"{safe(company)} - {safe(role)} - {stamp()}"  # date and time so repeat applications never overwrite each other
     # local copy of exactly what was submitted, in a Resumes subfolder
     res_dir = LOCAL_DIR / "Resumes"
     res_dir.mkdir(parents=True, exist_ok=True)

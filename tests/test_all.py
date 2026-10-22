@@ -138,8 +138,9 @@ def test_track_local(tmp_path, monkeypatch):
     r = c.post("/api/track", json={"job_id": d["job_id"], "company": "Acme", "role": "Acme - SWE Intern, Summer 2027 (USA) | Acme.jobs"})
     assert r.status_code == 200 and r.json()["mode"] == "local" and r.json()["role"] == "SWE Intern"
     rows = (tmp_path / "apps" / "tracker.csv").read_text().splitlines()
-    assert rows[0] == "Company,Role,Resume" and rows[1] == "Acme,SWE Intern,Resumes/Acme - SWE Intern.pdf"
-    assert (tmp_path / "apps" / "Resumes" / "Acme - SWE Intern.pdf").exists()
+    import re
+    assert rows[0] == "Company,Role,Resume" and re.fullmatch(r"Acme,SWE Intern,Resumes/Acme - SWE Intern - \d{4}-\d{2}-\d{2} \d{2}-\d{2}-\d{2}\.pdf", rows[1]), rows[1]
+    assert len(list((tmp_path / "apps" / "Resumes").glob("Acme - SWE Intern - *.pdf"))) == 1
     assert c.post("/api/track", json={"job_id": d["job_id"], "company": "", "role": "x"}).status_code == 400
 
 
@@ -161,7 +162,7 @@ def test_track_webhook(tmp_path, monkeypatch):
     d = c.post("/api/generate", json={"base": "ml", "jd": "ML engineer intern PyTorch. " * 10, "mock": True}).json()
     r = c.post("/api/track", json={"job_id": d["job_id"], "company": "Acme", "role": "ML Intern"})
     assert r.status_code == 200 and r.json()["mode"] == "google", r.text
-    assert got["token"] == "tok" and got["company"] == "Acme" and got["role"] == "ML Intern" and got["filename"] == "Acme - ML Intern.pdf" and "status" not in got and base64.b64decode(got["pdf_base64"])[:4] == b"%PDF"
+    assert got["token"] == "tok" and got["company"] == "Acme" and got["role"] == "ML Intern" and got["filename"].startswith("Acme - ML Intern - ") and __import__("re").fullmatch(r"Acme - ML Intern - \d{4}-\d{2}-\d{2} \d{2}-\d{2}-\d{2}\.pdf", got["filename"]) and "status" not in got and base64.b64decode(got["pdf_base64"])[:4] == b"%PDF"
     srv.shutdown()
 
 
