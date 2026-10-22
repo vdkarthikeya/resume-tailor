@@ -76,7 +76,12 @@ def log_application(pdf: Path, tex: Path, company: str, role: str) -> dict:
         try:
             d = r.json()
         except Exception:
-            raise RuntimeError("The Apps Script did not return JSON. Re-deploy it as a web app with access set to Anyone.")
+            # Show what Google actually sent back so the cause is visible (sign-in page, auth prompt, error page...).
+            snippet = re.sub(r"\s+", " ", re.sub(r"<(script|style).*?</\1>|<[^>]+>", " ", r.text, flags=re.S)).strip()[:200]
+            raise RuntimeError(
+                f"The Apps Script did not return JSON (HTTP {r.status_code}, {r.headers.get('content-type', 'unknown type')}). "
+                f"Google said: \"{snippet}\". Re-deploy it as a web app with access set to Anyone, "
+                "and make sure the script has been authorized to use Drive and Sheets.")
         if not d.get("ok"):
             raise RuntimeError("Tracker script said: " + str(d.get("error")))
         out.update(mode="google", drive_url=d["drive_url"], sheet_url=SHEET_URL, folder_url=FOLDER_URL)
