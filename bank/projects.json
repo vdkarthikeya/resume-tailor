@@ -1,0 +1,212 @@
+[
+  {
+    "id": "movie_genre",
+    "title": "Movie Genre Classification",
+    "url": "https://github.com/vdkarthikeya/movie-genre-classification-nlp",
+    "stack": [
+      "Python",
+      "PyTorch",
+      "scikit-learn",
+      "XGBoost",
+      "LightGBM",
+      "SentenceTransformers"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "movie_genre_1",
+        "markup": "Built a multi-label NLP model that predicts a movie's genres from its title and plot summary, trained on **42K+** films.",
+        "from_resume": "ds"
+      },
+      {
+        "id": "movie_genre_2",
+        "markup": "Improved predictions for rare genres by giving each genre its own cutoff, raising Macro F1 from 0.48 to **0.66**.",
+        "from_resume": "ds"
+      },
+      {
+        "id": "movie_genre_3",
+        "markup": "Raised the overall score (Macro F1) from 0.48 to **0.66** by giving each genre its own cutoff, and found a simple model beat complex ones while training **12×** faster.",
+        "from_resume": "ml"
+      },
+      {
+        "id": "movie_genre_4",
+        "markup": "Compared Logistic Regression, XGBoost, and LightGBM on text embeddings; the simpler Logistic Regression won and trained about **12×** faster.",
+        "from_resume": "ds"
+      }
+    ]
+  },
+  {
+    "id": "housing_bias",
+    "title": "Housing Price \\& Assessment Bias",
+    "url": "https://github.com/vdkarthikeya/housing-price-assessment-bias-public",
+    "stack": [
+      "Python",
+      "pandas",
+      "scikit-learn",
+      "NumPy"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "housing_bias_1",
+        "markup": "Built a model that estimates home values from **200K+** Cook County (Chicago) property records, and audited its fairness across price ranges to show which homes get over- or under-valued and taxed unfairly.",
+        "from_resume": "ds"
+      },
+      {
+        "id": "housing_bias_2",
+        "markup": "Built a model that estimates home values from **200K+** Chicago-area property records and checked which homes are over- or under-valued.",
+        "from_resume": "ml"
+      },
+      {
+        "id": "housing_bias_3",
+        "markup": "Engineered **15+** features (log square footage, polynomial age and location terms) and validated with 4-fold cross-validation (test RMSE **0.562**).",
+        "from_resume": "ds"
+      }
+    ]
+  },
+  {
+    "id": "sb79",
+    "title": "SB 79 Transit Housing Analysis (Los Angeles)",
+    "url": "https://github.com/vdkarthikeya/sb79-tod-analysis-public",
+    "stack": [
+      "ArcGIS Online",
+      "StoryMaps"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "sb79_1",
+        "markup": "Mapped the parts of Los Angeles that qualify for denser housing near transit under a new California law (**6,413** eligible zoning areas), layering in displacement risk, pollution, and fire hazard data in an interactive StoryMap.",
+        "from_resume": "ds"
+      }
+    ]
+  },
+  {
+    "id": "spam",
+    "title": "Email Spam Classifier",
+    "url": "https://github.com/vdkarthikeya/spam-ham-classifier-public",
+    "stack": [
+      "Python",
+      "scikit-learn",
+      "pandas",
+      "NumPy"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "spam_1",
+        "markup": "Built a spam filter that reads an email's text and flags spam, correctly sorting **92.1%** of emails it had never seen.",
+        "from_resume": "ds"
+      },
+      {
+        "id": "spam_2",
+        "markup": "Built a spam filter from 50+ engineered signals (link counts, dollar signs, HTML) that correctly sorts **92.1%** of unseen emails.",
+        "from_resume": "ml"
+      },
+      {
+        "id": "spam_3",
+        "markup": "Tuned an L1-regularized Logistic Regression with GridSearchCV and **10**-fold cross-validation, weighing precision against recall because false positives cost more.",
+        "from_resume": "ml"
+      }
+    ]
+  },
+  {
+    "id": "sightline",
+    "title": "SightLine (Open Projects, ML team)",
+    "url": "https://github.com/vdkarthikeya/sightline-ml-public",
+    "stack": [
+      "Python",
+      "PyTorch",
+      "OpenCV"
+    ],
+    "suffix": "in progress",
+    "bullets": [
+      {
+        "id": "sightline_1",
+        "markup": "Developing an app that turns a day of Meta Ray-Ban smart glasses footage into a **60-second** highlight video; on the ML team, which splits footage into clips and uses audio and visual models to pick the best moments.",
+        "from_resume": "ml"
+      },
+      {
+        "id": "sightline_2",
+        "markup": "Building the ML pipeline for an app that turns a day of Meta Ray-Ban smart glasses footage into a **60-second** highlight video, splitting footage into clips and using audio and visual models to pick the best moments.",
+        "from_resume": "swe"
+      },
+      {
+        "id": "sightline_3",
+        "markup": "Work with the iOS and backend teams on how clip ranking fits into the full product pipeline.",
+        "from_resume": "pm"
+      }
+    ]
+  },
+  {
+    "id": "byow",
+    "title": "Build Your Own World (Dungeon Game)",
+    "url": "https://github.com/vdkarthikeya/build-your-own-world-public",
+    "stack": [
+      "Java"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "byow_1",
+        "markup": "Built a seeded, procedurally generated dungeon game in Java where enemies chase the player along shortest paths (BFS), moving two steps for every one the player takes once in range.",
+        "from_resume": "swe"
+      },
+      {
+        "id": "byow_2",
+        "markup": "Designed a quiz-battle system with **100+** CS 61B trivia questions: enemy contact drains health until the player answers correctly, and health packs restore it.",
+        "from_resume": "swe"
+      }
+    ]
+  },
+  {
+    "id": "ngordnet",
+    "title": "Ngordnet",
+    "url": "https://github.com/vdkarthikeya/ngordnet-public",
+    "stack": [
+      "Java"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "ngordnet_1",
+        "markup": "Built a word-exploration tool that finds every more specific word under a given word and ranks them by usage.",
+        "from_resume": "swe"
+      },
+      {
+        "id": "ngordnet_2",
+        "markup": "Implemented hyponym search over a WordNet graph with recursive DFS, and wrote tests for cycles, self-loops, and disconnected graphs.",
+        "from_resume": "swe"
+      }
+    ]
+  },
+  {
+    "id": "scheme",
+    "title": "Scheme Interpreter",
+    "url": "https://github.com/vdkarthikeya/scheme-interpreter-public",
+    "stack": [
+      "Python"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "scheme_1",
+        "markup": "Built a Python program that runs Scheme code, with tail-call optimization so deep recursion does not crash.",
+        "from_resume": "swe"
+      }
+    ]
+  },
+  {
+    "id": "calhousing",
+    "title": "California Housing Regression",
+    "url": "https://github.com/vdkarthikeya/california-housing-regression",
+    "stack": [
+      "Python",
+      "scikit-learn",
+      "pandas",
+      "NumPy"
+    ],
+    "suffix": "",
+    "bullets": []
+  }
+]

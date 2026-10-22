@@ -1,0 +1,239 @@
+%-------------------------
+% Resume in Latex
+% Author : Jake Gutierrez
+% Based off of: https://github.com/sb2nov/resume
+% License : MIT
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\usepackage{ulem}
+\normalem  % prevents ulem from changing \emph behavior
+\setlength{\multicolsep}{-3.0pt}
+\setlength{\columnsep}{-1pt}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.19in}
+\addtolength{\topmargin}{-.7in}
+\addtolength{\textheight}{1.4in}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\classesList}[4]{
+    \item\small{
+        {#1 #2 #3 #4 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \textbf{\small #2} \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeCompactHeading}[4]{
+  \vspace{-1pt}\item
+    \begin{tabularx}{1.0\textwidth}[t]{@{}X@{}>{\raggedright\arraybackslash}p{1.5in}@{}}
+      \textbf{#1} $|$ \textbf{#2} $|$ \textbf{\small #3} & \textbf{\small #4} \\
+    \end{tabularx}\vspace{-3pt}
+}
+
+\newcommand{\resumeLeadHeading}[4]{
+  \vspace{-1pt}\item
+    \begin{tabularx}{1.0\textwidth}[t]{@{}X@{}>{\raggedright\arraybackslash}p{1.5in}@{}}
+      \textbf{#1} $|$ \textbf{#2} $|$ \textbf{\small #3} & \textbf{\small #4} \\
+    \end{tabularx}\vspace{-5pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[1]{
+    \item\small{{#1 \vspace{-3pt}}}
+}
+
+\newcommand{\lk}{\,{\scriptsize$\nearrow$}}
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[itemsep=2.5pt, topsep=3pt]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-4pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    {\Huge \scshape Dhana Karthikeya Ventrapragada} \\ \vspace{1pt}
+        \footnotesize
+    +1 (669) 269-8955 $|$
+    \href{mailto:vdkarthikeya@berkeley.edu}{\uline{vdkarthikeya@berkeley.edu}} $|$
+    \href{https://www.linkedin.com/in/vdkarthikeya/}{\uline{linkedin.com/in/vdkarthikeya}} $|$
+    \href{https://github.com/vdkarthikeya}{\uline{github.com/vdkarthikeya}} $|$
+    \href{https://vdkarthikeya.github.io}{\uline{vdkarthikeya.github.io}}
+    \vspace{-8pt}
+\end{center}
+
+%-----------EDUCATION-----------
+\section{Education}
+\resumeSubHeadingListStart
+
+\resumeSubheading
+{University of California, Berkeley}{Expected Dec 2027}
+{B.A. in Data Science and Applied Mathematics \;|\; GPA: 3.85/4.00}{Berkeley, CA}
+
+\vspace{-6pt}
+\resumeItemListStart
+\resumeItem{\textbf{Relevant Coursework:} Structure \& Interpretation of Computer Programs, Data Structures; \textit{In progress:} Efficient Algorithms \& Intractable Problems, Functional Programming \& AI-Assisted App Development, Data Engineering}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+\vspace{-14pt}
+
+%-----------TECHNICAL SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}, itemsep=3pt]
+    \small{\item{
+     \textbf{Languages}{: Python, Java, SQL, TypeScript} \\[2pt]
+     \textbf{Engineering}{: FastAPI, React, REST APIs, PostgreSQL, Auth0, AWS S3, Background Jobs, pytest, Git, GitHub} \\[2pt]
+     \textbf{Fundamentals}{: Data Structures, Graph Algorithms, Complexity Analysis, OOP, Functional Programming} \\[2pt]
+     \textbf{ML \& Data}{: PyTorch, scikit-learn, XGBoost, pandas, NumPy}
+    }}
+ \end{itemize}
+ \vspace{-15pt}
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeCompactHeading
+        {\href{https://guanglabs.com/}{\uline{Guang Labs}}\lk}{Engineering Intern}{Remote}{May 2026 -- Aug 2026}
+        \resumeItemListStart
+             \resumeItem{Engineered a backend service for an AI video startup that classifies a user's image or video by content type (sports, gaming, talking) using Google's Gemini.}
+             \resumeItem{Architected an asynchronous submit-and-poll workflow that processes long videos in the background rather than blocking users (FastAPI, PostgreSQL, Auth0).}
+             \resumeItem{Delivered the service end to end after code review, supporting uploads from \textbf{4} sources (local, S3, web links) and validating it with \textbf{86} automated tests.}
+             \resumeItem{Developed an in-app notification bell, from the database to the React interface, that alerts users when their video finishes processing or fails, and ensured failures never disrupt processing or send duplicate alerts on retries.}
+        \resumeItemListEnd
+
+    \resumeCompactHeading
+        {\href{https://idxexchange.com/}{\uline{IDX Exchange}}\lk}{Data Science Intern}{Remote}{Jun 2026 -- Aug 2026}
+        \resumeItemListStart
+            \resumeItem{Engineered a pipeline that predicts California home sale prices from \textbf{143K} real-estate records, typically within \textbf{8.6\%} of the actual price.}
+            \resumeItem{Benchmarked four model types and selected a tuned XGBoost (R\textsuperscript{2} of \textbf{0.88}), resolving a data leakage bug and cutting a simpler model's error from \textbf{29\%} to \textbf{15\%} with a school district feature.}
+        \resumeItemListEnd
+
+    \resumeCompactHeading
+        {Fung Institute}{Fung Fellow, Health + Innovation}{Berkeley, CA}{Aug 2026 -- Present}
+        \resumeItemListStart
+            \resumeItem{Selected for Berkeley's industry-partner fellowship, placed on The After Collective project supporting wildfire survivors.}
+            \resumeItem{Interviewed wildfire survivors about the tools and information they use, and organize the team's documentation.}
+        \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+\vspace{-12pt}
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \vspace{0pt}
+    \resumeSubHeadingListStart
+
+         \resumeProjectHeading
+            {\textbf{\href{https://github.com/vdkarthikeya/build-your-own-world-public}{\uline{Build Your Own World (Dungeon Game)}}\lk} $|$ \emph{Java}}
+        \resumeItemListStart
+            \resumeItem{Built a seeded, procedurally generated dungeon game in Java where enemies chase the player along shortest paths (BFS), moving two steps for every one the player takes once in range.}
+            \resumeItem{Designed a quiz-battle system with \textbf{100+} CS 61B trivia questions: enemy contact drains health until the player answers correctly, and health packs restore it.}
+        \resumeItemListEnd
+        \vspace{2pt}
+
+        \resumeProjectHeading
+            {\textbf{\href{https://github.com/vdkarthikeya/ngordnet-public}{\uline{Ngordnet}}\lk} $|$ \emph{Java}}
+        \resumeItemListStart
+            \resumeItem{Built a word-exploration tool that finds every more specific word under a given word and ranks them by usage.}
+        \resumeItemListEnd
+        \vspace{2pt}
+
+        \resumeProjectHeading
+            {\textbf{\href{https://github.com/vdkarthikeya/sightline-ml-public}{\uline{SightLine (Open Projects, ML team)}}\lk} $|$ \emph{Python, in progress}}
+        \resumeItemListStart
+            \resumeItem{Building the ML pipeline for an app that turns a day of Meta Ray-Ban smart glasses footage into a \textbf{60-second} highlight video, splitting footage into clips and using audio and visual models to pick the best moments.}
+        \resumeItemListEnd
+        \vspace{2pt}
+
+        \resumeProjectHeading
+            {\textbf{\href{https://github.com/vdkarthikeya/scheme-interpreter-public}{\uline{Scheme Interpreter}}\lk} $|$ \emph{Python}}
+        \resumeItemListStart
+            \resumeItem{Built a Python program that runs Scheme code, with tail-call optimization so deep recursion does not crash.}
+        \resumeItemListEnd
+
+    \resumeSubHeadingListEnd
+\vspace{-12pt}
+
+%-----------LEADERSHIP-----------
+\section{Leadership \& Involvement}
+    \resumeSubHeadingListStart
+
+        \resumeLeadHeading
+            {UC Berkeley CDSS}{Reader/Tutor, CDSS 198}{Berkeley, CA}{Aug 2026 -- Present}
+        \resumeItemListStart
+            \resumeItem{Run exam reviews and write practice worksheets for transfer students, and give resume feedback.}
+        \resumeItemListEnd
+
+        \resumeLeadHeading
+            {UC Berkeley EECS}{Course Staff (UCS1), CS 61A}{Berkeley, CA}{Jun 2026 -- Aug 2026}
+        \resumeItemListStart
+            \resumeItem{Taught \textbf{4} weekly exam-prep sections, held office hours, helped write midterm and final questions, and led final review sessions.}
+        \resumeItemListEnd
+
+    \resumeSubHeadingListEnd
+\vspace{-6pt}
+
+\end{document}

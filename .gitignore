@@ -1,0 +1,16 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+out/
+applications/
+tracker_config.json
+credentials*.json
+token*.json
+.env
+.env.*
+.DS_Store
+*.aux
+*.log
+*.out
