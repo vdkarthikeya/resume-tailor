@@ -172,6 +172,21 @@ def test_clean_role():
     assert J.clean_role("Machine Learning Engineer at Stripe", "Stripe") == "Machine Learning Engineer"
 
 
+@pytest.mark.parametrize("text,title,company", [
+    ("Machine Learning Research Intern at Scale AI\n\nAbout the role\nWe are looking for...", "Machine Learning Research Intern", "Scale AI"),
+    ("Scale AI - Machine Learning Research Intern - Summer 2027 (USA)\nWe build data infrastructure.", "Machine Learning Research Intern", "Scale AI"),
+    ("Software Engineering Intern, 2027 | Uber\nUber is hiring interns to build...", "Software Engineering Intern", "Uber"),
+    ("Company: Netflix\nJob Title: Software Engineer Intern\nLocation: Los Gatos", "Software Engineer Intern", "Netflix"),
+    ("Data Science Intern\nSan Francisco, CA\n\nAbout Stripe\nStripe is a financial infrastructure platform.", "Data Science Intern", "Stripe"),
+    ("Amazon\nSoftware Development Engineer Intern\nSeattle, WA\nJoin Amazon as an intern and ship code.", "Software Development Engineer Intern", "Amazon"),
+    ("Software Engineer Intern at Netflix\n\nNetflix is one of the world's leading entertainment services.", "Software Engineer Intern", "Netflix"),
+    ("We are looking for someone who loves data.\nYou will work with teams across the company.", "", ""),
+    ("The engineer will build systems that scale to millions of users.\nAbout the team\nWe are Databricks.", "", ""),
+])
+def test_guess_meta_from_pasted_text(text, title, company):
+    assert J.guess_meta(text) == {"title": title, "company": company}
+
+
 def test_ats_coverage_and_parse(tmp_path):
     import ats
     r = T.generate("swe", "Backend intern. Python, REST APIs, PostgreSQL, Kubernetes, React, machine learning. " * 3, tmp_path, T.MockProvider())

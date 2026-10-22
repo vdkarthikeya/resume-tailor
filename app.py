@@ -67,6 +67,7 @@ def payload(job_id: str) -> dict:
         "provider": j["provider"], "ok": b.ok, "error": None if b.ok else b.log,
         "pages": b.pages, "bottom": round(b.bottom), "fill_pct": round(100 * b.bottom / 772) if b.ok else 0,
         "warnings": plan["warnings"] + j["log"], "gaps": plan["gaps"], "keywords": plan["keywords"], "summary": plan["summary"],
+        "meta": jdmod.guess_meta(j["jd"]),
         "slots": slots_view(plan, j["reverted"]), "ats": T.ats_for(j["base"], plan, b, j["jd"], j["reverted"]), "v": int(time.time() * 1000),
     }
 

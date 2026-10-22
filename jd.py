@@ -102,6 +102,79 @@ def guess_company(title: str, soup=None, host: str = "") -> str:
     return labels[0].capitalize() if labels else ""
 
 
+_ROLE = re.compile(r"\b(intern(ship)?|engineer(ing)?|developer|scientist|analyst|researcher|research|manager|associate|co-?op|fellow|architect|specialist|designer|programmer)\b", re.I)
+_NOT_COMPANY = {"the", "this", "that", "us", "you", "our", "your", "we", "a", "an", "role", "team", "job", "position", "company",
+                "opportunity", "internship", "program", "benefits", "overview", "description", "responsibilities", "qualifications", "it", "what", "who"}
+_NOISE = re.compile(r"\b(job\s*id|req(uisition)?|remote|hybrid|on-?site|full[- ]time|part[- ]time|apply|posted|summer|fall|winter|spring|20\d\d)\b|\d{4,}", re.I)
+
+
+def _tidy_company(c: str) -> str:
+    c = re.sub(r"[\(\[][^)\]]*[\)\]]", "", c or "")
+    c = re.sub(r"\s+", " ", c).strip(" \t-–—|:,.")
+    return "" if (not c or len(c) > 40 or c.lower() in _NOT_COMPANY) else c
+
+
+def _split_headline(line: str):
+    """'Machine Learning Intern at Scale AI' / 'Scale AI - ML Intern' / 'ML Intern | Scale AI' -> (title, company) or None."""
+    if len(line) > 120 or not _ROLE.search(line):
+        return None
+    m = re.match(r"^(?P<t>.+?)\s+at\s+(?P<c>[A-Z][^|]{1,40})$", line)
+    if m and _ROLE.search(m["t"]):
+        return m["t"], _tidy_company(m["c"])
+    parts = [p.strip() for p in re.split(r"\s*(?:\||\s[-–—]\s)\s*", line) if p.strip()]
+    if len(parts) >= 2:
+        role_parts = [p for p in parts if _ROLE.search(p)]
+        others = [p for p in parts if not _ROLE.search(p) and not _NOISE.search(p)]
+        if role_parts:
+            return role_parts[0], _tidy_company(others[0]) if others else ""
+    if re.search(r"[.!?]$", line) or len(line.split()) > 12:
+        return None  # a sentence, not a title
+    return line, ""
+
+
+def guess_meta(text: str) -> dict:
+    """Best-effort company and role from pasted job text, so the tracker fields can fill themselves."""
+    lines = [re.sub(r"^[\s#*•\-]+", "", l).strip() for l in (text or "").splitlines()]
+    lines = [l for l in lines if l]
+    company = title = ""
+    for l in lines[:40]:  # "Company: Netflix" / "Job Title: ..." style labels
+        m = re.match(r"^(company|employer|organization|organisation)\s*[:\-]\s*(.+)$", l, re.I)
+        if m and not company:
+            company = _tidy_company(m.group(2))
+        m = re.match(r"^(job\s*title|position|role|title)\s*[:\-]\s*(.+)$", l, re.I)
+        if m and not title:
+            title = m.group(2).strip()
+    if not title or not company:
+        for i, l in enumerate(lines[:8]):  # headline near the top
+            h = _split_headline(l)
+            if h:
+                title = title or h[0]
+                company = company or h[1]
+                prev = lines[i - 1] if i > 0 else ""  # LinkedIn style: company on the line above the title
+                if not company and prev and len(prev.split()) <= 4 and not _ROLE.search(prev) and not _NOISE.search(prev):
+                    company = _tidy_company(prev)
+                break
+    if not title:
+        for l in lines[:25]:  # any short line that reads like a job title
+            if len(l) <= 90 and _ROLE.search(l) and not re.search(r"[.!?]$", l) and len(l.split()) <= 12:
+                title = l
+                break
+    if not company:
+        pats = [r"^about\s+([A-Z][\w&.\-]*(?:\s+[A-Z][\w&.\-]*){0,3})\s*$",
+                r"\b(?i:join|joining)\s+([A-Z][\w&.\-]*(?:\s+[A-Z][\w&.\-]*){0,3})\b(?=\s+(?:as|and|to|in|on|for)\b|[,.!])",
+                r"^at\s+([A-Z][\w&.\-]*(?:\s+[A-Z][\w&.\-]*){0,3}),\s+we\b",
+                r"^([A-Z][\w&.\-]*(?:\s+[A-Z][\w&.\-]*){0,3})\s+is\s+(?:a|an|the|hiring|looking|seeking|building|on a mission)\b"]
+        for l in lines[:60]:
+            for p in pats:
+                m = re.search(p, l)
+                if m and _tidy_company(m.group(1)):
+                    company = _tidy_company(m.group(1))
+                    break
+            if company:
+                break
+    return {"title": clean_role(title, company) if title else "", "company": company}
+
+
 def _result(title, company, text, url, source):
     return {"title": title or "", "company": company or "", "text": text.strip(), "url": url, "source": source}
 

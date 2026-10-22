@@ -158,7 +158,9 @@ $('go').onclick = async () => {
     job = await api('/api/generate', {base:$('base').value, jd:$('jd').value, mock:$('mock').checked});
     m.textContent = '';
     // New job: refresh the tracker fields (unless the user typed in them) and clear the old "Added ..." message.
-    if (!trackerDirty) { $('tco').value = jdMeta.company || ''; $('trole').value = jdMeta.title || ''; }
+    // Prefer details from a fetched link; for pasted text use what the server detected in it.
+    const meta = job.meta || {};
+    if (!trackerDirty) { $('tco').value = jdMeta.company || meta.company || ''; $('trole').value = jdMeta.title || meta.title || ''; }
     $('trackmsg').textContent = '';
     render();
   }
