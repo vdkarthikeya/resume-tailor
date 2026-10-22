@@ -28,7 +28,7 @@ No key: the "dry run" box only reorders skills (free), good for checking the pip
 ## How it keeps your resume safe
 - Your `.tex` is never regenerated. Only the text inside bullets, the skills lists, the coursework line and the project list is replaced; preamble, headings, dates and spacing are copied byte for byte.
 - The model returns plain text, never LaTeX. Backslashes, braces, em/en dashes and `--` are rejected.
-- Every rewritten bullet needs verbatim quotes from `master_doc.md`; numbers must already exist in the Master Doc or your resumes; banned claims (Gradescope, "shipped to production", CLIP, "end-to-end ML", co-founder) are rejected. A rejected edit silently falls back to your original bullet and is listed under Notes.
+- Every rewritten bullet needs verbatim quotes from `master_doc.md`; numbers must already exist in the Master Doc or your resumes; banned claims (Gradescope/autograders, co-founder, the word "ran" for 61A sections, filler words) are rejected; edit the `BANNED` list in `tailor.py` to change that. A rejected edit silently falls back to your original bullet and is listed under Notes.
 - Skills may only reorder or use items in the Master Doc; project and coursework choices come from `bank/`.
 - After compiling it checks page count and fill. Overflow triggers a retry with feedback, then reverts the biggest edits until it fits on one page.
 - The review panel shows old vs new per part, with evidence quotes. Untick to revert that part and recompile.
