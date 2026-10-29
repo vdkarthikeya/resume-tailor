@@ -154,7 +154,8 @@ Data source (Oct 28, 2026): MovieLens and TMDB (with IMDb metadata fields), not 
 Stack: Python, PyTorch, SentenceTransformers, scikit-learn, XGBoost, LightGBM. Repo: movie-genre-classification-nlp.
 - Multi-label genre prediction on 42K+ MovieLens/TMDB films across 20+ genres. Parsed nested IMDb metadata with regex; engineered log budget and revenue and release-time features.
 - Embedded title, tagline, and overview with MiniLM, MPNet, and e5-large-v2; compared Logistic Regression, XGBoost, and LightGBM.
-- Handled class imbalance with a rare-genre cutoff and per-label threshold tuning. Macro F1 (the primary metric, so rare genres count equally) rose from 0.48 to 0.66; Micro F1 0.68.
+- Handled class imbalance with a genre-frequency cutoff (drop genres under 3,000 films, 20 to 14 genres) and one tuned global decision threshold (0.28). It was NOT per-genre thresholds (those are listed as future work in the repo), so never say "each genre its own cutoff". Macro F1 (the primary metric, so rare genres count equally) rose from 0.48 to 0.66; Micro F1 0.68. Note the label set shrank, so the 0.48 and 0.66 are not on identical labels.
+- Models used: MiniLM (all-MiniLM-L6-v2), MPNet (all-mpnet-base-v2), e5-large-v2 embeddings; Logistic Regression (OneVsRest), XGBoost, LightGBM. Best: e5-large-v2 on title+tagline+overview with Logistic Regression. The model comparison table (LR 1 min, XGBoost 12 min, LightGBM 6 min; Macro F1 0.545, 0.528, 0.525) was run on MiniLM embeddings.
 - Logistic Regression on 1024-dim e5 embeddings beat the boosted trees and trained about 12x faster.
 
 ### Housing Price and Assessment Bias

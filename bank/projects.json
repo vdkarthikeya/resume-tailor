@@ -84,17 +84,17 @@
     "bullets": [
       {
         "id": "movie_genre_1",
-        "markup": "Built a multi-label NLP model that predicts a movie's genres from its title and plot summary, trained on **42K+** films.",
-        "from_resume": "ds"
+        "markup": "Built a multi-label NLP model that predicts a movie's genres from its title, tagline, and plot, using MiniLM, MPNet, and e5-large-v2 text embeddings on **42K+** films.",
+        "from_resume": "ml"
       },
       {
         "id": "movie_genre_2",
-        "markup": "Improved predictions for rare genres by giving each genre its own cutoff, raising Macro F1 from 0.48 to **0.66**.",
-        "from_resume": "ds"
+        "markup": "Compared Logistic Regression, XGBoost, and LightGBM: Logistic Regression won and trained about **12\u00d7** faster than XGBoost; dropping rare genres and tuning the threshold raised Macro F1 from 0.48 to **0.66**.",
+        "from_resume": "ml"
       },
       {
         "id": "movie_genre_3",
-        "markup": "Raised the overall score (Macro F1) from 0.48 to **0.66** by giving each genre its own cutoff, and found a simple model beat complex ones while training **12\u00d7** faster.",
+        "markup": "Embedded each film's text with MiniLM, MPNet, and e5-large-v2 and found the largest model (e5-large-v2) gave the best genre predictions.",
         "from_resume": "ml"
       },
       {
