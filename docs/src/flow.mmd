@@ -1,0 +1,20 @@
+flowchart TB
+  A([Job link or pasted text]) --> B[Fetch and clean the posting]
+  B --> C[Pick the best base resume<br/>SWE, ML, DS or PM]
+  C --> D[Claude proposes edits to bullets,<br/>skills, projects, coursework]
+  M[(Master Doc<br/>your evidence)] -.-> D
+  BK[(Approved project<br/>and course bank)] -.-> D
+  D --> E{Safety checks<br/>per edit}
+  E -- fail --> F[Keep your original text]
+  E -- pass --> G[Fill the LaTeX slots]
+  F --> G
+  G --> H[Compile PDF]
+  H --> I{One page<br/>and full?}
+  I -- no --> J[Retry with feedback,<br/>then revert the biggest edits]
+  J --> G
+  I -- yes --> K[ATS check and review panel]
+  K --> L([Download PDF, log to tracker])
+  classDef good fill:#e3efe6,stroke:#2f5d50;
+  classDef bad fill:#f6e0dc,stroke:#8a3b2e;
+  class L,K good
+  class F,J bad

@@ -1,0 +1,16 @@
+flowchart LR
+  R([Edit from<br/>the model]) --> C1[Verbatim quote<br/>from Master Doc?]
+  C1 --> C2[Numbers already<br/>in your records?]
+  C2 --> C3[Plain text only?<br/>no braces, dashes]
+  C3 --> C4[No banned claims<br/>or filler?]
+  C4 --> C5[Not a locked<br/>entry?]
+  C5 --> OK([Accepted])
+  C1 -. fail .-> X[Rejected:<br/>original kept,<br/>listed in Notes]
+  C2 -. fail .-> X
+  C3 -. fail .-> X
+  C4 -. fail .-> X
+  C5 -. fail .-> X
+  classDef good fill:#e3efe6,stroke:#2f5d50;
+  classDef bad fill:#f6e0dc,stroke:#8a3b2e;
+  class OK good
+  class X bad

@@ -1,0 +1,16 @@
+flowchart LR
+  subgraph Browser
+    UI[static/index.html]
+  end
+  subgraph FastAPI[app.py]
+    API[/api/fetch-jd, generate, revert, pdf, track/]
+  end
+  UI --> API
+  API --> JD[jd.py<br/>job page to text]
+  API --> TL[tailor.py<br/>prompt, rules, retry loop]
+  TL --> TX[tex_slots.py<br/>find and replace text slots]
+  TL --> AI[Claude API or claude CLI]
+  TL --> DATA[(master_doc.md<br/>bank/*.json<br/>resumes/*.tex)]
+  TX --> LT[pdflatex]
+  API --> ATS[ats.py<br/>keywords and PDF parse]
+  API --> TR[tracker.py<br/>Sheet and Drive]
