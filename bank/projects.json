@@ -35,6 +35,40 @@
     ]
   },
   {
+    "id": "resume_tailor",
+    "title": "Resume Tailor",
+    "url": "https://github.com/vdkarthikeya/resume-tailor",
+    "stack": [
+      "Python",
+      "FastAPI",
+      "LaTeX",
+      "Claude"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "resume_tailor_1",
+        "markup": "Built a tool that tailors a one-page LaTeX resume to a job posting, changing only the bullet text.",
+        "from_resume": "swe"
+      },
+      {
+        "id": "resume_tailor_2",
+        "markup": "Rejects rewrites that lack a quote from my own records, and checks one-page fit and ATS parsing.",
+        "from_resume": "swe"
+      },
+      {
+        "id": "resume_tailor_3",
+        "markup": "Built a tool that tailors a one-page LaTeX resume to a job posting, leaving the layout untouched and rewriting only the bullet text.",
+        "from_resume": "swe"
+      },
+      {
+        "id": "resume_tailor_4",
+        "markup": "Rejects any rewrite that lacks a quote from my own records, and checks that the PDF fits one page and passes ATS parsing.",
+        "from_resume": "swe"
+      }
+    ]
+  },
+  {
     "id": "movie_genre",
     "title": "Movie Genre Classification",
     "url": "https://github.com/vdkarthikeya/movie-genre-classification-nlp",

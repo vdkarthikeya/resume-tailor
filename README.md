@@ -13,6 +13,7 @@ Paste a job link (or the description), get a one-page, ATS-safe PDF compiled fro
 - **Hindsight** (Cal Hacks 13.0) is in `bank/projects.json`, `master_doc.md`, and every base resume (three projects each).
 - **PM base** (`resumes/pm.tex`) is updated with the new After Collective bullets and Hindsight; the tool picks it for product and program management jobs, and the prompt now has PM guidance.
 - **CS 61A bullet is locked** (`LOCKED_ENTRY_MARKERS` in `tailor.py`): it is kept as written and says Python, Scheme, and SQL plus linked lists, trees, lists, and dictionaries. CDSS 198 always mentions exam reviews and practice worksheets for CS and data science classes.
+- **Resume Tailor** itself is now a project on the SWE and PM bases (and in `bank/projects.json`), described as built with Claude.
 - Latest PDFs are hosted in vdkarthikeya.github.io under `resumes/`.
 
 ## Keeping it up to date (GitHub workflow)

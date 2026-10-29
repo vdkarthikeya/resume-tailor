@@ -128,6 +128,14 @@ Stack: Claude, FastAPI, React, Apify, Factory Droid SDK, ASSIST, Supabase. Repo:
 - Team: Atishay (product, design, engineering), Amaan, Shiv (admissions input), and me. Built over the 3-day hackathon, splitting work by phase and leaving time to test with real users.
 - Accuracy notes: no award or result is claimed. Do not say I built the backend.
 
+### Resume Tailor (personal tool, Oct 2026)
+Stack: Python, FastAPI, LaTeX, Claude. Repo: resume-tailor.
+- A tool that takes a job link or pasted description and produces a tailored one-page PDF from my own LaTeX resumes. Four base resumes (SWE, DS, ML, PM); it picks the best one for the job.
+- Built with Claude. I defined the problem (tailoring every application by hand took too long), the rules it must follow, and the checks, and I review and test it. Claude wrote most of the code. I should be able to explain the design in an interview.
+- Safety design: my LaTeX is never regenerated; only bullet text, skills lines, coursework and project choices are replaced. Every rewritten bullet must carry verbatim quotes from this Master Doc, numbers must already exist in it, and banned claims are rejected. A rejected edit falls back to the original bullet.
+- Checks: compiles the PDF and enforces one page with the page filled, an ATS keyword and parse check, a diff review panel, and an application tracker that logs each application to a Google Sheet and saves the PDF to Drive.
+- Accuracy notes: personal tool, not a product with users. Do not claim I wrote all the code.
+
 ### SightLine (Open Projects, ML team, Fall 2026, in progress)
 Stack: Python, PyTorch, OpenCV, YOLO. Repo: sightline-ml-public.
 - A mobile app that connects to Meta Ray-Ban glasses, captures audio and video through the day, and outputs a 60-second edited recap.
