@@ -4,12 +4,14 @@
     "title": "Hindsight (Cal Hacks 13.0)",
     "url": "https://github.com/Cal-Hacks-2026/Hindsight",
     "stack": [
-      "Claude",
+      "Python",
       "FastAPI",
+      "TypeScript",
       "React",
       "Supabase",
+      "Claude",
       "Apify",
-      "Factory Droid"
+      "Factory Droid SDK"
     ],
     "suffix": "",
     "bullets": [

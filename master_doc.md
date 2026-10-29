@@ -210,7 +210,7 @@ Four one-page LaTeX bases (SWE, DS, ML, PM) in resumes/. At most 3 projects per 
 ## Skills (only these may appear in a Skills section)
 - Languages: Python, Java, C++, SQL, Scheme, TypeScript
 - ML and data science: pandas, NumPy, scikit-learn, PyTorch, TensorFlow, XGBoost, LightGBM, SentenceTransformers, Embeddings, Cross-Validation, Feature Engineering, GeoPandas, Matplotlib, seaborn
-- Backend and infrastructure: FastAPI, Pydantic, PostgreSQL, Auth0, AWS S3, Gemini API, Claude API, Apify, Factory Droid SDK, REST APIs, pytest, ffmpeg, ffprobe, React, Background Jobs
+- Backend and infrastructure: FastAPI, Pydantic, PostgreSQL, Auth0, AWS S3, Gemini API, Claude API, Apify, Factory Droid SDK, Supabase, Vite, REST APIs, pytest, ffmpeg, ffprobe, React, Background Jobs
 - Product: User Research, User Interviews, Discovery Read-outs, Documentation, Cross-Functional Collaboration
 - Developer tools: Git, GitHub, VS Code, IntelliJ, Jupyter, Google Colab, MATLAB, Cursor
 - Fundamentals: Data Structures, Graph Algorithms, Complexity Analysis, OOP, Functional Programming
