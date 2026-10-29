@@ -205,6 +205,11 @@
         "id": "sightline_3",
         "markup": "Work with the iOS and backend teams on how clip ranking fits into the full product pipeline.",
         "from_resume": "pm"
+      },
+      {
+        "id": "sightline_4",
+        "markup": "Building the first stage of the scoring pipeline: samples frames from each 5-second clip, runs a pretrained **CLIP** model, and saves one embedding per clip for later clustering and scoring.",
+        "from_resume": "ml"
       }
     ]
   },

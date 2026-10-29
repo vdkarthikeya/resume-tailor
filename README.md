@@ -159,3 +159,7 @@ Project headings can be either style: linked title with arrow (`\textbf{\href{ur
 - UI refresh: glass look, one font family, same palette. Movie Genre project now named with its data source (MovieLens/TMDB).
 - Movie Genre bullets now name the models (MiniLM, MPNet, e5-large-v2 embeddings; Logistic Regression, XGBoost, LightGBM) and no longer claim per-genre cutoffs, which the project did not use. UI font changed to Plus Jakarta Sans with a gradient title.
 - Hindsight bullets and Master Doc entry now carry the technical design (deterministic matcher and planner, Claude for extraction and cited answers, Droid repair permissions), written as the team's system with Karthik's role kept honest.
+
+### Oct 29, 2026
+- **SightLine** in `master_doc.md` now records the assigned Linear tickets (SIG-22 CLIP embedding pipeline in progress, SIG-14 research done, SIG-63 and SIG-39 not started). The embedding step is allowed on resumes as "building"; nothing past it is.
+- New SightLine bullet in `bank/projects.json` (`sightline_4`) for the CLIP embedding step. Base resumes are unchanged.

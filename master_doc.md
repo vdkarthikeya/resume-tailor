@@ -185,11 +185,18 @@ Stack: Python, PyTorch, OpenCV, YOLO. Repo: sightline-ml-public.
 - ML pipeline: pull footage, split into clips, rank clips with multimodal models on audio and visual cues, assemble the top clips through automated video rendering. The ML team builds and fine-tunes computer vision and audio scoring models.
 - Works alongside the iOS team (app and Meta Wearables SDK) and the backend team (FastAPI, Supabase, Docker, orchestration, final assembly).
 
-**Update Oct 6, 2026: PM meeting (ideas I pitched, not built yet).** These are proposals, so they stay off the resume until implemented.
+**Update Oct 6, 2026: PM meeting (ideas I pitched, not built yet).** These were proposals when pitched; see the Oct 29 update below for what has since become a ticket.
 
 - Use the CLIP model to sample frames from many short (about 5 second) clips and get an embedding for each. Visually similar clips land close together, so clustering them by location and scene gives a recap that covers everything in the day, not just one moment.
 - Keep a list of descriptive phrases, turn them into vectors with CLIP's text encoder, and use them as blueprints: clips whose embeddings are very close to a phrase get priority in the recap.
 - Note: the model I called "flip model" out loud is CLIP (confirmed Oct 15, 2026).
+
+**Update Oct 29, 2026: Linear tickets (SightLine workspace).** The CLIP embedding idea above is now a real ticket assigned to me, so the embedding step may go on the resume as work in progress. The text-prompt scoring idea and everything past the embedding step stay off the resume until they exist.
+
+- SIG-22, ML Build #1: CLIP Clip Embedding Pipeline. Status In Progress since Oct 14, 2026. The script samples N evenly spaced frames from each 5-second clip, runs each frame through a pretrained CLIP model (ViT-B/32 via open_clip or Hugging Face transformers), averages the frame embeddings, L2-normalizes them into one vector per clip, and saves the output keyed by clip_id. Deliverables: the script, the embeddings file for the shared test set (about 30 to 50 clips from one day), and a README with timing and nearest-neighbor sanity checks. [MISSING] What is actually written and working so far, and which CLIP library I chose. Say "building", not "built", until the ticket is Done.
+- SIG-14, ML Research #1: Done (Oct 6, 2026). Written research on how to go from many 5-second clips to one 60-second recap, one chosen model or step in depth, and what public datasets and compute it needs. Research only, no code.
+- SIG-63, ML Scoring Pipeline MVP: assigned, Todo (created Oct 27, 2026). Scores every 5-second window from 0 to 1, evaluated with Spearman correlation and top-10 recall against a filmer's ground-truth ratings. Three people have the same ticket and the versions are compared. Not started, so no results or claims.
+- SIG-39, ML Test Clip: assigned, Todo. Filming test clips with the Meta glasses for the team. Not done.
 
 ### SB 79 Transit-Oriented Development Analysis (CYPLAN 101, Summer 2026)
 
