@@ -150,6 +150,7 @@ Stack: ArcGIS Online, StoryMaps. Two-person group project.
 - Delivered a research paper, a policy brief, and an interactive StoryMap. I wrote Methods, Results, Discussion (limitations), Abstract, and Appendices.
 
 ### Movie Genre Classification (DSS Decal, Spring 2026)
+Data source (Oct 28, 2026): MovieLens and TMDB (with IMDb metadata fields), not Netflix. Name it "Movie Genre Classification (MovieLens/TMDB)" on resumes.
 Stack: Python, PyTorch, SentenceTransformers, scikit-learn, XGBoost, LightGBM. Repo: movie-genre-classification-nlp.
 - Multi-label genre prediction on 42K+ MovieLens/TMDB films across 20+ genres. Parsed nested IMDb metadata with regex; engineered log budget and revenue and release-time features.
 - Embedded title, tagline, and overview with MiniLM, MPNet, and e5-large-v2; compared Logistic Regression, XGBoost, and LightGBM.
@@ -203,7 +204,7 @@ Four one-page LaTeX bases (SWE, DS, ML, PM) in resumes/. At most 3 projects per 
 ## Skills (only these may appear in a Skills section)
 - Languages: Python, Java, C++, SQL, Scheme, TypeScript
 - ML and data science: pandas, NumPy, scikit-learn, PyTorch, TensorFlow, XGBoost, LightGBM, SentenceTransformers, Embeddings, Cross-Validation, Feature Engineering, GeoPandas, Matplotlib, seaborn
-- Backend and infrastructure: FastAPI, Pydantic, PostgreSQL, Auth0, AWS S3, Gemini API, REST APIs, pytest, ffmpeg, ffprobe, React, Background Jobs
+- Backend and infrastructure: FastAPI, Pydantic, PostgreSQL, Auth0, AWS S3, Gemini API, Claude API, Apify, Factory Droid SDK, REST APIs, pytest, ffmpeg, ffprobe, React, Background Jobs
 - Product: User Research, User Interviews, Discovery Read-outs, Documentation, Cross-Functional Collaboration
 - Developer tools: Git, GitHub, VS Code, IntelliJ, Jupyter, Google Colab, MATLAB, Cursor
 - Fundamentals: Data Structures, Graph Algorithms, Complexity Analysis, OOP, Functional Programming

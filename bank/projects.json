@@ -70,7 +70,7 @@
   },
   {
     "id": "movie_genre",
-    "title": "Movie Genre Classification",
+    "title": "Movie Genre Classification (MovieLens/TMDB)",
     "url": "https://github.com/vdkarthikeya/movie-genre-classification-nlp",
     "stack": [
       "Python",
@@ -94,12 +94,12 @@
       },
       {
         "id": "movie_genre_3",
-        "markup": "Raised the overall score (Macro F1) from 0.48 to **0.66** by giving each genre its own cutoff, and found a simple model beat complex ones while training **12×** faster.",
+        "markup": "Raised the overall score (Macro F1) from 0.48 to **0.66** by giving each genre its own cutoff, and found a simple model beat complex ones while training **12\u00d7** faster.",
         "from_resume": "ml"
       },
       {
         "id": "movie_genre_4",
-        "markup": "Compared Logistic Regression, XGBoost, and LightGBM on text embeddings; the simpler Logistic Regression won and trained about **12×** faster.",
+        "markup": "Compared Logistic Regression, XGBoost, and LightGBM on text embeddings; the simpler Logistic Regression won and trained about **12\u00d7** faster.",
         "from_resume": "ds"
       }
     ]
