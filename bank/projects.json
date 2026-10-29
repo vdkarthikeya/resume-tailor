@@ -4,35 +4,33 @@
     "title": "Hindsight (Cal Hacks 13.0)",
     "url": "https://github.com/Cal-Hacks-2026/Hindsight",
     "stack": [
-      "Python",
+      "Claude",
       "FastAPI",
-      "TypeScript",
       "React",
       "Supabase",
-      "Claude",
       "Apify",
-      "Factory Droid SDK"
+      "Factory Droid"
     ],
     "suffix": "",
     "bullets": [
       {
         "id": "hindsight_1",
-        "markup": "Shaped the idea, features, and vision of a transfer planner for California community college students: code matches courses to official ASSIST agreements (alternatives, grades, agreement years) and plans terms around prerequisites.",
+        "markup": "Shaped the idea, features, and vision of a transfer planner for community college students: a **FastAPI** backend matches courses to official ASSIST agreements and plans terms, with a **React** and **TypeScript** interface.",
         "from_resume": "ml"
       },
       {
         "id": "hindsight_2",
-        "markup": "Claude reads transcripts and class schedules, which the student confirms, and answers questions with numbered sources that code checks; general education progress follows each college's Cal-GETC or IGETC list.",
+        "markup": "**Claude** reads transcripts and class schedules that students confirm, and answers with sources that code checks; **Supabase** stores profiles, coursework, and cached agreements.",
         "from_resume": "ml"
       },
       {
         "id": "hindsight_3",
-        "markup": "Kept data grounded: Apify scrapes campus pages, a Factory Droid agent repairs broken scrapers under deny-by-default permissions with every patch logged, and guide items must quote their source page.",
+        "markup": "Kept data grounded: **Apify** scrapes campus pages, a **Factory Droid** agent repairs broken scrapers under deny-by-default permissions, and guide items must quote their source.",
         "from_resume": "ml"
       },
       {
         "id": "hindsight_4",
-        "markup": "Claude reads confirmed transcripts and answers with code-checked sources; Apify scrapes campus pages and a Factory Droid agent repairs broken scrapers under deny-by-default permissions.",
+        "markup": "**Claude** reads confirmed transcripts and answers with sources; **Apify** scrapes campus pages, a **Factory Droid** agent repairs broken scrapers, and **Supabase** stores student data.",
         "from_resume": "pm"
       }
     ]
