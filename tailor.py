@@ -25,6 +25,14 @@ BASES = {
     "swe": dict(file="resumes/swe.tex", name="Software Engineering", blurb="Guang Labs first, FastAPI, React, Auth0"),
     "pm": dict(file="resumes/pm.tex", name="Product / Program Management", blurb="After Collective first, product and coordination work"),
 }
+# Entries whose bullets are never rewritten, only kept in place (user asked for the CS 61A bullet to stay as written).
+LOCKED_ENTRY_MARKERS = ("CS 61A",)
+
+
+def is_locked_entry(e) -> bool:
+    return any(mk in f"{e.company} {e.role}" for mk in LOCKED_ENTRY_MARKERS)
+
+
 BASES = {k: v for k, v in BASES.items() if (ROOT / v["file"]).exists()}
 PAGE_BOTTOM_TARGET = 745.0  # originals end near 772; below this the page looks under-filled
 PAGE_BOTTOM_MAX = 785.0
@@ -139,7 +147,7 @@ def build_plan(parsed: T.Parsed, proposal: dict, ctx: Ctx, base_key: str) -> dic
         orig = [b.markup for b in e.bullets]
         pe = prop_entries.get(e.id)
         res = {"label": f"{e.company}: {e.role}", "orig": orig, "new": [{"markup": m, "orig_idx": i, "kind": "same", "sources": []} for i, m in enumerate(orig)]}
-        if pe is None:
+        if pe is None or is_locked_entry(e):
             plan["entries"][e.id] = res
             continue
         pb = pe.get("bullets", [])
@@ -434,7 +442,7 @@ HARD RULES
    Voice: plain, direct, short. Start with a strong action verb (Built, Developed, Engineered, Implemented, Designed, Taught). Bold (**...**) the numbers and the job's key technical terms that the bullet truly demonstrates, at most 3 per bullet. No em dashes, no en dashes, no "--", no filler (leveraged, spearheaded, passionate). Use ² for superscript 2 and × for times. Nothing else: no backslashes, braces, ^, ~ or backticks.
    ATS wording: when the student really did the thing, use the job's exact term (REST APIs, not "web endpoints"; spell out "machine learning" where the job says it). Never use a job term the student did not earn.
 5. Facts to respect: CS 61A is "taught" sections (never "ran", never Gradescope or autograders). Guang Labs work is merged to main; say "merged" unless the Master Doc says otherwise. The classifier is a Gemini-based classification service, not a custom-trained LLM. IDX is a preprocessing and modeling pipeline. The CLIP ideas for SightLine are proposals the Master Doc marks as not built, so only mention them if the Master Doc says they were built. 200+ is the 61A class size, not a caseload. Fung Fellowship: only what is documented as done.
-6. Keep each entry's bullet count exactly as given and each bullet within about 25% of the original length, so the resume stays one full page. Do not touch headings, dates, titles, or GPA.
+6. The CS 61A entry is locked: return its bullets unchanged (from_index, identical text). It already says the sections were taught in Python, Scheme, and SQL, reinforcing linked lists, trees, lists, and dictionaries. The CDSS 198 entry must keep saying the student runs exam reviews and writes practice worksheets for CS and data science classes. Keep each entry's bullet count exactly as given and each bullet within about 25% of the original length, so the resume stays one full page. Do not touch headings, dates, titles, or GPA.
 
 ATS RULES (the resume must pass automated screening AND read well to a person)
 A. Keywords: list the 8 to 15 hard-skill terms the job uses, exactly as written, in "keywords". Each one the Master Doc supports must appear verbatim in the Skills lines AND be shown in at least one bullet. The first Skills line should lead with the job's own languages and tools.
@@ -449,6 +457,7 @@ HOW TO TAILOR
 - Evidence: every skill you list should be demonstrated in at least one bullet or project when the Master Doc supports it, so skills are shown, not just listed. Prefer skills that appear in the bullets.
 - Skills: reorder so the job's keywords come first; drop low-value items to make room; only add items that appear in the Master Doc. Keep each line under 110 characters including its label.
 - Projects: pick the same number of projects as the base resume (never more than 3) from the PROJECT BANK, most relevant to the job. Prefer the approved bullets (give bank_id and the exact text). Use 2 or 3 bullets per project (1 only when the bank has just one approved bullet).
+- Product and program management jobs (pm base): lead with discovery and product work (The After Collective interviews and concepts, Hindsight's product role, SightLine's cross-team work), then cross-functional and documentation work. Hindsight is a product-and-vision contribution built with Claude, never a backend you wrote.
 - Coursework: choose from ALLOWED COURSES only, no more courses than the base has.
 - Return your answer by calling the tool."""
 

@@ -1,5 +1,40 @@
 [
   {
+    "id": "hindsight",
+    "title": "Hindsight (Cal Hacks 13.0)",
+    "url": "https://github.com/Cal-Hacks-2026/Hindsight",
+    "stack": [
+      "Claude",
+      "FastAPI",
+      "React",
+      "Apify",
+      "Factory Droid"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "hindsight_1",
+        "markup": "Co-designed a transfer planner for California community college students that shows which classes count toward their major using official ASSIST data, citing a source for every answer.",
+        "from_resume": "ml"
+      },
+      {
+        "id": "hindsight_2",
+        "markup": "Shaped the product idea, features, and vision, and gave feedback that improved the interface and features.",
+        "from_resume": "ml"
+      },
+      {
+        "id": "hindsight_3",
+        "markup": "Kept it grounded in real data: credits are matched by code against official records, and campus opportunities are scraped from real pages (Apify, run by a Droid agent), with source links.",
+        "from_resume": "ml"
+      },
+      {
+        "id": "hindsight_4",
+        "markup": "Co-designed a transfer planner for California community college students that shows which classes count toward their major using official ASSIST data, citing a source for every answer. Shaped the idea, features, and vision.",
+        "from_resume": "swe"
+      }
+    ]
+  },
+  {
     "id": "movie_genre",
     "title": "Movie Genre Classification",
     "url": "https://github.com/vdkarthikeya/movie-genre-classification-nlp",

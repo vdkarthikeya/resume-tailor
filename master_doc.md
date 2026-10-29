@@ -98,10 +98,13 @@ Final result: XGBoost (400 trees, depth 8, learning rate 0.05, seed 42), 10 feat
 - Product speccing: lined up and joined two working sessions with Abhi (Oct 12 and 13) on how the partner takes a feature from user feedback to a spec and a build. Wrote both up in the partner meeting notes.
 - Team operations: DRI of the week for Week 7 and the Build and Learn assignment. Set up and formatted the team folder, then kept the running notes, canonical doc, interview notes, partner meeting notes, and weekly status updates current.
 - Midpoint prep: with two teammates, built the five-slide discovery read-out and supporting few-pager for the Oct 19 to 20 midpoint.
-- Accuracy notes: concepts in Build and Learn are early and not yet tested with real users, so nothing here is a result. The curation pilots in the partner's staging were a teammate's work, not mine.
+- Update Oct 28, 2026: seven interviews documented through Oct 22 (Oct 3 x3, Oct 12, Oct 16, Oct 18, Oct 22). Led the Oct 12 and Oct 16 interviews. Interviewees on Oct 16, 18, and 22 gave early reactions to the three concepts (claim steps, resource evaluation, service-fit checks). Joined the Oct 13 product speccing session and took the action item to test the partner's recovery coach for gaps and feature ideas before its beta.
+- Accuracy notes: concept reactions are early feedback from a few interviewees, not formal tests, so nothing here is a result. The curation pilots in the partner's staging were a teammate's work, not mine.
 
 ### CS 61A Undergraduate Course Staff , Jun to Aug 2026
 - Course staff for Berkeley's intro CS course in Python, SQL, and Scheme.
+- Sections and review work were in Python, Scheme, and SQL. Reinforced data structures like linked lists, trees, lists, and dictionaries, plus recursion, OOP, Scheme (tail calls, macros, cons/list/append), and SQL joins and aggregation (GROUP BY, HAVING vs WHERE). Hand-traced code with real numbers.
+- Tailoring rule: keep the CS 61A resume bullet as written (taught 4 weekly exam-prep sections in Python, Scheme, and SQL, reinforcing linked lists, trees, lists, and dictionaries, held office hours, helped write midterm and final questions). Do not rewrite it.
 - Taught 4 weekly exam-prep sections, held office hours, and handled regrade requests and extension approvals.
 - Helped write midterm and final exam questions, led final review sessions, and helped review two assignments.
 - Accuracy note: 200+ students is the total class size, not my personal caseload. Do not mention Gradescope autograders.
@@ -116,6 +119,14 @@ Final result: XGBoost (400 trees, depth 8, learning rate 0.05, seed 42), 10 feat
 - Member of the cabinet. Met with the associate dean and other CDSS faculty and program leads to discuss broad issues around the data science major. Raised the articulation issue for transfer students with the cabinet. Nothing I changed or shipped yet, so keep this to one line: member of the cabinet.
 
 ## Projects
+
+### Hindsight (Cal Hacks 13.0, Oct 2026, team project)
+Stack: Claude, FastAPI, React, Apify, Factory Droid SDK, ASSIST, Supabase. Repo: Cal-Hacks-2026/Hindsight.
+- A transfer planner for California community college students: shows which classes count toward a major using official ASSIST agreements, a plan for every term, GE progress, a class schedule view, campus opportunities, and an Ask panel. Every answer cites its source.
+- My part: helped come up with the product idea, features, and vision, and gave feedback on how the interface could improve and how more useful features could be added. The team built it with Claude. I did not write the matcher or planner code.
+- Grounded data: a Factory Droid agent starts the Apify scraper that pulls campus events and opportunities from real pages, so nothing is generated without evidence. Credit matching is deterministic code against ASSIST data, not a model guess.
+- Team: Atishay (product, design, engineering), Amaan, Shiv (admissions input), and me. Built over the 3-day hackathon, splitting work by phase and leaving time to test with real users.
+- Accuracy notes: no award or result is claimed. Do not say I built the backend.
 
 ### SightLine (Open Projects, ML team, Fall 2026, in progress)
 Stack: Python, PyTorch, OpenCV, YOLO. Repo: sightline-ml-public.
