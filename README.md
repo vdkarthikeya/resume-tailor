@@ -158,3 +158,4 @@ Project headings can be either style: linked title with arrow (`\textbf{\href{ur
 
 - UI refresh: glass look, one font family, same palette. Movie Genre project now named with its data source (MovieLens/TMDB).
 - Movie Genre bullets now name the models (MiniLM, MPNet, e5-large-v2 embeddings; Logistic Regression, XGBoost, LightGBM) and no longer claim per-genre cutoffs, which the project did not use. UI font changed to Plus Jakarta Sans with a gradient title.
+- Hindsight bullets and Master Doc entry now carry the technical design (deterministic matcher and planner, Claude for extraction and cited answers, Droid repair permissions), written as the team's system with Karthik's role kept honest.

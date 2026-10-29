@@ -7,6 +7,7 @@
       "Claude",
       "FastAPI",
       "React",
+      "Supabase",
       "Apify",
       "Factory Droid"
     ],
@@ -14,7 +15,7 @@
     "bullets": [
       {
         "id": "hindsight_1",
-        "markup": "Co-designed a transfer planner for California community college students that shows which classes count toward their major using official ASSIST data, citing a source for every answer.",
+        "markup": "Co-designed a transfer planner for California community college students: code matches courses to official ASSIST agreements and builds the term plan, while Claude reads transcripts and answers with cited sources.",
         "from_resume": "ml"
       },
       {
@@ -24,12 +25,12 @@
       },
       {
         "id": "hindsight_3",
-        "markup": "Kept it grounded in real data: credits are matched by code against official records, and campus opportunities are scraped from real pages (Apify, run by a Droid agent), with source links.",
+        "markup": "Kept data grounded: Apify scrapes real campus pages, a Factory Droid agent repairs broken scrapers under strict permissions, and every guide item must quote its source page.",
         "from_resume": "ml"
       },
       {
         "id": "hindsight_4",
-        "markup": "Co-designed a transfer planner for California community college students that shows which classes count toward their major using official ASSIST data, citing a source for every answer. Shaped the idea, features, and vision.",
+        "markup": "Co-designed a transfer planner for California community college students: code matches courses to official ASSIST agreements and builds the term plan, while Claude reads transcripts and answers with cited sources Shaped the idea, features, and vision.",
         "from_resume": "swe"
       }
     ]

@@ -121,12 +121,17 @@ Final result: XGBoost (400 trees, depth 8, learning rate 0.05, seed 42), 10 feat
 ## Projects
 
 ### Hindsight (Cal Hacks 13.0, Oct 2026, team project)
-Stack: Claude, FastAPI, React, Apify, Factory Droid SDK, ASSIST, Supabase. Repo: Cal-Hacks-2026/Hindsight.
+Stack: Claude, FastAPI (Python), React, TypeScript, Vite, Supabase, Apify, Factory Droid SDK, ASSIST, Render. Repo: Cal-Hacks-2026/Hindsight.
 - A transfer planner for California community college students: shows which classes count toward a major using official ASSIST agreements, a plan for every term, GE progress, a class schedule view, campus opportunities, and an Ask panel. Every answer cites its source.
 - My part: helped come up with the product idea, features, and vision, and gave feedback on how the interface could improve and how more useful features could be added. The team built it with Claude. I did not write the matcher or planner code.
 - Grounded data: a Factory Droid agent starts the Apify scraper that pulls campus events and opportunities from real pages, so nothing is generated without evidence. Credit matching is deterministic code against ASSIST data, not a model guess.
 - Team: Atishay (product, design, engineering), Amaan, Shiv (admissions input), and me. Built over the 3-day hackathon, splitting work by phase and leaving time to test with real users.
-- Accuracy notes: no award or result is claimed. Do not say I built the backend.
+- Technical design (from the repo README, DECISIONS.md and tests; the team's system, not code I wrote): academic decisions come from deterministic code, not a model. A matcher handles course groups, alternatives, sequence rules, minimum grades, in-progress courses and agreement years, and flags renumbered or ambiguous courses; a planner schedules remaining major courses around prerequisites; GE progress checks each course against the college's Cal-GETC or IGETC list for the year it was taken. Claude only reads transcripts and class schedules (the student confirms every row), writes opportunity explanations and the University guide, and answers questions with numbered source citations that code validates.
+- Grounding checks: a University guide item is dropped unless its quote appears on the cited page; missing dates stay empty; every listing links to its source page. Requirements come from the SJSU 2025-26 catalog; unclear items are marked for review instead of guessed.
+- Droid agent: the Factory Droid SDK runs a background service that scans campus sources every two hours, ranks results and writes alerts. If a source returns nothing, Droid may repair only that source's extractor script, with a per-run patch budget; shell and web access are denied, repairs run in a sandboxed process without keys, and every plan, patch and result is logged to an events table.
+- Design choices: no school is named in code (a campus registry file per school holds school-specific data); Apify's existing Cheerio Scraper Actor is used instead of building a custom one; all students get credits, GE and community-college terms, but only SJSU Data Science and Economics have a full plan, University guide and opportunities feed.
+- Scale: about 28K lines of Python and TypeScript, with 450+ API tests and 24 agent tests. Atishay was the only coder and ran parallel Claude Code sessions; I did not write the code.
+- Accuracy notes: no award or result is claimed. Do not say I built the backend, matcher, planner or agent. Say "co-designed" and describe the system as the team's.
 
 ### Resume Tailor (personal tool, Oct 2026)
 Stack: Python, FastAPI, LaTeX, Claude. Repo: resume-tailor.
