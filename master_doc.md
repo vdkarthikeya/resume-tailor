@@ -1,6 +1,6 @@
 # Master Doc: Everything I've Done
 
-(Source of truth for the resume tailor. Synced Oct 28, 2026 from the Claude Doc "Master Doc: Everything I've Done" (rev 23), plus Oct 28 additions (Hindsight, Resume Tailor, Movie Genre fixes, CS 61A tailoring rule, Fung Oct 28 update, skills list), which were also added to the Claude Doc. To refresh: export the doc as Markdown and replace this file.)
+(Source of truth for the resume tailor. Synced Nov 2, 2026 from the Claude Doc "Master Doc: Everything I've Done" (rev 29), plus Oct 28 additions (Hindsight, Resume Tailor, Movie Genre fixes, CS 61A tailoring rule, Fung Oct 28 update, skills list, Nov 2 Hindsight numbers and user testing), which were also added to the Claude Doc. To refresh: export the doc as Markdown and replace this file.)
 
 ## How to use this doc
 
@@ -168,6 +168,15 @@ Stack: Claude, FastAPI (Python), React, TypeScript, Vite, Supabase, Apify, Facto
 - Design choices: no school is named in code (a campus registry file per school holds school-specific data); Apify's existing Cheerio Scraper Actor is used instead of building a custom one; all students get credits, GE and community-college terms, but only SJSU Data Science and Economics have a full plan, University guide and opportunities feed.
 - Scale: about 28K lines of Python and TypeScript, with 450+ API tests and 24 agent tests. Atishay was the only coder and ran parallel Claude Code sessions; I did not write the code.
 - Accuracy notes: no award or result is claimed. Do not say I built the backend, matcher, planner or agent. Say "co-designed" and describe the system as the team's.
+
+**Update Nov 2, 2026: numbers from the repo (README, AUDIT.md of Oct 24, git log) and what each one can honestly say.**
+
+- Team and time: team of 4 (Atishay, Amaan, Shiv, me), built over the Oct 23 to 25 hackathon. 140 commits in the repo (121 Atishay, 19 Shiv; none under my name, since my part was product and testing).
+- Testing: the team's audit ran 12 student scenarios end to end (freshman, other community colleges, UC Berkeley target, part-time, messy grades and repeats, already at SJSU, bad uploads, mobile). On the baseline De Anza to SJSU scenario, 17 of 17 courses were read correctly from the transcript, and year-of-course matching caught 3 credits the current agreement would have missed. CORRECTION: those transcripts are FICTIONAL test documents (watermarked SAMPLE, TEST DATA), not real students. Say "12 fictional student scenarios" or "a sample transcript", never "real transcript".
+- Audit also lists what does not work yet: no path for an incoming freshman without a file, and other community colleges and UC Berkeley or UCLA are locked in the UI (the backend matches Foothill, Mission and Berkeley). Full plan, University guide and opportunities feed exist only for SJSU Data Science and Economics.
+- Data: ASSIST snapshot holds 116 community colleges, 61 universities and 116 agreements. Radar uses 12 scraped sources; one Droid run stored 197 SJSU listings in 44 seconds with all 6 SJSU sources healthy; scans run every 2 hours. The audit used about 30 Claude calls.
+- Safe for a resume (mine to explain): 3-day hackathon, team of 4, and the 12 fictional-scenario test with 17/17 courses on the sample transcript, worded as the team's testing. Keep lines of code, test counts, commit counts and ASSIST coverage off the resume, because they imply code or coverage I did not write or that is not fully built.
+- User testing (stated by me, Nov 2, 2026): 10 real users tested the product and gave positive feedback, saying it would have helped them when they were going through their own transfer. This is the real-user number for the resume: say "10 transfer students tested it" and describe the feedback in words (positive, would have helped during transfer). There is no score or percentage, so do not invent one. \[MISSING\] Whether I ran those sessions myself, whether they were all community college transfer students, and how many real test transcripts we collected (plan said 3 to 5), to be ready for follow-up questions.
 
 ### Resume Tailor (personal tool, Oct 2026)
 Stack: Python, FastAPI, LaTeX, Claude. Repo: resume-tailor.
