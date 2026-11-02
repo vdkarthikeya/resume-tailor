@@ -32,6 +32,11 @@
         "id": "hindsight_4",
         "markup": "**Claude** reads confirmed transcripts and answers with sources; **Apify** scrapes campus pages, a **Factory Droid** agent repairs broken scrapers, and **Supabase** stores student data.",
         "from_resume": "pm"
+      },
+      {
+        "id": "hindsight_5",
+        "markup": "Tested with **10** transfer students, who said it would have helped during their own transfer.",
+        "from_resume": "all"
       }
     ]
   },
