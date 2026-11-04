@@ -15,12 +15,12 @@
     "bullets": [
       {
         "id": "hindsight_1",
-        "markup": "Shaped the idea, features, and vision of a transfer planner for community college students: a **FastAPI** backend matches courses to official ASSIST agreements and plans terms, with a **React** and **TypeScript** interface.",
+        "markup": "Co-designed a transfer planner: a **FastAPI** backend that matches courses to official ASSIST agreements with deterministic rules (minimum grades, agreement years), a **React** and **TypeScript** interface, and **Supabase**.",
         "from_resume": "ml"
       },
       {
         "id": "hindsight_2",
-        "markup": "**Claude** reads transcripts and class schedules that students confirm, and answers with sources that code checks; **Supabase** stores profiles, coursework, and cached agreements.",
+        "markup": "**Claude** reads transcripts and class schedules that students confirm and answers with numbered citations that code validates; **Apify** scrapes campus pages and a **Factory Droid** agent repairs only broken scraper scripts, in a sandbox.",
         "from_resume": "ml"
       },
       {
@@ -54,12 +54,12 @@
     "bullets": [
       {
         "id": "resume_tailor_1",
-        "markup": "Built a tool that tailors a one-page LaTeX resume to a job posting, changing only the bullet text.",
+        "markup": "Built with **Claude**: a **Python** and **FastAPI** app that tailors a **LaTeX** resume to a job posting.",
         "from_resume": "swe"
       },
       {
         "id": "resume_tailor_2",
-        "markup": "Rejects rewrites that lack a quote from my own records, and checks one-page fit and ATS parsing.",
+        "markup": "**Claude API** rewrites must quote my own records; code rejects invented numbers and checks page fit and ATS parsing.",
         "from_resume": "swe"
       },
       {

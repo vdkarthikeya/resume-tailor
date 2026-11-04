@@ -149,6 +149,7 @@ Project headings can be either style: linked title with arrow (`\textbf{\href{ur
 - **PyTorch** stays on every skills line; **TensorFlow** is removed because no resume bullet or project demonstrates it.
 - `master_doc.md` synced to the Oct 21 Master Doc (CS 189 projects, Fung update, Guang workshop, Movie Genre stack).
 - **Nov 2, 2026:** Hindsight now has a user-testing bullet (10 transfer students tested it, positive feedback) on all four bases; the Claude, Apify, Droid and Supabase bullets were merged into one on SWE, DS and ML (three bullets max per project). `master_doc.md` synced to Master Doc rev 29.
+- **Nov 3, 2026:** Hindsight and Resume Tailor bullets rewritten around tools and how they are used (like Movie Genre Classification); TypeScript, React, Factory Droid SDK and LaTeX added to the Skills lines where they fit on one line.
 
 ### Oct 28, 2026
 - **Hindsight** (Cal Hacks 13.0) is in `bank/projects.json`, `master_doc.md`, and every base resume (three projects each).

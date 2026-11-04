@@ -1,6 +1,6 @@
 # Master Doc: Everything I've Done
 
-(Source of truth for the resume tailor. Synced Nov 2, 2026 from the Claude Doc "Master Doc: Everything I've Done" (rev 29), plus Oct 28 additions (Hindsight, Resume Tailor, Movie Genre fixes, CS 61A tailoring rule, Fung Oct 28 update, skills list, Nov 2 Hindsight numbers and user testing), which were also added to the Claude Doc. To refresh: export the doc as Markdown and replace this file.)
+(Source of truth for the resume tailor. Synced Nov 3, 2026 from the Claude Doc "Master Doc: Everything I've Done" (rev 29), plus Oct 28 additions (Hindsight, Resume Tailor, Movie Genre fixes, CS 61A tailoring rule, Fung Oct 28 update, skills list, Nov 2 Hindsight numbers and user testing), which were also added to the Claude Doc. To refresh: export the doc as Markdown and replace this file.)
 
 ## How to use this doc
 
@@ -308,3 +308,5 @@ Stack: Python, scikit-learn (MLPClassifier, MLPRegressor, LinearRegression), Num
 **Writing rules I settled on.** Short bullets that say what the thing is in plain words, then a number. No em dashes. Nothing goes on a resume or site unless I can explain it in a live conversation.
 
 **Resume versions.** I keep four role-tailored resumes: Software Engineer intern, Data Science, ML, and Product Manager. Four one-page LaTeX bases (SWE, DS, ML, PM) live in resumes/ in the resume-tailor repo. At most 3 projects per resume. ATS rules: single column, plain hyphen dates, Bachelor of Arts wording, comma-separated coursework, exact job keywords in Skills and bullets.
+
+**Skills additions (Nov 3, 2026).** Hindsight and Resume Tailor resume bullets now name their tools and how they were used (FastAPI deterministic matcher, React, TypeScript, Supabase, Claude API, Apify, Factory Droid SDK; Resume Tailor in Python, FastAPI, LaTeX and the Claude API). These tools are approved in the Skills lines: TypeScript, React, Factory Droid SDK, Claude API, Apify, Supabase, LaTeX. Wording rule: Hindsight stays "co-designed" and the system is the team's; Resume Tailor is "built with Claude".
