@@ -1,6 +1,7 @@
 """Local resume tailor. Run: uvicorn app:app --port 8000"""
 from __future__ import annotations
 
+import re
 import time
 import uuid
 from pathlib import Path
@@ -107,21 +108,27 @@ def revert(req: RevertReq):
     return payload(req.job_id)
 
 
+def download_name(company: str, ext: str) -> str:
+    """Dhana_Karthikeya_Ventrapragada_Resume_<Company>.<ext>, the same naming as the hosted resumes."""
+    slug = re.sub(r"[^A-Za-z0-9]+", "_", company).strip("_")[:50]
+    return "Dhana_Karthikeya_Ventrapragada_Resume" + (f"_{slug}" if slug else "") + f".{ext}"
+
+
 @app.get("/api/pdf/{job_id}")
-def pdf(job_id: str, download: bool = False):
+def pdf(job_id: str, download: bool = False, company: str = ""):
     j = JOBS.get(job_id)
     if not j or not j["built"].ok:
         raise HTTPException(404, "no pdf")
     return FileResponse(j["built"].pdf, media_type="application/pdf",
-                        headers={"Content-Disposition": f'{"attachment" if download else "inline"}; filename="Karthik_Ventrapragada_Resume.pdf"'})
+                        headers={"Content-Disposition": f'{"attachment" if download else "inline"}; filename="{download_name(company, "pdf")}"'})
 
 
 @app.get("/api/tex/{job_id}")
-def tex(job_id: str):
+def tex(job_id: str, company: str = ""):
     j = JOBS.get(job_id)
     if not j:
         raise HTTPException(404, "no tex")
-    return FileResponse(OUT / job_id / "resume.tex", media_type="text/plain", headers={"Content-Disposition": 'attachment; filename="resume.tex"'})
+    return FileResponse(OUT / job_id / "resume.tex", media_type="text/plain", headers={"Content-Disposition": f'attachment; filename="{download_name(company, "tex")}"'})
 
 
 class TrackReq(BaseModel):

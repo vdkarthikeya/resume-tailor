@@ -218,8 +218,19 @@ function renderAts() {
 function showPdf() {
   const ok = job.ok;
   $('pdf').src = ok ? `/api/pdf/${job.job_id}?v=${job.v}` : 'about:blank';
-  for (const [id, url] of [['dl', `/api/pdf/${job.job_id}?download=true`], ['dltex', `/api/tex/${job.job_id}`]]) { $(id).classList.toggle('hide', !ok); $(id).href = url; }
+  for (const id of ['dl', 'dltex']) $(id).classList.toggle('hide', !ok);
+  setDl();
 }
+
+// download names carry the company: Dhana_Karthikeya_Ventrapragada_Resume_<Company>.pdf
+function setDl() {
+  if (!job) return;
+  const c = encodeURIComponent(($('tco').value || jdMeta.company || '').trim());
+  $('dl').href = `/api/pdf/${job.job_id}?download=true&company=${c}`;
+  $('dltex').href = `/api/tex/${job.job_id}?company=${c}`;
+}
+$('tco').addEventListener('input', setDl);
+for (const id of ['dl', 'dltex']) $(id).addEventListener('click', setDl);
 
 $('track').onclick = async () => {
   const m = $('trackmsg'); m.className = 'msg'; m.textContent = 'Saving...'; $('track').disabled = true;
