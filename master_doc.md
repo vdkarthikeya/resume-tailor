@@ -325,7 +325,7 @@ Fall 2025 decks (not yet taught this term) also cover dbt, Airflow, Spark, Kafka
 
 How it maps to the IBM Quantum Data Scientist Intern posting (Job 132776): SQL on large datasets; data pipelines and transformations; reliability and governance of data; dbt, Airflow and Spark ideas; entity resolution for messy customer and event data.
 
-Accuracy notes: dbt, Airflow, Spark and OLAP come from last year's decks and are not yet taught this term, so say "studying" and not "used" unless I confirm hands-on work. [MISSING] Whether Project 2 used dbt.
+Accuracy notes: dbt, Airflow, Spark and OLAP come from last year's decks and are not yet taught this term, so say "studying" and not "used" unless I confirm hands-on work. Project 2 (Fall 2026, query performance, PostgreSQL, Lahman baseball database) did not use dbt. What I did: read EXPLAIN ANALYZE output; compared views and materialized views; built single-column and multi-column indexes; clustered a table. My own recorded numbers: an index on salary cut a MIN(salary) query cost from about 525 to about 0.33 while AVG(salary) still read every row; inserting 300,000 rows took 4.03 s with the index versus 3.02 s without (about 33% slower); clustering batting by the ab index cut one query from cost about 2,884 to about 1,787 and 11.4 ms to 1.9 ms.
 
 ### CS 194 (Functional Programming and AI-Assisted App Development, the "Gleam class")
 
@@ -342,3 +342,8 @@ Seminar for my Fung Fellowship team (human-centered design, interviewing users).
 ### IBM interview prep (Nov 5, 2026)
 
 IBM Quantum Data Scientist Intern 2027 (Job 132776) recorded interview due about Nov 11. The full plan with STAR stories is in the Claude Doc "IBM Recorded Interview Game Plan". Stories drawn from this document: IDX leakage fix, Guang Labs review fix, Fung survivor interviews, CS 61A staff, Hindsight, Resume Tailor, and current classes.
+
+### Interview stories in my own words (added Nov 5, 2026; for interviews, not resumes)
+
+- **Tutoring team hours mix-up (disagreement story).** On the CDSS 198 Transfer Seminar tutoring team I missed one weekly supervisor meeting because I had to talk to a professor. Teammates said the plan was two worksheets each per week plus working with individual groups, but nobody had counted the hours: about 2 hours per worksheet (write and prepare), about 4 for two, against a role of about 10 hours a week. I raised it with the team, who agreed and asked me to take it to our supervisor (Marcia). I brought her the hour breakdown and asked. She said it was a miscommunication: she meant one worksheet per tutor, rotating across courses. She appreciated that I took ownership of raising it for the team and said anyone with questions could come to her or to me. I posted the clarified plan with the hours broken out and we added a sign-in to see which students used the sessions.
+- **Failing a CS 61A midterm (setback story).** As a transfer student I felt out of place next to freshmen and upper-division students and was struggling in lower-division classes. I failed a CS 61A midterm, reached out to my TA, and he sat with me for two and a half hours, listening and telling me succeeding in the course was possible. I finished the course with a good grade. It is part of why I joined course staff.
