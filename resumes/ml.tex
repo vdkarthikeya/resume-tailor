@@ -8,6 +8,7 @@
 \documentclass[letterpaper,11pt]{article}
 
 \usepackage{latexsym}
+\usepackage{graphicx}
 \usepackage[empty]{fullpage}
 \usepackage{titlesec}
 \usepackage{marvosym}
@@ -92,8 +93,18 @@
     \end{tabular*}\vspace{-7pt}
 }
 
+% Project heading: title | tools ... GitHub always stays on ONE line. If it would overflow, it is
+% scaled down just enough to fit (and the build logs HEADING-SCALED so the tailor can shorten the tools).
 \newcommand{\resumeProjectHeading}[1]{
-    \item\small{{#1 \vspace{-3pt}}}
+    \item\small{%
+      \setbox0\hbox{\def\hfill{\hspace{1.5em}}#1}%
+      \ifdim\wd0>\linewidth
+        \typeout{HEADING-SCALED}%
+        \noindent\resizebox{\linewidth}{!}{\unhbox0}%
+      \else
+        #1%
+      \fi
+      \vspace{-3pt}}
 }
 
 \newcommand{\lk}{\,{\scriptsize$\nearrow$}}

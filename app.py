@@ -31,6 +31,12 @@ class GenReq(BaseModel):
     base: str = "auto"
     jd: str
     mock: bool = False
+    url: str = ""
+
+
+class MetaReq(BaseModel):
+    text: str
+    url: str = ""
 
 
 class RevertReq(BaseModel):
@@ -66,9 +72,10 @@ def payload(job_id: str) -> dict:
     return {
         "job_id": job_id, "base": j["base"], "base_name": T.BASES[j["base"]]["name"], "base_reason": j.get("base_reason"),
         "provider": j["provider"], "ok": b.ok, "error": None if b.ok else b.log,
-        "pages": b.pages, "bottom": round(b.bottom), "fill_pct": round(100 * b.bottom / 772) if b.ok else 0,
+        "pages": b.pages, "heading_scaled": b.heading_scaled if b.ok else 0, "bottom": round(b.bottom), "fill_pct": round(100 * b.bottom / 772) if b.ok else 0,
         "warnings": plan["warnings"] + j["log"], "gaps": plan["gaps"], "keywords": plan["keywords"], "summary": plan["summary"],
         "slots": slots_view(plan, j["reverted"]), "ats": T.ats_for(j["base"], plan, b, j["jd"], j["reverted"]), "v": int(time.time() * 1000),
+        "meta": jdmod.extract_meta(j["jd"], j.get("url", "")),
     }
 
 
@@ -78,6 +85,12 @@ def fetch_jd(req: FetchReq):
         return jdmod.fetch_jd(req.url)
     except jdmod.JDError as e:
         raise HTTPException(422, str(e))
+
+
+@app.post("/api/jd-meta")
+def jd_meta(req: MetaReq):
+    """Company and role guessed from pasted job text, so the tracker boxes fill themselves."""
+    return jdmod.extract_meta(req.text, req.url)
 
 
 @app.post("/api/generate")
@@ -92,6 +105,7 @@ def generate(req: GenReq):
         r = T.generate(req.base, req.jd, OUT / job_id, provider)
     except Exception as e:  # API errors, etc.
         raise HTTPException(502, f"{type(e).__name__}: {e}")
+    r["url"] = req.url
     JOBS[job_id] = r
     return payload(job_id)
 
@@ -142,8 +156,12 @@ def track(req: TrackReq):
     j = JOBS.get(req.job_id)
     if not j or not j["built"].ok:
         raise HTTPException(404, "Generate a resume first.")
+    company, role = req.company.strip(), req.role.strip()
+    if not company or not role:  # safety net: never log a blank, fill it from the job text
+        m = jdmod.extract_meta(j["jd"], j.get("url", ""))
+        company, role = company or m["company"], role or m["role"]
     try:
-        return tracker.log_application(j["built"].pdf, OUT / req.job_id / "resume.tex", req.company, req.role)
+        return tracker.log_application(j["built"].pdf, OUT / req.job_id / "resume.tex", company, role)
     except ValueError as e:
         raise HTTPException(400, str(e))
     except Exception as e:
@@ -153,7 +171,7 @@ def track(req: TrackReq):
 @app.get("/api/status")
 def status():
     import os
-    return {"tracker": "google" if tracker.google_ready() else "local", "sheet_url": tracker.SHEET_URL, "folder_url": tracker.FOLDER_URL, "api_key": T.provider_kind() != "none", "provider": T.provider_kind(), "latex": bool(T._engine()), "bases": {k: v["name"] for k, v in T.BASES.items()}}
+    return {"tracker": "google" if tracker.google_ready() else "local", "sheet_url": tracker.SHEET_URL, "folder_url": tracker.FOLDER_URL, "api_key": T.provider_kind() != "none", "provider": T.provider_kind(), "latex": bool(T._engine()), "bases": {k: v["name"] for k, v in T.BASES.items()}, "base_info": {k: {"name": v["name"], "blurb": v.get("blurb", "")} for k, v in T.BASES.items()}}
 
 
 app.mount("/", StaticFiles(directory=ROOT / "static", html=True), name="static")

@@ -1,77 +1,148 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Resume Tailor</title>
+<script>try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-  /* Palette: espresso #261311, copper #c4895a, parchment #f1e6d6, forest #1f3b34 */
-  :root { --bg:#261311; --paper:#321b17; --card:#321b17; --ink:#f1e6d6; --mute:#b5a392; --line:#503630; --acc:#c4895a; --onacc:#261311; --blush:#c4895a; --sage:#2f5a4e; --mist:#3d2420;
-          --hover:#d9a074; --okbd:#5f9a85; --warnbd:#c4895a; --ok:#94c7ad; --warn:#e3a574; --bad:#ff9f90; --add:#213a33; --del:#4a2824; --shadow:0 18px 40px -20px rgba(0,0,0,.75);
-          --ui:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; --text:var(--ui); --display:var(--ui); --glass:rgba(50,27,23,.52); --glass-line:rgba(241,230,214,.14); --field:rgba(38,19,17,.45); color-scheme:dark; }
-  @media (prefers-color-scheme: light) { :root:not([data-theme=dark]) { --bg:#f3eadc; --paper:#fbf5ea; --card:#fbf5ea; --ink:#261311; --mute:#7a6657; --line:#d9c8b0; --acc:#6e4026; --onacc:#f7eee0; --blush:#6e4026; --sage:#2f5a4e; --mist:#eadbc6; --hover:#4f2b17; --okbd:#2f5a4e; --warnbd:#b87a4b; --ok:#2f5a4e; --warn:#9a5532; --bad:#9e3a32; --add:#dbe8e1; --del:#f1d9d2; --shadow:0 10px 24px -18px rgba(38,19,17,.5); --glass:rgba(251,245,234,.58); --glass-line:rgba(255,255,255,.7); --field:rgba(255,255,255,.5); color-scheme:light; } }
-  :root[data-theme=light] { --bg:#f3eadc; --paper:#fbf5ea; --card:#fbf5ea; --ink:#261311; --mute:#7a6657; --line:#d9c8b0; --acc:#6e4026; --onacc:#f7eee0; --blush:#6e4026; --sage:#2f5a4e; --mist:#eadbc6; --hover:#4f2b17; --okbd:#2f5a4e; --warnbd:#b87a4b; --ok:#2f5a4e; --warn:#9a5532; --bad:#9e3a32; --add:#dbe8e1; --del:#f1d9d2; --shadow:0 10px 24px -18px rgba(38,19,17,.5); --glass:rgba(251,245,234,.58); --glass-line:rgba(255,255,255,.7); --field:rgba(255,255,255,.5); color-scheme:light; }
+  /* Palette: charcoal #2C3531, teal #116466, tan #D9B08C, peach #FFCB9A, mist #D1E8E2.
+     Space Grotesk (wide-tracked caps) for headings, Manrope for reading text. */
+  :root, :root[data-theme=dark] {
+    --bg:#222a27; --bg2:#2C3531; --card:rgba(44,53,49,.72); --card-line:rgba(209,232,226,.14); --field:rgba(17,24,22,.55);
+    --ink:#D1E8E2; --mute:#9db5ae; --line:rgba(209,232,226,.16); --acc:#FFCB9A; --acc-ink:#2C3531; --acc-hover:#D9B08C;
+    --teal:#116466; --teal-soft:rgba(17,100,102,.34); --tan:#D9B08C; --head:#FFCB9A;
+    --ok:#8fe0c9; --okbd:#2f9a95; --warn:#FFCB9A; --warnbd:#D9B08C; --bad:#ff9d8c;
+    --add:rgba(17,100,102,.38); --del:rgba(217,176,140,.16); --shadow:0 24px 50px -28px rgba(0,0,0,.8);
+    --glow1:rgba(17,100,102,.55); --glow2:rgba(255,203,154,.12); --focus:#FFCB9A; color-scheme:dark;
+  }
+  :root[data-theme=light] {
+    --bg:#e3f1ed; --bg2:#D1E8E2; --card:rgba(255,255,255,.66); --card-line:rgba(44,53,49,.14); --field:rgba(255,255,255,.85);
+    --ink:#2C3531; --mute:#52665f; --line:rgba(44,53,49,.16); --acc:#116466; --acc-ink:#eef8f5; --acc-hover:#0b4a4c;
+    --teal:#116466; --teal-soft:rgba(17,100,102,.12); --tan:#9a6b43; --head:#116466;
+    --ok:#0d6a63; --okbd:#116466; --warn:#8a5428; --warnbd:#D9B08C; --bad:#a93a2c;
+    --add:rgba(17,100,102,.14); --del:rgba(217,176,140,.34); --shadow:0 18px 36px -26px rgba(44,53,49,.55);
+    --glow1:rgba(17,100,102,.18); --glow2:rgba(255,203,154,.55); --focus:#116466; color-scheme:light;
+  }
+  :root { --display:"Space Grotesk","Manrope",system-ui,sans-serif; --ui:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
   * { box-sizing:border-box; }
-  body { margin:0; min-height:100vh; color:var(--ink); font:400 15px/1.65 var(--text); letter-spacing:-.005em; font-feature-settings:'ss01','cv11'; -webkit-font-smoothing:antialiased; background:
-    radial-gradient(900px 600px at 8% -5%, color-mix(in srgb, var(--acc) 38%, transparent), transparent 60%),
-    radial-gradient(800px 600px at 100% 10%, color-mix(in srgb, var(--sage) 55%, transparent), transparent 60%),
-    radial-gradient(700px 500px at 50% 110%, color-mix(in srgb, var(--acc) 22%, transparent), transparent 60%), var(--bg); background-attachment:fixed; }
-  header { padding:26px 32px 14px; text-align:center; max-width:1280px; margin:0 auto; }
-  h1 { font:800 clamp(26px,3.4vw,38px)/1.1 var(--ui); letter-spacing:-.03em; margin:0; color:var(--ink); background:linear-gradient(100deg,var(--ink) 15%,var(--acc) 85%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }  .sub { color:var(--mute); font:400 13px var(--ui); } #status { display:block; margin-top:10px; font-size:12px; }
-  main { display:grid; grid-template-columns:minmax(340px,490px) 1fr; gap:24px; padding:14px 32px 56px; align-items:start; max-width:1280px; margin:0 auto; }
-  @media (max-width:980px) { main { grid-template-columns:1fr; padding:12px 16px 40px; } }
-  .card { background:var(--glass); border:1px solid var(--glass-line); border-radius:18px; padding:20px 22px; margin-bottom:18px; box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.12); position:relative; -webkit-backdrop-filter:blur(22px) saturate(140%); backdrop-filter:blur(22px) saturate(140%); }
-  h2 { font:700 11.5px/1.2 var(--ui); letter-spacing:.16em; text-transform:uppercase; color:var(--acc); margin:0 0 12px; padding-bottom:10px; border-bottom:1px solid var(--glass-line); }
-  h2 .sub { font-family:var(--ui); text-transform:none; letter-spacing:0; font-size:12px; }
-  label { font:600 12.5px var(--ui); letter-spacing:.01em; color:var(--mute); display:block; margin:10px 0 5px; }
-  input[type=text], textarea, select { width:100%; padding:10px 12px; border:1px solid var(--glass-line); border-radius:12px; background:var(--field); color:var(--ink); font:14px var(--text); }
-  input:focus, textarea:focus, select:focus { outline:2px solid var(--blush); outline-offset:1px; border-color:var(--sage); }
-  input[type=checkbox] { accent-color:var(--acc); }
-  textarea { min-height:190px; resize:vertical; font-size:13px; }
-  .row { display:flex; gap:8px; } .row > * { flex:1; } .row > button { flex:0 0 auto; }
-  button { padding:8px 16px; border-radius:12px; border:1px solid var(--acc); background:transparent; color:var(--acc); font:600 13px var(--ui); cursor:pointer; transition:background .15s, color .15s; }
-  button:hover:not(:disabled) { background:var(--mist); } 
-  button.primary { background:var(--acc); border-color:var(--acc); color:var(--onacc); width:100%; margin-top:12px; padding:11px; font-size:14px; }
-  button.primary:hover:not(:disabled) { background:var(--hover); border-color:var(--hover); color:var(--onacc); }
-  button:disabled { opacity:.5; cursor:wait; }
-  .msg { font:13px var(--ui); margin-top:6px; } .err { color:var(--bad); } .okc { color:var(--ok); } .warnc { color:var(--warn); }
-  .chips { display:flex; flex-wrap:wrap; gap:6px; } .chip { background:var(--field); border:1px solid var(--glass-line); border-radius:99px; padding:2px 11px; font:12px var(--ui); }
-  .stat { display:flex; gap:18px; flex-wrap:wrap; font:13px var(--ui); } .stat b { font-weight:700; }
-  iframe { width:100%; height:80vh; border:1px solid var(--glass-line); border-radius:12px; background:#fff; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; min-height:100vh; color:var(--ink); font:400 15px/1.65 var(--ui); -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(900px 620px at 10% -8%, var(--glow1), transparent 62%),
+      radial-gradient(760px 560px at 100% 4%, var(--glow2), transparent 60%),
+      radial-gradient(900px 600px at 50% 115%, var(--glow1), transparent 62%),
+      linear-gradient(180deg, var(--bg2), var(--bg)); background-attachment:fixed; transition:background .3s, color .3s; }
+  header { padding:30px 32px 12px; max-width:1280px; margin:0 auto; position:relative; text-align:center; }
+  .brand { font:700 clamp(22px,3vw,32px)/1.1 var(--display); letter-spacing:.42em; text-transform:uppercase; margin:0; padding-left:.42em; color:var(--ink); }
+  .brand b { color:var(--head); font-weight:700; }
+  .tagline { font:500 11.5px var(--display); letter-spacing:.3em; text-transform:uppercase; color:var(--mute); margin-top:10px; }
+  .tagline::before, .tagline::after { content:""; display:inline-block; width:34px; height:1px; background:var(--tan); vertical-align:middle; margin:0 12px; opacity:.7; }
+  #status { display:block; margin-top:8px; font-size:12px; color:var(--mute); }
+  #theme { position:absolute; right:32px; top:26px; width:42px; height:42px; padding:0; border-radius:12px; display:grid; place-items:center; background:var(--card); border:1px solid var(--card-line); color:var(--head); }
+  #theme:hover:not(:disabled) { background:var(--teal-soft); border-color:var(--tan); }
+  #theme svg { width:20px; height:20px; }
+  :root[data-theme=dark] .i-moon, :root[data-theme=light] .i-sun { display:none; }
+  main { display:grid; grid-template-columns:minmax(340px,500px) 1fr; gap:24px; padding:16px 32px 56px; align-items:start; max-width:1280px; margin:0 auto; }
+  @media (max-width:980px) { main { grid-template-columns:1fr; padding:12px 16px 40px; } header { padding:76px 16px 8px; } #theme { right:16px; top:18px; } }
+  .card { background:var(--card); border:1px solid var(--card-line); border-radius:16px; padding:20px 22px; margin-bottom:18px; box-shadow:var(--shadow); position:relative; -webkit-backdrop-filter:blur(18px) saturate(130%); backdrop-filter:blur(18px) saturate(130%); }
+  /* HUD corner ticks, a nod to the reference */
+  .card::before, .card::after { content:""; position:absolute; width:14px; height:14px; border:1px solid var(--tan); opacity:.75; pointer-events:none; }
+  .card::before { top:-1px; left:-1px; border-right:0; border-bottom:0; border-top-left-radius:16px; }
+  .card::after { bottom:-1px; right:-1px; border-left:0; border-top:0; border-bottom-right-radius:16px; }
+  h2 { font:600 12px/1.2 var(--display); letter-spacing:.24em; text-transform:uppercase; color:var(--head); margin:0 0 14px; padding-bottom:11px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  h2 .n { display:inline-grid; place-items:center; width:22px; height:22px; border-radius:50%; background:var(--teal); color:#D1E8E2; font:700 11px var(--display); letter-spacing:0; }
+  h2 .sub { font:500 12px var(--ui); text-transform:none; letter-spacing:0; color:var(--mute); }
+  .sub { color:var(--mute); font:500 12.5px var(--ui); }
+  label { font:600 12.5px var(--ui); color:var(--mute); display:block; margin:12px 0 6px; }
+  input[type=text], textarea { width:100%; padding:11px 13px; border:1px solid var(--line); border-radius:12px; background:var(--field); color:var(--ink); font:14px var(--ui); transition:border-color .15s, box-shadow .15s; }
+  input::placeholder, textarea::placeholder { color:var(--mute); opacity:.75; }
+  input:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible, .dd-list:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
+  input[type=text]:focus, textarea:focus { border-color:var(--tan); }
+  input[type=checkbox] { accent-color:var(--teal); width:16px; height:16px; }
+  textarea { min-height:190px; resize:vertical; font-size:13px; line-height:1.55; }
+  .row { display:flex; gap:10px; } .row > * { flex:1; min-width:0; } .row > button { flex:0 0 auto; align-self:stretch; }
+  button { padding:9px 18px; border-radius:12px; border:1px solid var(--tan); background:transparent; color:var(--head); font:600 13px var(--ui); cursor:pointer; transition:background .15s, color .15s, border-color .15s, transform .1s; }
+  button:hover:not(:disabled) { background:var(--teal-soft); }
+  button:active:not(:disabled) { transform:translateY(1px); }
+  button.primary { background:var(--acc); border-color:var(--acc); color:var(--acc-ink); width:100%; margin-top:14px; padding:12px; font:700 13px var(--display); letter-spacing:.16em; text-transform:uppercase; }
+  button.primary:hover:not(:disabled) { background:var(--acc-hover); border-color:var(--acc-hover); color:var(--acc-ink); }
+  :root[data-theme=light] button.primary:hover:not(:disabled) { color:#fff; }
+  button:disabled { opacity:.55; cursor:wait; }
+  .msg { font:500 13px var(--ui); margin-top:8px; } .err { color:var(--bad); } .okc { color:var(--ok); } .warnc { color:var(--warn); }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; } .chip { background:var(--field); border:1px solid var(--line); border-radius:99px; padding:2px 11px; font:500 12px var(--ui); }
+  .stat { display:flex; gap:18px; flex-wrap:wrap; font:500 13px var(--ui); } .stat b { font-weight:700; }
+  iframe { width:100%; height:80vh; border:1px solid var(--line); border-radius:12px; background:#fff; }
   .slot { border-top:1px dashed var(--line); padding:12px 0; } .slot:first-of-type { border-top:0; }
-  
   .slot-h { display:flex; justify-content:space-between; gap:8px; align-items:center; font:600 14px var(--ui); }
-  .slot-h label { margin:0; font:400 12px var(--ui); display:flex; gap:6px; align-items:center; }
-  .b { font-size:13px; padding:5px 10px; border-radius:12px; margin:4px 0; white-space:pre-wrap; border-left:3px solid transparent; }
-  .b.old { background:var(--del); border-left-color:var(--blush); text-decoration:line-through; text-decoration-color:color-mix(in srgb, var(--ink) 40%, transparent); opacity:.85; } .b.new { background:var(--add); border-left-color:var(--okbd); } .b.same { color:var(--mute); }
+  .slot-h label { margin:0; font:500 12px var(--ui); display:flex; gap:6px; align-items:center; }
+  .b { font-size:13px; padding:6px 11px; border-radius:10px; margin:4px 0; white-space:pre-wrap; border-left:3px solid transparent; }
+  .b.old { background:var(--del); border-left-color:var(--tan); text-decoration:line-through; text-decoration-color:color-mix(in srgb, var(--ink) 40%, transparent); opacity:.85; }
+  .b.new { background:var(--add); border-left-color:var(--okbd); } .b.same { color:var(--mute); }
   details { font:12px var(--ui); color:var(--mute); margin:2px 0 4px 8px; } details q { display:block; margin:2px 0; } .nf { color:var(--bad); }
-  .tabs { display:flex; gap:6px; margin-bottom:8px; } .tabs button.on { background:var(--acc); color:var(--onacc); border-color:var(--acc); }
   .chip.k-ok { border-color:var(--okbd); background:var(--add); color:var(--ok); } .chip.k-warn { border-color:var(--warnbd); background:var(--del); color:var(--warn); }
-  .hide { display:none; } ul { margin:4px 0 0 18px; padding:0; } .actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
-  a { color:var(--acc); }
-  a.btn { text-decoration:none; padding:9px 18px; border-radius:12px; border:1px solid var(--acc); background:var(--acc); color:var(--onacc); font:600 13px var(--ui); } a.btn.alt { background:transparent; color:var(--acc); }
-  a.btn:hover { background:var(--hover); border-color:var(--hover); color:var(--onacc); }
-  .sub[style*="margin-top"] { font-size:12px; font-weight:600; }
+  .hide { display:none !important; } ul { margin:4px 0 0 18px; padding:0; } .actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  a { color:var(--head); }
+  a.btn { text-decoration:none; padding:9px 18px; border-radius:12px; border:1px solid var(--acc); background:var(--acc); color:var(--acc-ink); font:700 12px var(--display); letter-spacing:.12em; text-transform:uppercase; }
+  a.btn.alt { background:transparent; color:var(--head); border-color:var(--tan); }
+  a.btn:hover { background:var(--acc-hover); border-color:var(--acc-hover); color:var(--acc-ink); } a.btn.alt:hover { background:var(--teal-soft); color:var(--head); border-color:var(--tan); }
+  .grp { font:600 11px var(--display); letter-spacing:.2em; text-transform:uppercase; color:var(--tan); margin-top:10px; }
+  .hint { font:500 12px var(--ui); margin-top:5px; color:var(--mute); } .hint.warn { color:var(--warn); }
+
+  /* Resume picker: a roomy custom dropdown whose rows wrap instead of spilling */
+  .dd { position:relative; }
+  .dd-btn { width:100%; display:flex; align-items:center; gap:14px; text-align:left; padding:12px 14px; min-height:62px; background:var(--field); border:1px solid var(--line); color:var(--ink); border-radius:14px; }
+  .dd-btn:hover:not(:disabled), .dd[data-open=true] .dd-btn { background:var(--field); border-color:var(--tan); }
+  .dd-main { flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+  .dd-name { font:600 15px/1.3 var(--ui); color:var(--ink); overflow-wrap:anywhere; }
+  .dd-blurb { font:500 12.5px/1.4 var(--ui); color:var(--mute); overflow-wrap:anywhere; }
+  .dd-badge { flex:0 0 auto; width:38px; height:38px; border-radius:10px; display:grid; place-items:center; background:var(--teal); color:#D1E8E2; font:700 12px var(--display); letter-spacing:.06em; }
+  .dd-chev { flex:0 0 auto; width:18px; height:18px; color:var(--head); transition:transform .2s; } .dd[data-open=true] .dd-chev { transform:rotate(180deg); }
+  .dd-list { position:absolute; z-index:30; left:0; right:0; top:calc(100% + 8px); margin:0; padding:6px; list-style:none; max-height:min(60vh,420px); overflow:auto; border-radius:14px; background:var(--bg2); border:1px solid var(--tan); box-shadow:0 26px 50px -18px rgba(0,0,0,.65); }
+  :root[data-theme=light] .dd-list { background:#f6fbf9; }
+  .dd-list[hidden] { display:none; }
+  .dd-opt { display:flex; align-items:center; gap:14px; padding:11px 12px; border-radius:10px; cursor:pointer; min-height:58px; }
+  .dd-opt:hover, .dd-opt.cur { background:var(--teal-soft); }
+  .dd-opt[aria-selected=true] { box-shadow:inset 3px 0 0 var(--acc); background:var(--teal-soft); }
+  .dd-opt .dd-check { margin-left:auto; flex:0 0 auto; width:18px; height:18px; color:var(--ok); opacity:0; } .dd-opt[aria-selected=true] .dd-check { opacity:1; }
 </style>
 </head>
 <body>
-<header style="position:relative"><button id="theme" type="button" style="position:absolute;right:32px;top:22px;padding:6px 12px;font-size:12px" aria-label="Toggle light or dark mode">Light</button><h1>RESUME TAILOR</h1><span class="sub" id="status"></span></header>
+<header>
+  <button id="theme" type="button" aria-label="Switch between dark and light mode" title="Switch between dark and light mode">
+    <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5.3 5.3 7 7M17 17l1.7 1.7M5.3 18.7 7 17M17 7l1.7-1.7"/></svg>
+    <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.6 8.6 0 0 1 9.8 3.5a8.6 8.6 0 1 0 10.7 10.7Z"/></svg>
+  </button>
+  <h1 class="brand">Resume <b>Tailor</b></h1>
+  <div class="tagline">One page. Every fact checked.</div>
+  <span class="sub" id="status"></span>
+</header>
 <main>
   <section>
     <div class="card">
-      <h2>1. Job</h2>
-      <label for="url">Job link (optional: Greenhouse, Lever, Ashby, most career pages)</label>
+      <h2><span class="n">1</span>Job</h2>
+      <label for="url" style="margin-top:0">Job link (optional: Greenhouse, Lever, Ashby, most career pages)</label>
       <div class="row"><input type="text" id="url" placeholder="https://boards.greenhouse.io/..."><button id="fetch">Fetch</button></div>
       <div class="msg" id="fetchmsg"></div>
       <label for="jd">Job description. Paste the full text here if the link misses anything.</label>
       <textarea id="jd" placeholder="Paste the job description..."></textarea>
+      <div class="hint" id="metahint"></div>
     </div>
     <div class="card">
-      <h2>2. Base resume</h2>
-      <select id="base"><option value="auto">Auto-pick best fit</option></select>
-      <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="mock"> Dry run without the AI (only reorders skills, free)</label>
+      <h2><span class="n">2</span>Base resume</h2>
+      <input type="hidden" id="base" value="auto">
+      <div class="dd" id="baseDd" data-open="false">
+        <button type="button" class="dd-btn" id="ddBtn" aria-haspopup="listbox" aria-expanded="false" aria-controls="ddList" aria-label="Base resume">
+          <span class="dd-badge" id="ddBadge">AI</span>
+          <span class="dd-main"><span class="dd-name" id="ddName">Auto-pick best fit</span><span class="dd-blurb" id="ddBlurb">Reads the job and chooses the closest resume</span></span>
+          <svg class="dd-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <ul class="dd-list" id="ddList" role="listbox" tabindex="-1" aria-label="Base resume" hidden></ul>
+      </div>
+      <label style="display:flex;gap:8px;align-items:center;margin-top:14px"><input type="checkbox" id="mock"> Dry run without the AI (only reorders skills, free)</label>
       <button class="primary" id="go">Tailor my resume</button>
       <div class="msg" id="genmsg"></div>
     </div>
@@ -88,9 +159,10 @@
       <div id="atsBody"></div>
     </div>
     <div class="card hide" id="trackCard">
-      <h2>3. Log this application</h2>
-      <div class="row"><div><label for="tco">Company</label><input type="text" id="tco"></div><div><label for="trole">Role</label><input type="text" id="trole"></div></div>
-            <button class="primary" id="track">Add to tracker</button>
+      <h2><span class="n">3</span>Log this application</h2>
+      <div class="row"><div><label for="tco" style="margin-top:0">Company</label><input type="text" id="tco" autocomplete="off"></div><div><label for="trole" style="margin-top:0">Role</label><input type="text" id="trole" autocomplete="off"></div></div>
+      <div class="hint" id="trackhint"></div>
+      <button class="primary" id="track">Add to tracker</button>
       <div class="msg" id="trackmsg"></div>
       <div class="sub" id="tracksub" style="margin-top:4px"></div>
     </div>
@@ -109,6 +181,7 @@
 <script>
 const $ = id => document.getElementById(id);
 let job = null, jdMeta = {title:'', company:'', url:''}, sheetUrl = '';
+const dirty = {tco:false, trole:false};   // true once the user typed in that box, so autofill never overwrites it
 const esc = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 const md = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 
@@ -119,6 +192,35 @@ async function api(path, body) {
   return j;
 }
 
+/* ---------- resume picker (custom dropdown) ---------- */
+const picker = (() => {
+  const dd = $('baseDd'), btn = $('ddBtn'), list = $('ddList'), hid = $('base');
+  let opts = [{v:'auto', name:'Auto-pick best fit', blurb:'Reads the job and chooses the closest resume', badge:'AI'}], cur = 0;
+  const check = '<svg class="dd-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
+  const sel = () => opts.findIndex(o => o.v === hid.value);
+  function paintButton() { const o = opts[Math.max(sel(), 0)]; $('ddName').textContent = o.name; $('ddBlurb').textContent = o.blurb; $('ddBadge').textContent = o.badge; }
+  function build() {
+    list.innerHTML = opts.map((o, i) => `<li class="dd-opt" role="option" id="ddo${i}" data-i="${i}" aria-selected="${o.v === hid.value}"><span class="dd-badge">${esc(o.badge)}</span><span class="dd-main"><span class="dd-name">${esc(o.name)}</span><span class="dd-blurb">${esc(o.blurb)}</span></span>${check}</li>`).join('');
+    list.querySelectorAll('.dd-opt').forEach(li => { li.onclick = () => choose(+li.dataset.i); li.onmousemove = () => mark(+li.dataset.i); });
+  }
+  function mark(i) { cur = i; list.querySelectorAll('.dd-opt').forEach((li, k) => li.classList.toggle('cur', k === i)); list.setAttribute('aria-activedescendant', 'ddo' + i); list.children[i]?.scrollIntoView({block:'nearest'}); }
+  function open() { dd.dataset.open = 'true'; btn.setAttribute('aria-expanded', 'true'); list.hidden = false; mark(Math.max(sel(), 0)); list.focus({preventScroll:true}); }
+  function close(focusBtn = true) { dd.dataset.open = 'false'; btn.setAttribute('aria-expanded', 'false'); list.hidden = true; if (focusBtn) btn.focus(); }
+  function choose(i) { hid.value = opts[i].v; paintButton(); build(); close(); }
+  btn.onclick = () => (list.hidden ? open() : close());
+  btn.addEventListener('keydown', e => { if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(e.key)) { e.preventDefault(); open(); } });
+  list.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); mark(Math.min(cur + 1, opts.length - 1)); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); mark(Math.max(cur - 1, 0)); }
+    else if (e.key === 'Home') { e.preventDefault(); mark(0); } else if (e.key === 'End') { e.preventDefault(); mark(opts.length - 1); }
+    else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choose(cur); }
+    else if (e.key === 'Escape') { e.preventDefault(); close(); } else if (e.key === 'Tab') close(false);
+  });
+  document.addEventListener('mousedown', e => { if (!dd.contains(e.target) && !list.hidden) close(false); });
+  const badge = n => n.split(/[\s/]+/).filter(w => /^[A-Za-z]/.test(w)).map(w => w[0]).join('').slice(0, 3).toUpperCase();
+  return { set(bases) { opts = [opts[0], ...bases.map(b => ({v:b.v, name:b.name, blurb:b.blurb, badge:badge(b.name)}))]; paintButton(); build(); } };
+})();
+
 api('/api/status').then(s => {
   const bits = [];
   if (!s.latex) bits.push('LaTeX not found');
@@ -126,11 +228,36 @@ api('/api/status').then(s => {
   $('status').textContent = bits.join(' · ');
   if (!s.api_key) $('mock').checked = true;
   sheetUrl = s.sheet_url;
-  $('base').innerHTML = '<option value="auto">Auto-pick best fit</option>' + Object.entries(s.bases).map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
-    $('tracksub').innerHTML = s.tracker === 'google' ? `Logging to your <a href="${s.sheet_url}" target="_blank">Google Sheet</a> and Drive folder.` : 'Google not connected yet: saving to the local applications/ folder (see README to connect your Sheet).';
+  const info = s.base_info || Object.fromEntries(Object.entries(s.bases).map(([k, v]) => [k, {name:v, blurb:''}]));
+  picker.set(Object.entries(info).map(([k, v]) => ({v:k, name:v.name, blurb:v.blurb || ''})));
+  $('tracksub').innerHTML = s.tracker === 'google' ? `Logging to your <a href="${s.sheet_url}" target="_blank">Google Sheet</a> and Drive folder.` : 'Google not connected yet: saving to the local applications/ folder (see README to connect your Sheet).';
 }).catch(() => {});
 
-$('jd').addEventListener('input', () => { $('fetchmsg').textContent = ''; $('genmsg').textContent = ''; });
+/* ---------- company and role: detected from the job text, never stale ---------- */
+function applyMeta(m, source) {
+  if (!m) return;
+  if (!dirty.tco) $('tco').value = m.company || '';
+  if (!dirty.trole) $('trole').value = m.role || '';
+  const c = m.confidence || {}, weak = [];
+  if (!m.company || c.company === 'low') weak.push('company');
+  if (!m.role || c.role === 'low') weak.push('role');
+  const msg = !m.company && !m.role ? 'Could not find the company or role in this text. Type them in.'
+    : weak.length ? `Check the ${weak.join(' and ')}: I was not sure.` : 'Company and role found in the job text. Edit if needed.';
+  for (const id of ['metahint', 'trackhint']) { const el = $(id); if (!el) continue; el.textContent = (id === 'metahint' && !source) ? '' : msg; el.className = 'hint' + (weak.length || (!m.company && !m.role) ? ' warn' : ''); }
+}
+let metaTimer = null;
+function scheduleMeta() {
+  clearTimeout(metaTimer);
+  metaTimer = setTimeout(async () => {
+    const text = $('jd').value;
+    if (text.trim().length < 40) { $('metahint').textContent = ''; return; }
+    try { applyMeta(await api('/api/jd-meta', {text, url:$('url').value}), 'paste'); } catch (e) {}
+  }, 350);
+}
+$('tco').addEventListener('input', () => { dirty.tco = true; setDl(); });
+$('trole').addEventListener('input', () => { dirty.trole = true; });
+
+$('jd').addEventListener('input', () => { $('fetchmsg').textContent = ''; $('genmsg').textContent = ''; dirty.tco = dirty.trole = false; scheduleMeta(); });
 $('url').addEventListener('keydown', e => { if (e.key === 'Enter') $('fetch').click(); });
 
 $('fetch').onclick = async () => {
@@ -141,7 +268,9 @@ $('fetch').onclick = async () => {
     const r = await api('/api/fetch-jd', {url: $('url').value});
     jdMeta = {title: r.title, company: r.company, url: r.url};
     $('jd').value = (r.title ? r.title + (r.company ? ' at ' + r.company : '') + '\n\n' : '') + r.text;
+    dirty.tco = dirty.trole = false;
     m.className = 'msg okc'; m.textContent = `Got ${r.text.length.toLocaleString()} characters via ${r.source}. Check it looks right.`;
+    scheduleMeta();
   } catch (e) { m.className = 'msg err'; m.textContent = e.message + ' You can paste the job text in the box below instead.'; }
   $('fetch').disabled = false;
 };
@@ -149,16 +278,15 @@ $('fetch').onclick = async () => {
 $('go').onclick = async () => {
   const m = $('genmsg'); $('fetchmsg').textContent = '';
   if ($('jd').value.trim().length < 80) { m.className = 'msg err'; m.textContent = 'Paste the job description above first (at least a few sentences).'; return; }
-   m.className = 'msg'; m.textContent = 'Tailoring and compiling (can take up to a minute)...'; $('go').disabled = true;
-  try { job = await api('/api/generate', {base:$('base').value, jd:$('jd').value, mock:$('mock').checked}); m.textContent = ''; render(); }
+  m.className = 'msg'; m.textContent = 'Tailoring and compiling (can take up to a minute)...'; $('go').disabled = true;
+  try { job = await api('/api/generate', {base:$('base').value, jd:$('jd').value, mock:$('mock').checked, url:$('url').value}); m.textContent = ''; render(true); }
   catch (e) { m.className = 'msg err'; m.textContent = e.message; }
   $('go').disabled = false;
 };
 
-function render() {
+function render(fresh) {
   $('trackCard').classList.remove('hide');
-  if (!$('tco').value) $('tco').value = jdMeta.company || '';
-  if (!$('trole').value) $('trole').value = jdMeta.title || '';
+  if (fresh) applyMeta(job.meta, 'generate');   // a new resume always refreshes the boxes (unless you already typed in them)
   $('report').classList.remove('hide'); $('slotsCard').classList.remove('hide');
   $('summary').innerHTML = `<b>${esc(job.base_name)} base</b>${job.base_reason ? ' <span class="sub">(' + esc(job.base_reason) + ')</span>' : ''}<br>${esc(job.summary || '')}`;
   const fill = job.fill_pct;
@@ -166,13 +294,15 @@ function render() {
     ? `<span>Pages: <b class="${job.pages === 1 ? 'okc' : 'err'}">${job.pages}</b></span><span>Page fill: <b class="${fill >= 96 ? 'okc' : 'warnc'}">${fill}%</b></span><span>Changed parts: <b>${job.slots.filter(s => s.changed && !s.reverted).length}</b></span>`
     : `<span class="err">Compile failed: ${esc(job.error || '')}</span>`;
   $('kw').innerHTML = (job.keywords || []).map(k => `<span class="chip">${esc(k)}</span>`).join('');
-  $('warns').innerHTML = job.warnings.length ? '<b class="warnc">Notes</b><ul>' + job.warnings.map(w => `<li>${esc(w)}</li>`).join('') + '</ul>' : '';
+  const notes = job.warnings.slice();
+  if (job.heading_scaled) notes.push('A project heading is long, so it was shrunk slightly to keep the tools and GitHub link on one line. Remove a tool from that project to restore full size.');
+  $('warns').innerHTML = notes.length ? '<b class="warnc">Notes</b><ul>' + notes.map(w => `<li>${esc(w)}</li>`).join('') + '</ul>' : '';
   $('gaps').innerHTML = (job.gaps || []).length ? '<b>Job asks for, but your Master Doc has no evidence (not added)</b><ul>' + job.gaps.map(g => `<li>${esc(g)}</li>`).join('') + '</ul>' : '';
   const groups = {};
   job.slots.forEach(s => (groups[s.group] = groups[s.group] || []).push(s));
   let h = '';
   for (const [g, list] of Object.entries(groups)) {
-    h += `<div class="sub" style="margin-top:8px">${esc(g)}</div>`;
+    h += `<div class="grp">${esc(g)}</div>`;
     for (const s of list) {
       h += `<div class="slot"><div class="slot-h"><span>${esc(s.label)}${s.changed ? '' : ' <span class="sub">(unchanged)</span>'}</span>`
         + (s.changed ? `<label><input type="checkbox" data-id="${esc(s.id)}" ${s.reverted ? '' : 'checked'}> use edit</label>` : '') + '</div>';
@@ -197,7 +327,6 @@ function render() {
   showPdf();
 }
 
-
 function renderAts() {
   const a = job.ats, el = $('atsBody');
   $('atsCard').classList.toggle('hide', !a);
@@ -206,11 +335,11 @@ function renderAts() {
   const bar = (v, c) => `<div style="height:8px;background:var(--line);border-radius:4px;overflow:hidden"><div style="width:${v}%;height:100%;background:var(--${c})"></div></div>`;
   let h = `<div class="stat"><span>Job keyword match: <b>${a.before_pct}%</b> before &rarr; <b class="${a.after_pct >= 70 ? 'okc' : 'warnc'}">${a.after_pct}%</b> now</span><span class="sub">${a.matched.length} of ${a.total} keywords</span></div>`
     + `<div style="margin:6px 0">${bar(a.after_pct, a.after_pct >= 70 ? 'ok' : 'warn')}</div>`;
-  if (a.matched.length) h += `<div class="sub" style="margin-top:6px">On your resume</div><div class="chips">${a.matched.map(t => chip(t, 'k-ok')).join('')}</div>`;
-  if (a.missing_supported.length) h += `<div class="sub" style="margin-top:8px">In your Master Doc but not on this resume (consider adding)</div><div class="chips">${a.missing_supported.map(t => chip(t, 'k-warn')).join('')}</div>`;
-  if (a.gaps.length) h += `<div class="sub" style="margin-top:8px">Not in your Master Doc (don't add unless it is true)</div><div class="chips">${a.gaps.map(t => chip(t, '')).join('')}</div>`;
-  if (a.skills_not_in_bullets.length) h += `<div class="sub" style="margin-top:8px">Listed skills no bullet shows (recruiters look for proof)</div><div class="chips">${a.skills_not_in_bullets.slice(0, 8).map(t => chip(t, '')).join('')}${a.skills_not_in_bullets.length > 8 ? '<span class="sub">+' + (a.skills_not_in_bullets.length - 8) + ' more</span>' : ''}</div>`;
-  h += '<div class="sub" style="margin-top:10px">Parse check (what an ATS reads from the PDF)</div><ul style="list-style:none;margin:4px 0 0;padding:0;font-size:13px">'
+  if (a.matched.length) h += `<div class="grp">On your resume</div><div class="chips" style="margin-top:6px">${a.matched.map(t => chip(t, 'k-ok')).join('')}</div>`;
+  if (a.missing_supported.length) h += `<div class="grp">In your Master Doc but not on this resume (consider adding)</div><div class="chips" style="margin-top:6px">${a.missing_supported.map(t => chip(t, 'k-warn')).join('')}</div>`;
+  if (a.gaps.length) h += `<div class="grp">Not in your Master Doc (don't add unless it is true)</div><div class="chips" style="margin-top:6px">${a.gaps.map(t => chip(t, '')).join('')}</div>`;
+  if (a.skills_not_in_bullets.length) h += `<div class="grp">Listed skills no bullet shows (recruiters look for proof)</div><div class="chips" style="margin-top:6px">${a.skills_not_in_bullets.slice(0, 8).map(t => chip(t, '')).join('')}${a.skills_not_in_bullets.length > 8 ? '<span class="sub">+' + (a.skills_not_in_bullets.length - 8) + ' more</span>' : ''}</div>`;
+  h += '<div class="grp">Parse check (what an ATS reads from the PDF)</div><ul style="list-style:none;margin:6px 0 0;padding:0;font-size:13px">'
     + a.parse.map(c => `<li class="${c.ok ? 'okc' : 'err'}">${c.ok ? '✓' : '✗'} ${esc(c.name)}${c.detail && !c.ok ? ' (' + esc(c.detail) + ')' : ''}</li>`).join('') + '</ul>';
   el.innerHTML = h;
 }
@@ -229,13 +358,13 @@ function setDl() {
   $('dl').href = `/api/pdf/${job.job_id}?download=true&company=${c}`;
   $('dltex').href = `/api/tex/${job.job_id}?company=${c}`;
 }
-$('tco').addEventListener('input', setDl);
 for (const id of ['dl', 'dltex']) $(id).addEventListener('click', setDl);
 
 $('track').onclick = async () => {
   const m = $('trackmsg'); m.className = 'msg'; m.textContent = 'Saving...'; $('track').disabled = true;
   try {
     const r = await api('/api/track', {job_id: job.job_id, company: $('tco').value, role: $('trole').value});
+    $('tco').value = r.company || $('tco').value; $('trole').value = r.role || $('trole').value; setDl();
     m.className = 'msg okc';
     m.innerHTML = r.mode === 'google' ? `Added ${esc(r.company)}: ${esc(r.role)}. <a href="${r.drive_url}" target="_blank">Resume PDF</a> · <a href="${r.sheet_url}" target="_blank">Open sheet</a>` : `Saved locally: ${esc(r.job)}`;
   } catch (e) { m.className = 'msg err'; m.textContent = e.message; }
@@ -245,18 +374,15 @@ $('track').onclick = async () => {
 async function onToggle() {
   const reverted = [...document.querySelectorAll('#slots input[type=checkbox]')].filter(c => !c.checked).map(c => c.dataset.id);
   document.querySelectorAll('#slots input').forEach(c => c.disabled = true);
-  try { job = await api('/api/revert', {job_id: job.job_id, reverted}); render(); }
+  try { job = await api('/api/revert', {job_id: job.job_id, reverted}); render(false); }
   catch (e) { $('genmsg').className = 'msg err'; $('genmsg').textContent = e.message; }
 }
 
-(function () {
-  const root = document.documentElement, btn = document.getElementById('theme');
-  const isLight = () => root.dataset.theme ? root.dataset.theme === 'light' : matchMedia('(prefers-color-scheme: light)').matches;
-  const paint = () => { btn.textContent = isLight() ? 'Dark' : 'Light'; };
-  try { const t = localStorage.getItem('theme'); if (t) root.dataset.theme = t; } catch (e) {}
-  btn.onclick = () => { const t = isLight() ? 'dark' : 'light'; root.dataset.theme = t; try { localStorage.setItem('theme', t); } catch (e) {} paint(); };
-  paint();
-})();
+// light / dark toggle (sun and moon icons swap with CSS; choice is remembered)
+$('theme').onclick = () => {
+  const root = document.documentElement, next = root.dataset.theme === 'light' ? 'dark' : 'light';
+  root.dataset.theme = next; try { localStorage.setItem('theme', next); } catch (e) {}
+};
 </script>
 </body>
 </html>

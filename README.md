@@ -170,3 +170,9 @@ Project headings can be either style: linked title with arrow (`\textbf{\href{ur
 - **SightLine** bullets are more technical and still fit one page: ML base has two (smart-glasses recap pipeline; CLIP ViT-B/32 embedding stage in PyTorch and OpenCV with cosine-similarity checks), PM base has one. CLIP added to the ML skills line (Embeddings dropped to keep it on one line) and OpenCV added to the Data line. Longer drafts are kept in `bank/projects.json` (`sightline_6`) for when space allows.- **Downloads** from the app are now named `Dhana_Karthikeya_Ventrapragada_Resume_<Company>.pdf` (and `.tex`), using the Company box, so the saved file matches the hosted resumes.
 
 - **Tests** need a LaTeX install that includes the `ulem` and `fontawesome5` packages (full MacTeX has them). Without them the compile-based tests fail even though the app code is fine. Last run, Nov 4, 2026: 35 of 35 passed.
+
+## Changelog, Nov 4, 2026 (evening)
+- **Project headings** (title, tools, GitHub link) always stay on one line. The `\resumeProjectHeading` macro in every template shrinks an overlong heading just enough to fit and logs `HEADING-SCALED`, which the app shows as a note and feeds back to the AI to shorten the tools list.
+- **Company and role** are now read from the pasted job text (`jd.extract_meta`), from the link when there is one, and from the real company name on Greenhouse (not the URL slug, which gave `wehrtyou` for Hudson River Trading). The boxes refresh for every new job and the tracker fills in blanks itself. Low-confidence guesses are flagged.
+- **Web app redesign**: new palette (charcoal, teal, tan, peach, mist), Space Grotesk and Manrope fonts, a sun/moon light and dark toggle, and a larger resume picker whose rows wrap instead of spilling.
+

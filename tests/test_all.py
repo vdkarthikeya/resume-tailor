@@ -235,3 +235,75 @@ def test_bank_bullets_are_clean():
     for pid, pr in ctx.bank.items():
         for b in pr["bullets"]:
             assert not T.check_bullet_text(b["markup"], ctx, 10_000), (b["id"], T.check_bullet_text(b["markup"], ctx, 10_000))
+
+
+# ---------------------------------------------------------------- company and role from pasted text
+META_CASES = [
+    ("Data Scientist Intern - 2027\nNew York, NY\nApply\n\nAbout Hudson River Trading\nHudson River Trading (HRT) is a multi-asset class quantitative trading firm.",
+     "https://job-boards.greenhouse.io/embed/job_app?for=wehrtyou&token=1", "Hudson River Trading", "Data Scientist Intern"),
+    ("Data Science Intern\nRemote - USA\n\nAt Coinbase, our mission is to increase economic freedom in the world.",
+     "", "Coinbase", "Data Science Intern"),
+    ("Amazon - Software Development Engineer Intern - Summer 2027 (USA) - Job ID: 123456\n\nAmazon is an equal opportunity employer", "", "Amazon", "Software Development Engineer Intern"),
+    ("Machine Learning Engineer Intern at Scale AI\n\nWe are hiring.", "", "Scale AI", "Machine Learning Engineer Intern"),
+    ("Company: Stripe\nJob Title: Data Science Intern, Summer 2027\nLocation: SF", "", "Stripe", "Data Science Intern"),
+    ("Software Engineering Intern, Summer 2027\nGoogle\nMountain View, CA, USA\n\nAbout the job\nGoogle's software engineers develop the next-generation technologies.", "", "Google", "Software Engineering Intern"),
+    ("Sector Data Scientist Intern (Summer 2027) | New York\n\nCitadel is a leading global investment firm.\nAbout Citadel", "", "Citadel", "Sector Data Scientist Intern"),
+    ("Product Manager Intern (Fall 2027 or Spring 2028)\n\nAbout Databricks\nDatabricks is the data and AI company.", "", "Databricks", "Product Manager Intern"),
+    ("Quantitative Researcher Intern\nNew York\nJane Street is a quantitative trading firm and liquidity provider.", "", "Jane Street", "Quantitative Researcher Intern"),
+]
+
+
+@pytest.mark.parametrize("text,url,company,role", META_CASES)
+def test_extract_meta(text, url, company, role):
+    m = J.extract_meta(text, url)
+    assert (m["company"], m["role"]) == (company, role), m
+
+
+def test_extract_meta_unknown_and_slug():
+    m = J.extract_meta("We are looking for someone great to join our team.")
+    assert m["company"] == "" and m["confidence"]["company"] == "none"
+    # no company cue in the text: fall back to the link, nicely capitalized
+    m = J.extract_meta("Data Analyst Intern\nBuild dashboards and run SQL every day for the team.", "https://jobs.lever.co/hudson-river-trading/abc")
+    assert m["company"] == "Hudson River Trading" and m["role"] == "Data Analyst Intern"
+    assert J.pretty_slug("wehrtyou") == "Wehrtyou" and J.pretty_slug("scale-ai") == "Scale Ai"
+
+
+def test_greenhouse_uses_real_company_name(monkeypatch):
+    class R:
+        def __init__(s, c, j): s.status_code, s._j = c, j; s.headers = {"content-type": "application/json"}; s.text = ""
+        def json(s): return s._j
+    def fake(c, url, **k):
+        if url.endswith("/boards/wehrtyou/jobs/9"): return R(200, GH)
+        if url.endswith("/boards/wehrtyou"): return R(200, {"name": "Hudson River Trading"})
+        return R(404, {})
+    monkeypatch.setattr(J, "_get", fake)
+    assert J.fetch_jd("https://job-boards.greenhouse.io/embed/job_app?for=wehrtyou&token=9")["company"] == "Hudson River Trading"
+
+
+def test_api_meta_and_track_fallback(tmp_path, monkeypatch):
+    from fastapi.testclient import TestClient
+    import app as A, tracker
+    monkeypatch.setattr(A, "OUT", tmp_path / "o"); monkeypatch.setattr(tracker, "LOCAL_DIR", tmp_path / "apps")
+    monkeypatch.setattr(tracker, "google_ready", lambda: False)
+    c = TestClient(A.app)
+    jdtext = "Data Science Intern\nRemote - USA\n\nAt Coinbase, our mission is to increase economic freedom. " + "We analyze data with Python and SQL. " * 6
+    assert c.post("/api/jd-meta", json={"text": jdtext}).json()["company"] == "Coinbase"
+    d = c.post("/api/generate", json={"base": "ds", "jd": jdtext, "mock": True}).json()
+    assert d["meta"]["company"] == "Coinbase" and d["meta"]["role"] == "Data Science Intern"
+    r = c.post("/api/track", json={"job_id": d["job_id"], "company": "", "role": ""})  # blank boxes still log correctly
+    assert r.status_code == 200 and r.json()["company"] == "Coinbase" and r.json()["role"] == "Data Science Intern"
+
+
+def test_no_project_heading_wraps(tmp_path):
+    """Heading, tools and GitHub link stay on one line even with an overlong tools list (scaled, flagged)."""
+    base = (T.ROOT / "resumes/ml.tex").read_text()
+    ok = T.compile_tex(base, tmp_path / "a", "r")
+    assert ok.ok and ok.heading_scaled == 0
+    long_ = base.replace("\\emph{PyTorch, OpenCV, in progress}", "\\emph{PyTorch, OpenCV, CLIP, NumPy, pandas, scikit-learn, FastAPI, in progress}")
+    assert long_ != base
+    b = T.compile_tex(long_, tmp_path / "b", "r")
+    import pymupdf
+    words = pymupdf.open(b.pdf)[0].get_text("words")  # (x0, y0, x1, y1, word, ...)
+    head_y = next(w[1] for w in words if w[4] == "SightLine")
+    gh = [w for w in words if w[4] == "GitHub" and abs(w[1] - head_y) < 3]
+    assert b.pages == 1 and b.heading_scaled == 1 and gh, "GitHub link left the heading line"
