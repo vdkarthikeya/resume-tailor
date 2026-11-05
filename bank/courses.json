@@ -1,16 +1,15 @@
 {
- "completed": [
-  "Structure & Interpretation of Computer Programs",
-  "Foundations of Data Science",
-  "Data Structures",
-  "Principles & Techniques of Data Science",
-  "Probability for Data Science",
-  "Introduction to Urban Data Analytics"
- ],
- "in_progress": [
-  "Introduction to Machine Learning",
-  "Efficient Algorithms & Intractable Problems",
-  "Functional Programming & AI-Assisted App Development",
-  "Data Engineering"
- ]
+  "completed": [
+    "Structure & Interpretation of Computer Programs",
+    "Foundations of Data Science",
+    "Data Structures",
+    "Principles & Techniques of Data Science",
+    "Probability for Data Science",
+    "Introduction to Urban Data Analytics"
+  ],
+  "in_progress": [
+    "Introduction to Machine Learning",
+    "Functional Programming & AI-Assisted App Development",
+    "Data Engineering"
+  ]
 }

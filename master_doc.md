@@ -1,6 +1,6 @@
 # Master Doc: Everything I've Done
 
-(Source of truth for the resume tailor. Synced Nov 3, 2026 from the Claude Doc "Master Doc: Everything I've Done" (rev 29), plus Oct 28 additions (Hindsight, Resume Tailor, Movie Genre fixes, CS 61A tailoring rule, Fung Oct 28 update, skills list, Nov 2 Hindsight numbers and user testing), which were also added to the Claude Doc. To refresh: export the doc as Markdown and replace this file.)
+(Source of truth for the resume tailor. Updated Nov 5, 2026 with current-class sections (Data C101, CS 194, CS 189, ENGIN 188; CS 170 dropped) and IBM interview prep note. Synced Nov 3, 2026 from the Claude Doc "Master Doc: Everything I've Done" (rev 29), plus Oct 28 additions (Hindsight, Resume Tailor, Movie Genre fixes, CS 61A tailoring rule, Fung Oct 28 update, skills list, Nov 2 Hindsight numbers and user testing), which were also added to the Claude Doc. To refresh: export the doc as Markdown and replace this file.)
 
 ## How to use this doc
 
@@ -33,7 +33,7 @@ UC Berkeley B.A. in Data Science (Applied Mathematics and Modeling domain emphas
 | Spring 2026 | DATA 198 and INDENG 198, Directed Group Studies | P |
 | Summer 2026 | CYPLAN 101, Introduction to Urban Data Analytics | A |
 | Summer 2026 | DATA 197, Field Studies in Data Science | P |
-| Fall 2026 | CS 170 Efficient Algorithms and Intractable Problems; CS 189 Introduction to Machine Learning; CS 194 Functional Programming and AI-Assisted App Development; DATA C101 Data Engineering; ENGIN 188 Fung Fellowship Seminar | In progress |
+| Fall 2026 | CS 189 Introduction to Machine Learning; CS 194 Functional Programming and AI-Assisted App Development; DATA C101 Data Engineering; ENGIN 188 Fung Fellowship Seminar | In progress |
 
 Note: resumes list full course names, never course codes.
 
@@ -312,3 +312,33 @@ Stack: Python, scikit-learn (MLPClassifier, MLPRegressor, LinearRegression), Num
 **Resume versions.** I keep four role-tailored resumes: Software Engineer intern, Data Science, ML, and Product Manager. Four one-page LaTeX bases (SWE, DS, ML, PM) live in resumes/ in the resume-tailor repo. At most 3 projects per resume. ATS rules: single column, plain hyphen dates, Bachelor of Arts wording, comma-separated coursework, exact job keywords in Skills and bullets.
 
 **Skills additions (Nov 3, 2026).** Hindsight and Resume Tailor resume bullets now name their tools and how they were used (FastAPI deterministic matcher, React, TypeScript, Supabase, Claude API, Apify, Factory Droid SDK; Resume Tailor in Python, FastAPI, LaTeX and the Claude API). These tools are approved in the Skills lines: TypeScript, React, Factory Droid SDK, Claude API, Apify, Supabase, LaTeX. Wording rule: Hindsight stays "co-designed" and the system is the team's; Resume Tailor is "built with Claude".
+
+## Current classes, Fall 2026 (added Nov 5, 2026)
+
+CS 170 was dropped by my decision, so it is no longer in progress. I am taking CS 189, CS 194, DATA C101 and ENGIN 188.
+
+### DATA C101: Data Engineering
+
+Topics from the lecture decks so far: ETL, ELT and ETLT; data warehouse versus data lake versus lakehouse; governance versus agility; relational algebra; SQL with CTEs, subqueries, views and materialized views; DML and DDL; query plans, EXPLAIN, and predicate and projection pushdown; data preparation (structural transforms such as pivot and melt, type induction); entity resolution (blocking, q-grams, Levenshtein distance, clustering); data models (matrix, relation, dataframe); semistructured data and MongoDB.
+
+Fall 2025 decks (not yet taught this term) also cover dbt, Airflow, Spark, Kafka, CI/CD data tests, OLAP and star schemas, and graph databases.
+
+How it maps to the IBM Quantum Data Scientist Intern posting (Job 132776): SQL on large datasets; data pipelines and transformations; reliability and governance of data; dbt, Airflow and Spark ideas; entity resolution for messy customer and event data.
+
+Accuracy notes: dbt, Airflow, Spark and OLAP come from last year's decks and are not yet taught this term, so say "studying" and not "used" unless I confirm hands-on work. [MISSING] Whether Project 2 used dbt.
+
+### CS 194 (Functional Programming and AI-Assisted App Development, the "Gleam class")
+
+New 1-unit Fall 2026 course (DeNero and Ousterhout) that covers only the new CS 61A unit, for students who already took CS 61A. Gleam replaces Scheme for functional programming and the interpreter unit; Lustre is Gleam's package for the Elm architecture. Topics: algebraic data types and pattern matching, the DOM and browser technologies, building a full app across multiple languages with a client-server design using agentic AI tools. Project languages: Gleam, JavaScript, Python and SQL, with a TypeScript and SQL option. Take-home work is recorded and reviewed, and students discuss their code with staff or an LLM tutor. [MISSING] Whether the enrollment moved from CS 194 to CS 198 (an Oct 26 email says it did).
+
+### CS 189: Introduction to Machine Learning
+
+In progress. Homework so far includes a Fashion-MNIST assignment (scikit-learn and torchvision data loading) and bootstrap confidence intervals. [MISSING] A fuller topic list.
+
+### ENGIN 188: Fung Fellowship Seminar
+
+Seminar for my Fung Fellowship team (human-centered design, interviewing users). [MISSING] Syllabus details.
+
+### IBM interview prep (Nov 5, 2026)
+
+IBM Quantum Data Scientist Intern 2027 (Job 132776) recorded interview due about Nov 11. The full plan with STAR stories is in the Claude Doc "IBM Recorded Interview Game Plan". Stories drawn from this document: IDX leakage fix, Guang Labs review fix, Fung survivor interviews, CS 61A staff, Hindsight, Resume Tailor, and current classes.
