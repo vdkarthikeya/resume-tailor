@@ -203,7 +203,7 @@
       },
       {
         "id": "sightline_2",
-        "markup": "Building the **CLIP ViT-B/32** clip embedding stage in PyTorch and OpenCV, checked with cosine-similarity neighbors.",
+        "markup": "Building **CLIP ViT-B/32** clip embeddings in PyTorch and OpenCV, checked with cosine-similarity neighbors.",
         "from_resume": "ml"
       },
       {
