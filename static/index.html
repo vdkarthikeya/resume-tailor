@@ -93,6 +93,7 @@
   .hint { font:500 12px var(--ui); margin-top:5px; color:var(--mute); } .hint.warn { color:var(--warn); }
 
   /* Resume picker: a roomy custom dropdown whose rows wrap instead of spilling */
+  .card.raised { z-index:60; }   /* lets the open list sit above the cards below it */
   .dd { position:relative; }
   .dd-btn { width:100%; display:flex; align-items:center; gap:14px; text-align:left; padding:12px 14px; min-height:62px; background:var(--field); border:1px solid var(--line); color:var(--ink); border-radius:14px; }
   .dd-btn:hover:not(:disabled), .dd[data-open=true] .dd-btn { background:var(--field); border-color:var(--tan); }
@@ -204,8 +205,8 @@ const picker = (() => {
     list.querySelectorAll('.dd-opt').forEach(li => { li.onclick = () => choose(+li.dataset.i); li.onmousemove = () => mark(+li.dataset.i); });
   }
   function mark(i) { cur = i; list.querySelectorAll('.dd-opt').forEach((li, k) => li.classList.toggle('cur', k === i)); list.setAttribute('aria-activedescendant', 'ddo' + i); list.children[i]?.scrollIntoView({block:'nearest'}); }
-  function open() { dd.dataset.open = 'true'; btn.setAttribute('aria-expanded', 'true'); list.hidden = false; mark(Math.max(sel(), 0)); list.focus({preventScroll:true}); }
-  function close(focusBtn = true) { dd.dataset.open = 'false'; btn.setAttribute('aria-expanded', 'false'); list.hidden = true; if (focusBtn) btn.focus(); }
+  function open() { dd.closest('.card').classList.add('raised'); dd.dataset.open = 'true'; btn.setAttribute('aria-expanded', 'true'); list.hidden = false; mark(Math.max(sel(), 0)); list.focus({preventScroll:true}); }
+  function close(focusBtn = true) { dd.closest('.card').classList.remove('raised'); dd.dataset.open = 'false'; btn.setAttribute('aria-expanded', 'false'); list.hidden = true; if (focusBtn) btn.focus(); }
   function choose(i) { hid.value = opts[i].v; paintButton(); build(); close(); }
   btn.onclick = () => (list.hidden ? open() : close());
   btn.addEventListener('keydown', e => { if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(e.key)) { e.preventDefault(); open(); } });
