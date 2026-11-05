@@ -207,6 +207,8 @@ Stack: Python, PyTorch, OpenCV, YOLO. Repo: sightline-ml-public.
 - SIG-63, ML Scoring Pipeline MVP: assigned, Todo (created Oct 27, 2026). Scores every 5-second window from 0 to 1, evaluated with Spearman correlation and top-10 recall against a filmer's ground-truth ratings. Three people have the same ticket and the versions are compared. Not started, so no results or claims.
 - SIG-39, ML Test Clip: assigned, Todo. Filming test clips with the Meta glasses for the team. Not done.
 
+**Update Nov 4, 2026: resume wording.** SIG-63 (ML Scoring Pipeline MVP) is now In Progress (started Nov 3); no results or accuracy numbers yet, so none go on the resume. Resume bullets name CLIP ViT-B/32, PyTorch, OpenCV and cosine-similarity neighbor checks for the SIG-22 embedding stage, worded as "building" until SIG-22 is Done. Not yet confirmed: which CLIP library I used and whether the neighbor and timing checks are finished.
+
 ### SB 79 Transit-Oriented Development Analysis (CYPLAN 101, Summer 2026)
 
 Stack: ArcGIS Online, StoryMaps. Two-person group project.

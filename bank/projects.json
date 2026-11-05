@@ -95,7 +95,7 @@
       },
       {
         "id": "movie_genre_2",
-        "markup": "Compared Logistic Regression, XGBoost, and LightGBM: Logistic Regression won and trained about **12\u00d7** faster than XGBoost; dropping rare genres and tuning the threshold raised Macro F1 from 0.48 to **0.66**.",
+        "markup": "Compared Logistic Regression, XGBoost, and LightGBM: Logistic Regression won and trained about **12×** faster than XGBoost; dropping rare genres and tuning the threshold raised Macro F1 from 0.48 to **0.66**.",
         "from_resume": "ml"
       },
       {
@@ -105,7 +105,7 @@
       },
       {
         "id": "movie_genre_4",
-        "markup": "Compared Logistic Regression, XGBoost, and LightGBM on text embeddings; the simpler Logistic Regression won and trained about **12\u00d7** faster.",
+        "markup": "Compared Logistic Regression, XGBoost, and LightGBM on text embeddings; the simpler Logistic Regression won and trained about **12×** faster.",
         "from_resume": "ds"
       }
     ]
@@ -198,22 +198,32 @@
     "bullets": [
       {
         "id": "sightline_1",
-        "markup": "Developing an app that turns a day of Meta Ray-Ban smart glasses footage into a **60-second** highlight video; on the ML team, which splits footage into clips and uses audio and visual models to pick the best moments.",
+        "markup": "Building the ML pipeline for a smart-glasses app that turns a day of footage into a **60-second** recap.",
         "from_resume": "ml"
       },
       {
         "id": "sightline_2",
-        "markup": "Building the ML pipeline for an app that turns a day of Meta Ray-Ban smart glasses footage into a **60-second** highlight video, splitting footage into clips and using audio and visual models to pick the best moments.",
-        "from_resume": "swe"
+        "markup": "Building the **CLIP ViT-B/32** clip embedding stage in PyTorch and OpenCV, checked with cosine-similarity neighbors.",
+        "from_resume": "ml"
       },
       {
         "id": "sightline_3",
-        "markup": "Work with the iOS and backend teams on how clip ranking fits into the full product pipeline.",
+        "markup": "ML team member on a smart-glasses recap app, embedding clips with CLIP to rank them for the **60**-second video.",
         "from_resume": "pm"
       },
       {
         "id": "sightline_4",
-        "markup": "Building the first stage of the scoring pipeline: samples frames from each 5-second clip, runs a pretrained **CLIP** model, and saves one embedding per clip for later clustering and scoring.",
+        "markup": "Building the ML pipeline for an app that turns a day of Meta Ray-Ban smart glasses footage into a **60-second** highlight video, splitting footage into clips and using audio and visual models to pick the best moments.",
+        "from_resume": "swe"
+      },
+      {
+        "id": "sightline_5",
+        "markup": "Work with the iOS and backend teams on how clip ranking fits into the full product pipeline.",
+        "from_resume": "pm"
+      },
+      {
+        "id": "sightline_6",
+        "markup": "Writing the clip embedding stage in Python: samples evenly spaced frames per clip with OpenCV, encodes them with a pretrained **CLIP ViT-B/32** model in PyTorch, then averages and L2-normalizes them into one vector per clip.",
         "from_resume": "ml"
       }
     ]

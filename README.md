@@ -165,3 +165,6 @@ Project headings can be either style: linked title with arrow (`\textbf{\href{ur
 ### Oct 29, 2026
 - **SightLine** in `master_doc.md` now records the assigned Linear tickets (SIG-22 CLIP embedding pipeline in progress, SIG-14 research done, SIG-63 and SIG-39 not started). The embedding step is allowed on resumes as "building"; nothing past it is.
 - New SightLine bullet in `bank/projects.json` (`sightline_4`) for the CLIP embedding step. Base resumes are unchanged.
+
+### Nov 4, 2026
+- **SightLine** bullets are more technical and still fit one page: ML base has two (smart-glasses recap pipeline; CLIP ViT-B/32 embedding stage in PyTorch and OpenCV with cosine-similarity checks), PM base has one. CLIP added to the ML skills line (Embeddings dropped to keep it on one line) and OpenCV added to the Data line. Longer drafts are kept in `bank/projects.json` (`sightline_6`) for when space allows.
