@@ -176,3 +176,8 @@ Project headings can be either style: linked title with arrow (`\textbf{\href{ur
 - **Company and role** are now read from the pasted job text (`jd.extract_meta`), from the link when there is one, and from the real company name on Greenhouse (not the URL slug, which gave `wehrtyou` for Hudson River Trading). The boxes refresh for every new job and the tracker fills in blanks itself. Low-confidence guesses are flagged.
 - **Web app redesign**: new palette (charcoal, teal, tan, peach, mist), Space Grotesk and Manrope fonts, a sun/moon light and dark toggle, and a larger resume picker whose rows wrap instead of spilling.
 
+
+## Changelog, Nov 10, 2026
+- **11 projects added to `bank/projects.json`** so the tailor can pick them: Climate Change Hypothesis Testing (A/B test, bootstrap CIs), World Population and Poverty, Movie Genre k-NN Classifier (all Data 8), Micrograd from Scratch, PostgreSQL Query Performance (Data 101), LLM Arena Leaderboard and Fashion-MNIST (CS 189), Percolation (CS 61B), and Cats, Hog and Ants (CS 61A). California Housing Regression now has a bullet.
+- `master_doc.md` has a section for each new project with the numbers taken from the notebooks; A/B Testing, Hypothesis Testing and Bootstrapping are now approved skills.
+- Base resumes are unchanged. Tests: 48 of 48 passed.

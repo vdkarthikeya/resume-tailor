@@ -292,11 +292,246 @@
     "url": "https://github.com/vdkarthikeya/california-housing-regression",
     "stack": [
       "Python",
-      "scikit-learn",
       "pandas",
+      "scikit-learn",
+      "Matplotlib"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "calhousing_1",
+        "markup": "Compared linear regression with k-nearest-neighbors regression on **20,640** California block groups using scikit-learn Pipelines, cutting test RMSE from about **$70,000** to about **$61,000**.",
+        "from_resume": "ds"
+      }
+    ]
+  },
+  {
+    "id": "climate",
+    "title": "Climate Change Hypothesis Testing",
+    "url": "https://github.com/vdkarthikeya/climate-analysis",
+    "stack": [
+      "Python",
+      "NumPy",
+      "Matplotlib"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "climate_1",
+        "markup": "Ran an **A/B test** (permutation test, **5,000** simulations) to check whether drought years were truly drier than other years, rejecting chance at the 5% level (p = **0.026**).",
+        "from_resume": "ds"
+      },
+      {
+        "id": "climate_2",
+        "markup": "Built **99%** bootstrap confidence intervals (**5,000** resamples) for monthly max temperatures, finding **9** of **12** months significantly hotter in 2019-2021 than in 1900-1960.",
+        "from_resume": "ds"
+      },
+      {
+        "id": "climate_3",
+        "markup": "Flagged the multiple-testing risk of running **12** tests at once, and showed why unequal group sizes do not bias a permutation test.",
+        "from_resume": "ds"
+      }
+    ]
+  },
+  {
+    "id": "poverty",
+    "title": "World Population and Poverty",
+    "url": "https://github.com/vdkarthikeya/hunger-poverty-analysis",
+    "stack": [
+      "Python",
+      "NumPy",
+      "Matplotlib"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "poverty_1",
+        "markup": "Joined and grouped Gapminder country tables to track world population by decade (**2.6** billion in 1960 to **6.8** billion in 2020) and fertility versus child mortality across the **50** most populous countries.",
+        "from_resume": "ds"
+      },
+      {
+        "id": "poverty_2",
+        "markup": "Estimated that about **14.4%** of the world lived in extreme poverty around 2010 by joining each country's latest poverty rate with its population, then mapped poverty by region.",
+        "from_resume": "ds"
+      }
+    ]
+  },
+  {
+    "id": "knn_movies",
+    "title": "Movie Genre k-NN Classifier",
+    "url": "https://github.com/vdkarthikeya/movie-classification",
+    "stack": [
+      "Python",
       "NumPy"
     ],
     "suffix": "",
-    "bullets": []
+    "bullets": [
+      {
+        "id": "knn_movies_1",
+        "markup": "Built a k-nearest-neighbors classifier that labels **333** movies as comedy or thriller from script word frequencies, reaching **70%** test accuracy with **10** hand-picked features.",
+        "from_resume": "ds"
+      },
+      {
+        "id": "knn_movies_2",
+        "markup": "Analyzed the errors (darker comedies read as thrillers) and cut to **4** features, reaching about **78%** accuracy on a second test set.",
+        "from_resume": "ml"
+      }
+    ]
+  },
+  {
+    "id": "micrograd",
+    "title": "Micrograd from Scratch",
+    "url": "https://github.com/vdkarthikeya/micrograd-from-scratch",
+    "stack": [
+      "Python",
+      "PyTorch"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "micrograd_1",
+        "markup": "Built a scalar autograd engine in plain Python that runs backpropagation by topologically sorting the computation graph and applying the chain rule at each node.",
+        "from_resume": "ml"
+      },
+      {
+        "id": "micrograd_2",
+        "markup": "Trained an MLP built on the engine with gradient descent, cutting loss from **4.85** to **0.033** in **20** steps, and checked gradients against **PyTorch** autograd.",
+        "from_resume": "ml"
+      }
+    ]
+  },
+  {
+    "id": "pg_perf",
+    "title": "PostgreSQL Query Performance",
+    "url": "",
+    "stack": [
+      "PostgreSQL",
+      "SQL"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "pg_perf_1",
+        "markup": "Tuned **PostgreSQL** queries on a baseball database by reading EXPLAIN ANALYZE plans: an index cut a MIN(salary) query cost from about **525** to **0.33**.",
+        "from_resume": "ds"
+      },
+      {
+        "id": "pg_perf_2",
+        "markup": "Measured trade-offs: the index made inserting **300,000** rows about **33%** slower, and clustering a table cut one query from **11.4** ms to **1.9** ms.",
+        "from_resume": "ds"
+      }
+    ]
+  },
+  {
+    "id": "percolation",
+    "title": "Percolation",
+    "url": "https://github.com/vdkarthikeya/percolation-unionfind",
+    "stack": [
+      "Java",
+      "JUnit"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "percolation_1",
+        "markup": "Modeled grid percolation with weighted union-find and virtual top and bottom sites, using a second union-find to prevent backwash.",
+        "from_resume": "swe"
+      },
+      {
+        "id": "percolation_2",
+        "markup": "Ran Monte Carlo trials to estimate the percolation threshold with its mean, standard deviation, and **95%** confidence interval.",
+        "from_resume": "swe"
+      }
+    ]
+  },
+  {
+    "id": "cats",
+    "title": "Cats Typing Test",
+    "url": "https://github.com/vdkarthikeya/cats-typing-test",
+    "stack": [
+      "Python"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "cats_1",
+        "markup": "Built a typing speed test that scores words per minute and accuracy, with autocorrect based on a recursive edit distance capped by a limit.",
+        "from_resume": "swe"
+      }
+    ]
+  },
+  {
+    "id": "hog",
+    "title": "Hog Dice Game",
+    "url": "https://github.com/vdkarthikeya/hog-dice-game",
+    "stack": [
+      "Python"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "hog_1",
+        "markup": "Wrote higher-order functions that simulate a dice game **1,000** times per setting to find the best number of dice to roll and compare strategy win rates.",
+        "from_resume": "swe"
+      }
+    ]
+  },
+  {
+    "id": "ants",
+    "title": "Ants vs. Bees",
+    "url": "https://github.com/vdkarthikeya/ants-vs-bees",
+    "stack": [
+      "Python"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "ants_1",
+        "markup": "Built a tower defense game with object-oriented programming: about **20** ant and bee classes sharing behavior through inheritance.",
+        "from_resume": "swe"
+      }
+    ]
+  },
+  {
+    "id": "llm_arena",
+    "title": "LLM Arena Leaderboard",
+    "url": "",
+    "stack": [
+      "Python",
+      "scikit-learn",
+      "pandas",
+      "Plotly"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "llm_arena_1",
+        "markup": "Ranked the top **20** LLMs from about **26K** human-preference battles by fitting a Bradley-Terry model (logistic regression) and comparing it to raw win rates on held-out battles.",
+        "from_resume": "ml"
+      },
+      {
+        "id": "llm_arena_2",
+        "markup": "Bootstrapped **200** resamples for confidence intervals on each model's rank, and grouped prompts into topics with LSA and K-Means to compare leaderboards by topic.",
+        "from_resume": "ds"
+      }
+    ]
+  },
+  {
+    "id": "fashion_mnist",
+    "title": "Fashion-MNIST Rotation Robustness",
+    "url": "",
+    "stack": [
+      "Python",
+      "scikit-learn",
+      "NumPy"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "fashion_mnist_1",
+        "markup": "Trained an MLP classifier on **70K** Fashion-MNIST images and made it robust to a rotated test set with rotation augmentation, a rotation-angle regressor, and test-time augmentation.",
+        "from_resume": "ml"
+      }
+    ]
   }
 ]

@@ -284,6 +284,72 @@ Stack: Python, scikit-learn (MLPClassifier, MLPRegressor, LinearRegression), Num
 - The secret test set was rotated. Three fixes: train on randomly rotated augmented images; train a regressor that predicts the rotation angle and un-rotate test images before classifying; test-time augmentation.
 - [MISSING] Final accuracy numbers for each fix.
 
+### Climate Change Hypothesis Testing (Foundations of Data Science, Data 8 Project 2, Fall 2025)
+
+Stack: Python, NumPy, datascience tables, Matplotlib. Repo: climate-analysis (private). Course project in a staff notebook with fill-in sections; the code, hypotheses and written conclusions are mine.
+
+- A/B test on drought: tested whether EPA-labeled drought years were drier than other years. Null: drought and other years have the same precipitation distribution. Test statistic: average precipitation in drought years minus average in other years. Simulated the null 5,000 times by shuffling the drought/other labels (permutation test). p-value 0.026, so rejected the null at a 5% cutoff: drought years were drier, consistent with the EPA's statement.
+- Explained why total precipitation is still a valid test statistic when groups have different sizes: the permutation keeps group sizes fixed, so the imbalance is built into the null distribution.
+- Bootstrap confidence intervals: wrote make_ci, a 99% confidence interval for a mean from 5,000 bootstrap resamples. Compared past (1900 to 1960) and present (2019 to 2021) average daily max temperatures for every month. The past average fell outside the present 99% interval for 9 of 12 months, so those months are significantly hotter now; February was not (past 68.8 inside the present interval).
+- Noted the multiple-testing risk: running 12 tests at a 1% cutoff raises the chance of at least one false rejection.
+
+### World Population and Poverty (Foundations of Data Science, Data 8 Project 1, Fall 2025)
+
+Stack: Python, NumPy, datascience tables, Matplotlib. Repo: hunger-poverty-analysis (private). Course project using Gapminder data.
+
+- Computed Poland's annual population growth rate in 5-year steps from 1900 to 2025 and linked its fertility and child mortality trends since 1950 with scatter plots.
+- Built world population totals by decade (about 2.6 billion in 1960 to about 6.8 billion in 2020) by joining and grouping country tables, and compared fertility and child mortality for the 50 most populous countries with an interactive year slider.
+- Estimated that about 14.4% of the world population lived in extreme poverty around 2010 by joining each country's latest poverty rate with its population; mapped poverty totals by region and listed the 10 countries with the most people in poverty.
+
+### Movie Genre k-NN Classifier (Foundations of Data Science, Data 8 Project 3, Fall 2025)
+
+Stack: Python, NumPy, datascience tables. Repo: movie-classification (private). Course project.
+
+- Classified movies as comedy or thriller from word frequencies in their scripts: 333 movies, 5,000 stemmed word features, 85/15 train and test split (283 and 50 movies).
+- Wrote Euclidean distance and a k-nearest-neighbors classifier, chose 10 word features myself, and reached 70% test accuracy with 15 neighbors. Error analysis: most mistakes were darker comedies labeled as thrillers.
+- Under a 5-feature limit, picked 4 words (well, look, kill, love) and reached about 78% accuracy on a second test set.
+
+### Micrograd from Scratch (self-study, repo from June 2026)
+
+Stack: Python (no NumPy or PyTorch in the engine); PyTorch only to check gradients. Repo: micrograd-from-scratch (public). Followed Andrej Karpathy's micrograd lecture.
+
+- Built a scalar autograd engine: a Value class that records the operations that produced it and runs backpropagation by topologically sorting the graph and applying the chain rule at each node.
+- Built Neuron, Layer and MLP classes on top of it and trained a 3-input MLP with two hidden layers of 4 neurons on a toy dataset with gradient descent: mean squared error loss fell from about 4.85 to about 0.033 in 20 steps.
+- Checked my gradients against PyTorch autograd on the same expression, and derived the backward pass of a 2-layer net by hand (Micrograd.pdf).
+
+### California Housing Regression (details added Nov 10, 2026)
+
+Stack: Python, pandas, scikit-learn, Matplotlib. Repo: california-housing-regression (public).
+
+- 20,640 California block groups, 80/20 train and test split. One-hot encoded ocean proximity, median imputation, scikit-learn Pipelines so preprocessing is fit on training data only.
+- Linear regression test RMSE about $70,000 versus k-nearest-neighbors regression (with feature scaling) about $61,000. Linear regression underpredicted expensive homes.
+
+### PostgreSQL Query Performance (Data Engineering, Data 101 Project 2, Fall 2026)
+
+Stack: PostgreSQL, SQL. Course project on the Lahman baseball database. Details are under DATA C101 below.
+
+- Read EXPLAIN ANALYZE plans, compared views and materialized views, built single-column and multi-column indexes, and clustered a table.
+- An index on salary cut a MIN(salary) query cost from about 525 to about 0.33 while AVG(salary) still read every row; inserting 300,000 rows was about 33% slower with the index; clustering batting by the ab index cut one query from 11.4 ms to 1.9 ms.
+
+### Percolation (Data Structures, CS 61B Project, Spring 2026)
+
+Stack: Java, JUnit. Repo: percolation-unionfind (private).
+
+- Modeled an N by N grid that percolates when open sites connect top to bottom, using weighted quick union with virtual top and bottom sites so each percolation check is near constant time.
+- Used a second union-find without the virtual bottom site to avoid backwash (sites wrongly marked full through the bottom).
+- Ran Monte Carlo trials to estimate the percolation threshold, reporting the mean, standard deviation and a 95% confidence interval.
+
+### Hog, Cats and Ants (Structure and Interpretation of Computer Programs, CS 61A Projects)
+
+Stack: Python. Repos: hog-dice-game, cats-typing-test, ants-vs-bees (private).
+
+- Hog: a two-player dice game with higher-order functions for strategies; make_averaged runs a function 1,000 times to estimate the best number of dice to roll and compare strategy win rates.
+- Cats: a typing speed test that measures words per minute and accuracy, with autocorrect based on a recursive edit distance (minimum_mewtations) bounded by a limit, plus multiplayer progress and fastest-word reports.
+- Ants: a tower defense game built with object-oriented programming, about 20 ant and bee classes that use inheritance (thrower, container, queen and more).
+
+### Note on repos
+- food-safety-eda is misnamed: it holds my Data 100 Cook County housing notebooks (Projects A1 and A2), the same work as Housing Price and Assessment Bias.
+
 ## Earlier roles at De Anza
 
 - **Boundary.0, Secretary (Apr 2024 to Jun 2025, Cupertino):** one of the club's first officers; helped partner with 5+ companies across construction, finance, and computer science; coordinated board meetings; organized launch and outreach events to grow a 120+ member community. Mission: connect students with industry opportunities.
@@ -294,7 +360,7 @@ Stack: Python, scikit-learn (MLPClassifier, MLPRegressor, LinearRegression), Num
 
 ## Skills (only these may appear in a Skills section)
 - Languages: Python, Java, C++, SQL, Scheme, TypeScript
-- ML and data science: pandas, NumPy, scikit-learn, PyTorch, TensorFlow, XGBoost, LightGBM, SentenceTransformers, Embeddings, Cross-Validation, Feature Engineering, GeoPandas, Matplotlib, seaborn
+- ML and data science: A/B Testing, Hypothesis Testing, Bootstrapping, pandas, NumPy, scikit-learn, PyTorch, TensorFlow, XGBoost, LightGBM, SentenceTransformers, Embeddings, Cross-Validation, Feature Engineering, GeoPandas, Matplotlib, seaborn
 - Backend and infrastructure: FastAPI, Pydantic, PostgreSQL (query plans with EXPLAIN ANALYZE, indexing; from Data 101 Project 2, Nov 5, 2026), Auth0, AWS S3, Gemini API, Claude API, Apify, Factory Droid SDK, Supabase, Vite, REST APIs, pytest, ffmpeg, ffprobe, React, Background Jobs
 - Product: User Research, User Interviews, Discovery Read-outs, Documentation, Cross-Functional Collaboration
 - Developer tools: Git, GitHub, VS Code, IntelliJ, Jupyter, Google Colab, MATLAB, Cursor
