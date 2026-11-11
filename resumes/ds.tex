@@ -145,7 +145,7 @@
 
 \vspace{-6pt}
 \resumeItemListStart
-\resumeItem{\textbf{Relevant Coursework:} Principles \& Techniques of Data Science, Probability for Data Science, Introduction to Urban Data Analytics; \textit{In progress:} Introduction to Machine Learning, Data Engineering}
+\resumeItem{\textbf{Relevant Coursework:} Foundations of Data Science, Principles \& Techniques of Data Science, Probability for Data Science; \textit{In progress:} Introduction to Machine Learning, Data Engineering}
 \resumeItemListEnd
 
 \resumeSubHeadingListEnd
@@ -156,9 +156,9 @@
  \begin{itemize}[leftmargin=0.15in, label={}, itemsep=3pt]
     \small{\item{
      \textbf{Languages}{: Python, SQL, Java, TypeScript} \\[2pt]
-     \textbf{ML \& Statistics}{: scikit-learn, XGBoost, LightGBM, PyTorch, Cross-Validation, Feature Engineering} \\[2pt]
-     \textbf{Data}{: pandas, NumPy, GeoPandas, Matplotlib, seaborn, PostgreSQL (query plans, indexing), MongoDB, Entity Resolution, ArcGIS Online, Jupyter} \\[2pt]
-     \textbf{Engineering}{: FastAPI, React, Supabase, Claude API, Apify, Factory Droid SDK, REST APIs, AWS S3, pytest, Git}
+     \textbf{Statistics \& ML}{: A/B Testing, Hypothesis Testing, Bootstrapping, scikit-learn, XGBoost, PyTorch, Cross-Validation} \\[2pt]
+     \textbf{Data}{: pandas, NumPy, Matplotlib, seaborn, PostgreSQL (query plans, indexing), Plotly, Feature Engineering, Jupyter} \\[2pt]
+     \textbf{Engineering}{: FastAPI, React, Supabase, Claude API, REST APIs, AWS S3, pytest, Git}
     }}
  \end{itemize}
  \vspace{-15pt}
@@ -180,9 +180,8 @@
         {Guang Labs}{Engineering Intern}{Remote}{May 2026 - Aug 2026}
         \resumeItemListStart
              \resumeItem{Engineered a service for an AI video startup that classifies videos and images by type (sports, gaming, talking) using Gemini, retrying uncertain or malformed responses on different clips, up to \textbf{10} attempts.}
-             \resumeItem{Persisted each label with the model's confidence and reasoning so the team can audit it, backed by \textbf{86} tests.}
+             \resumeItem{Stored each label, confidence score, and reasoning in a \textbf{PostgreSQL} table for auditing, backed by \textbf{86} tests.}
              \resumeItem{Developed an in-app notification bell that alerts users when their video finishes processing or fails.}
-             \resumeItem{Built the service on Pydantic schemas and a deterministic fake provider, so it can be tested without live services.}
         \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -193,27 +192,27 @@
     \vspace{0pt}
     \resumeSubHeadingListStart
         \resumeProjectHeading
-            {\textbf{Hindsight (Cal Hacks 13.0)} $|$ \emph{Claude, FastAPI, React, Supabase, Apify, Factory Droid} \hfill \href{https://github.com/Cal-Hacks-2026/Hindsight}{\uline{GitHub}}}
+            {\textbf{Climate Change Hypothesis Testing} $|$ \emph{Python, NumPy, Matplotlib} \hfill \href{https://github.com/vdkarthikeya/climate-analysis}{\uline{GitHub}}}
+        \resumeItemListStart
+            \resumeItem{Ran an \textbf{A/B test} (permutation test, \textbf{5,000} simulations) to check whether drought years were truly drier than other years, rejecting chance at the 5\% level (p = \textbf{0.026}).}
+            \resumeItem{Built \textbf{99\%} bootstrap confidence intervals (\textbf{5,000} resamples) for monthly max temperatures, finding \textbf{9} of \textbf{12} months significantly hotter in 2019-2021 than in 1900-1960.}
+            \resumeItem{Flagged the multiple-testing risk of running \textbf{12} tests at once at a \textbf{1\%} cutoff.}
+        \resumeItemListEnd
+        \vspace{2pt}
+
+        \resumeProjectHeading
+            {\textbf{LLM Arena Leaderboard} $|$ \emph{Python, scikit-learn, pandas, Plotly}}
+        \resumeItemListStart
+            \resumeItem{Ranked the top \textbf{20} LLMs from about \textbf{26K} human-preference battles by fitting a Bradley-Terry model (logistic regression) and comparing it to raw win rates on held-out battles.}
+            \resumeItem{Bootstrapped \textbf{200} resamples for confidence intervals on each model's rank, and grouped prompts into topics with LSA and K-Means to compare leaderboards by topic.}
+        \resumeItemListEnd
+        \vspace{2pt}
+
+        \resumeProjectHeading
+            {\textbf{Hindsight (Cal Hacks 13.0)} $|$ \emph{Claude, FastAPI, React, Supabase} \hfill \href{https://github.com/Cal-Hacks-2026/Hindsight}{\uline{GitHub}}}
         \resumeItemListStart
             \resumeItem{Co-designed a transfer planner: a \textbf{FastAPI} backend that matches courses to official ASSIST agreements with deterministic rules (minimum grades, agreement years), a \textbf{React} and \textbf{TypeScript} interface, and \textbf{Supabase}.}
-            \resumeItem{\textbf{Claude} reads transcripts and class schedules that students confirm and answers with numbered citations that code validates; \textbf{Apify} scrapes campus pages and a \textbf{Factory Droid} agent repairs only broken scraper scripts, in a sandbox.}
             \resumeItem{Tested with \textbf{10} transfer students, who said it would have helped during their own transfer.}
-        \resumeItemListEnd
-        \vspace{2pt}
-
-        \resumeProjectHeading
-            {\textbf{Housing Price \& Assessment Bias} $|$ \emph{Python, pandas, scikit-learn} \hfill \href{https://github.com/vdkarthikeya/housing-price-assessment-bias-public}{\uline{GitHub}}}
-        \resumeItemListStart
-            \resumeItem{Built a model that estimates home values from \textbf{200K+} Cook County (Chicago) property records, and audited its fairness across price ranges to show which homes get over- or under-valued and taxed unfairly.}
-            \resumeItem{Engineered \textbf{15+} features (log square footage, polynomial age and location terms) and validated with 4-fold cross-validation (test RMSE \textbf{0.562}).}
-        \resumeItemListEnd
-        \vspace{2pt}
-
-        \resumeProjectHeading
-            {\textbf{SB 79 Transit Housing Analysis (Los Angeles)} $|$ \emph{ArcGIS Online, StoryMaps} \hfill \href{https://github.com/vdkarthikeya/sb79-tod-analysis-public}{\uline{GitHub}}}
-        \resumeItemListStart
-            \resumeItem{Mapped the parts of Los Angeles that qualify for denser housing near transit under a new California law (\textbf{6,413} eligible zoning areas), layering in displacement risk, pollution, and fire hazard data in an interactive StoryMap.}
-            \resumeItem{Wrote the Methods, Results, and Discussion of the research paper and policy brief that accompany the StoryMap (two-person project).}
         \resumeItemListEnd
 
     \resumeSubHeadingListEnd
