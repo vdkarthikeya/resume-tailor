@@ -513,6 +513,11 @@
         "id": "llm_arena_2",
         "markup": "Bootstrapped **200** resamples for confidence intervals on each model's rank, and grouped prompts into topics with LSA and K-Means to compare leaderboards by topic.",
         "from_resume": "ds"
+      },
+      {
+        "id": "llm_arena_3",
+        "markup": "Built a style-controlled leaderboard that adjusts each model's strength for response length and formatting (bold, headers, lists).",
+        "from_resume": "ds"
       }
     ]
   },

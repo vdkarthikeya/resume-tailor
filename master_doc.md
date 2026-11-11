@@ -267,14 +267,14 @@ Stack: scikit-learn, pandas, NumPy. Repo: spam-ham-classifier-public.
 
 ### LLM Arena Leaderboard (CS 189 Homework 2, Fall 2026)
 
-Stack: Python, scikit-learn, pandas, NumPy, Plotly. Course homework in a staff-provided notebook with fill-in sections.
+Stack: Python, scikit-learn, pandas, NumPy, Plotly. Course homework in a staff-provided notebook with fill-in sections; all fill-in work is mine.
 
 - Used the public Arena human-preference battle data from Hugging Face: top 20 LLMs by battle count, about 40K battles (about 26K after removing ties).
 - Computed pairwise win fractions and average win rates, then fit a Bradley-Terry model (logistic regression, no intercept, L2) to learn one strength score per LLM. Compared it against win rates on a held-out 20% of battles using log loss.
 - Bootstrapped 200 resamples for confidence intervals and confidence-aware ranks.
 - Found prompt topics with LSA (TruncatedSVD), K-Means, and a Gaussian mixture model, then compared leaderboards by topic.
 - Built a style-controlled leaderboard using response length and bold, header, and list counts.
-- [MISSING] Which parts I completed myself, and whether I did the custom style feature (Question 7).
+- Confirmed Nov 10, 2026: I did all of it myself, including the style-controlled leaderboard (Question 7).
 
 ### Fashion-MNIST Rotation Robustness (CS 189, Fall 2026)
 
@@ -348,6 +348,7 @@ Stack: Python. Repos: hog-dice-game, cats-typing-test, ants-vs-bees (private).
 - Ants: a tower defense game built with object-oriented programming, about 20 ant and bee classes that use inheritance (thrower, container, queen and more).
 
 ### Note on repos
+- Confirmed Nov 10, 2026: I did all the work in every project listed in this doc myself (course projects included); Hindsight is the exception, as described in its section.
 - food-safety-eda is misnamed: it holds my Data 100 Cook County housing notebooks (Projects A1 and A2), the same work as Housing Price and Assessment Bias.
 
 ## Earlier roles at De Anza
@@ -360,7 +361,7 @@ Stack: Python. Repos: hog-dice-game, cats-typing-test, ants-vs-bees (private).
 
 ## Skills (only these may appear in a Skills section)
 - Languages: Python, Java, C++, SQL, Scheme, TypeScript
-- ML and data science: A/B Testing, Hypothesis Testing, Bootstrapping, pandas, NumPy, scikit-learn, PyTorch, TensorFlow, XGBoost, LightGBM, SentenceTransformers, Embeddings, Cross-Validation, Feature Engineering, GeoPandas, Matplotlib, seaborn
+- ML and data science: A/B Testing, Hypothesis Testing, Bootstrapping, pandas, NumPy, scikit-learn, PyTorch, TensorFlow, XGBoost, LightGBM, SentenceTransformers, Embeddings, Cross-Validation, Feature Engineering, GeoPandas, Matplotlib, seaborn, Plotly
 - Backend and infrastructure: FastAPI, Pydantic, PostgreSQL (query plans with EXPLAIN ANALYZE, indexing; from Data 101 Project 2, Nov 5, 2026), Auth0, AWS S3, Gemini API, Claude API, Apify, Factory Droid SDK, Supabase, Vite, REST APIs, pytest, ffmpeg, ffprobe, React, Background Jobs
 - Product: User Research, User Interviews, Discovery Read-outs, Documentation, Cross-Functional Collaboration
 - Developer tools: Git, GitHub, VS Code, IntelliJ, Jupyter, Google Colab, MATLAB, Cursor
