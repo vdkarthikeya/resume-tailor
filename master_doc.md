@@ -187,7 +187,7 @@ Stack: Claude, FastAPI (Python), React, TypeScript, Vite, Supabase, Apify, Facto
 
 ### Next Step (Fung Fellowship prototype, Nov 2026, team project)
 
-Stack: plain HTML, CSS and JavaScript (no build step), Cloudflare Pages with Pages Functions, Cloudflare Workers AI. Live site: https://next-step-2fg.pages.dev. Repo: nextstep-wildfire/next-step (private until I make it public; 26 commits, all mine, Nov 12 to 13).
+Stack: plain HTML, CSS and JavaScript (no build step), Cloudflare Pages with Pages Functions, Cloudflare Workers AI. Live site: https://next-step-2fg.pages.dev. Repo: nextstep-wildfire/next-step (public as of Nov 14, 2026; 26 commits, all mine, Nov 12 to 13).
 
 - What it is: a free website that helps California wildfire survivors write one clear letter to their insurer. A chat gives answers tied to numbered source notes, and a letter builder drafts the letter in English, Spanish or Chinese. Built through the Fung Fellowship with mentorship from TAC.
 - How it works: the AI is a hosted model (Llama 3.3 70B on Cloudflare Workers AI, with an optional smaller model and an optional Anthropic key path), not a model I trained. Answers are grounded in 15 numbered source notes in sources.json, and the server strips any citation number that does not exist. Prompts live on the server. Nothing is stored server-side: chats, letters and the contact log stay in the browser's localStorage.

@@ -542,7 +542,7 @@
   {
     "id": "next_step",
     "title": "Next Step (Fung Fellowship)",
-    "url": "https://next-step-2fg.pages.dev",
+    "url": "https://github.com/nextstep-wildfire/next-step",
     "stack": [
       "JavaScript",
       "Cloudflare",
