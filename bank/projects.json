@@ -54,7 +54,7 @@
     "bullets": [
       {
         "id": "resume_tailor_1",
-        "markup": "Built with **Claude**: a **Python** and **FastAPI** app that tailors a **LaTeX** resume to a job posting.",
+        "markup": "Built a **Python** and **FastAPI** app that tailors a **LaTeX** resume to a job posting.",
         "from_resume": "swe"
       },
       {
@@ -552,7 +552,7 @@
     "bullets": [
       {
         "id": "next_step_1",
-        "markup": "Built with **Claude**: a free website that helps California wildfire survivors write one clear letter to their insurer, in English, Spanish or Chinese.",
+        "markup": "Built a free website that helps California wildfire survivors write one clear letter to their insurer, in English, Spanish or Chinese.",
         "from_resume": "swe"
       },
       {
@@ -562,7 +562,7 @@
       },
       {
         "id": "next_step_3",
-        "markup": "Built with **Claude**: a site that helps survivors write one clear insurance letter, grounded in **15** cited sources.",
+        "markup": "Built a site that helps survivors write one clear insurance letter, grounded in **15** cited sources.",
         "from_resume": "pm"
       }
     ]
