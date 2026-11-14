@@ -12,10 +12,10 @@ This is the full-detail record behind my resumes and website. Those stay short; 
 | IDX Exchange, Data Science Intern (Jun to Aug 2026) | Built a California home-price model, median error 8.64% |
 | CS 61A Course Staff (UCS1), Jun to Aug 2026 | Taught 4 weekly exam-prep sections, held office hours, helped write exam questions |
 | CDSS 198 Reader and Tutor, Aug 2026 to present | Careers seminar feedback plus Transfer Seminar exam reviews |
-| Fung Fellow, Health + Innovation, Aug 2026 to present | Team on The After Collective, an AI recovery coach for disaster survivors |
+| Fung Fellow, Health + Innovation, Aug 2026 to present | Team mentored by The After Collective; built Next Step, a hosted guide for wildfire survivors' insurance claims |
 | CSM Junior Mentor, Sep 2026 to present | Weekly Transfer Affinity section for CS 88 / DATA C88C |
 | SightLine (Open Projects, ML team), Fall 2026 | ML pipeline for a smart-glasses daily recap app |
-| Projects | Hindsight, Resume Tailor, SB 79 analysis, Movie Genres, Housing Bias, Spam Classifier, California Housing, Scheme Interpreter, Ngordnet, Build Your Own World |
+| Projects | Next Step, Hindsight, Resume Tailor, SB 79 analysis, Movie Genres, Housing Bias, Spam Classifier, California Housing, Scheme Interpreter, Ngordnet, Build Your Own World |
 
 ## Education and coursework
 
@@ -133,6 +133,13 @@ XGBoost (400 trees, depth 8, learning rate 0.05, seed 42), 10 features, tested o
 - Midpoint read-out: the five-slide deck (Sabrina, Peggy and me) has a speaker script where I open with the hook slide, the Palisades homeowner's "frozen into immobility" quote and the bullseye (the person who runs the household's insurance claim after a California wildfire). The deck says six interviews and two concept walkthroughs. The shipped log schedules the partner meeting for the read-out on Oct 26, so do not claim it was presented to the partner unless I confirm.
 - Oct 22 interview (Eaton Fire resident, Dawn): Peggy was the interviewer and Sabrina took notes; my role is not recorded. Do not say I led or attended it. Her reactions: favored Claim Roadmap or AfterVerify, and questioned Help That Fits and vendor reliability. Proposed team next step: have an insurance professional review the claims checklist.
 
+**Update Nov 14, 2026: Fung status, refreshed from the team's docs, the Next Step repo and the progress message from the Fung project.** The After Collective (TAC) is our mentor, so phrase it that way on the resume and website.
+
+- Role: DRI of the week for Weeks 5 to 9 and Week 11 (shipped log). Ran or led 3 of the 5 Bet 2 sessions (Derek, Jack, Sohan). Led interviews on Oct 12 (Palisades homeowner), Oct 16 (Sohan), Nov 5 (broker Megan Glasson) and Nov 6 (Jessica Rogers, with a live demo). Documentation owner. Joined the two speccing sessions with Abhi (Oct 12 and 13). Built the Next Step v2 artifact and the hosted site, and drafted the Bet 3 doc. This replaces the older "four interviews documented in total" line, which is out of date.
+- Bets: Bet 1 not supported (0 of 4 scored). Bet 2 not supported (0 of 5). Bet 3 is untested: it needs 3 of 5 new users to reach a letter with one correct ask, unassisted, in 10 minutes. The Nov 13 session with Annie Barbour failed because of Zoom screen sharing, and no Bet 3 sessions have been run. The team settled on the core verb "Ask" on Nov 10, after David pointed out that "trust" is not a verb.
+- Next Step is the prototype, listed as its own project below. I rebuilt its start screen around the letter after users did not find the reply helper on their own.
+- Accuracy notes: no outcomes are claimed. The Bet 3 doc and the canonical doc still say "not built yet", which is stale (the prototype is live), so the repo is the safer source. A few people who help survivors have reviewed the prototype and given feedback; no professional has formally reviewed it. Say "mentorship from TAC", not "built for TAC" or "TAC's product".
+
 ### CS 61A Undergraduate Course Staff (UCS1), Jun to Aug 2026
 
 - Course staff for Berkeley's intro CS course in Python, SQL, and Scheme.
@@ -177,6 +184,16 @@ Stack: Claude, FastAPI (Python), React, TypeScript, Vite, Supabase, Apify, Facto
 - Data: ASSIST snapshot holds 116 community colleges, 61 universities and 116 agreements. Radar uses 12 scraped sources; one Droid run stored 197 SJSU listings in 44 seconds with all 6 SJSU sources healthy; scans run every 2 hours. The audit used about 30 Claude calls.
 - Safe for a resume (mine to explain): 3-day hackathon, team of 4, and the 12 fictional-scenario test with 17/17 courses on the sample transcript, worded as the team's testing. Keep lines of code, test counts, commit counts and ASSIST coverage off the resume, because they imply code or coverage I did not write or that is not fully built.
 - User testing (stated by me, Nov 2, 2026): 10 real users tested the product and gave positive feedback, saying it would have helped them when they were going through their own transfer. This is the real-user number for the resume: say "10 transfer students tested it" and describe the feedback in words (positive, would have helped during transfer). There is no score or percentage, so do not invent one. \[MISSING\] Whether I ran those sessions myself, whether they were all community college transfer students, and how many real test transcripts we collected (plan said 3 to 5), to be ready for follow-up questions.
+
+### Next Step (Fung Fellowship prototype, Nov 2026, team project)
+
+Stack: plain HTML, CSS and JavaScript (no build step), Cloudflare Pages with Pages Functions, Cloudflare Workers AI. Live site: https://next-step-2fg.pages.dev. Repo: nextstep-wildfire/next-step (private until I make it public; 26 commits, all mine, Nov 12 to 13).
+
+- What it is: a free website that helps California wildfire survivors write one clear letter to their insurer. A chat gives answers tied to numbered source notes, and a letter builder drafts the letter in English, Spanish or Chinese. Built through the Fung Fellowship with mentorship from TAC.
+- How it works: the AI is a hosted model (Llama 3.3 70B on Cloudflare Workers AI, with an optional smaller model and an optional Anthropic key path), not a model I trained. Answers are grounded in 15 numbered source notes in sources.json, and the server strips any citation number that does not exist. Prompts live on the server. Nothing is stored server-side: chats, letters and the contact log stay in the browser's localStorage.
+- Limits and testing: the free tier allows roughly 100 replies a day on the 70B model. A browser test script (tests/run.mjs, 34 checks per the README) and a dev server with a mock AI cover the app. The source notes were last updated Nov 7, 2026.
+- My part: built the site and its backend with Claude, and led the user sessions that shaped it. Say "built with Claude" and "hosted model", the same honest framing as Resume Tailor.
+- Accuracy notes: it is a student prototype, not legal or insurance advice. Say "grounded chat and letter generation on a hosted model", never "trained" or "ML model". No outcomes are claimed, and Bet 3 is untested. A few people who help survivors reviewed the prototype informally; the facts in the source notes have not had a formal expert check.
 
 ### Resume Tailor (personal tool, Oct 2026)
 Stack: Python, FastAPI, LaTeX, Claude. Repo: resume-tailor.
