@@ -1,7 +1,7 @@
 [
   {
     "id": "hindsight",
-    "title": "Hindsight (Cal Hacks 13.0)",
+    "title": "Hindsight",
     "url": "https://github.com/Cal-Hacks-2026/Hindsight",
     "stack": [
       "Claude",
@@ -15,7 +15,7 @@
     "bullets": [
       {
         "id": "hindsight_1",
-        "markup": "Co-designed a transfer planner: a **FastAPI** backend that matches courses to official ASSIST agreements with deterministic rules (minimum grades, agreement years), a **React** and **TypeScript** interface, and **Supabase**.",
+        "markup": "Co-designed a transfer planner at Cal Hacks 13.0: a **FastAPI** backend that matches courses to ASSIST agreements with deterministic rules, a **React** and **TypeScript** interface, and **Supabase**.",
         "from_resume": "ml"
       },
       {
@@ -541,7 +541,7 @@
   },
   {
     "id": "next_step",
-    "title": "Next Step (Fung Fellowship)",
+    "title": "Next Step",
     "url": "https://github.com/nextstep-wildfire/next-step",
     "stack": [
       "JavaScript",
@@ -552,7 +552,7 @@
     "bullets": [
       {
         "id": "next_step_1",
-        "markup": "Built a free website that helps California wildfire survivors write one clear letter to their insurer, in English, Spanish or Chinese.",
+        "markup": "Built a free site for the Fung Fellowship that helps wildfire survivors write one clear insurer letter in English, Spanish or Chinese.",
         "from_resume": "swe"
       },
       {
@@ -562,7 +562,7 @@
       },
       {
         "id": "next_step_3",
-        "markup": "Built a site that helps survivors write one clear insurance letter, grounded in **15** cited sources.",
+        "markup": "Built a site for the Fung Fellowship that helps survivors write one clear insurance letter, grounded in **15** cited sources.",
         "from_resume": "pm"
       }
     ]
