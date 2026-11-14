@@ -183,3 +183,7 @@ Project headings can be either style: linked title with arrow (`\textbf{\href{ur
 - Base resumes are unchanged. Tests: 48 of 48 passed.
 - **Later Nov 10:** Master Doc now records that I did all the work in every project myself (Hindsight excepted, as its section says), LLM Arena's open question is closed, `llm_arena_3` (style-controlled leaderboard) added to the bank, and Plotly approved for Skills.
 - **Nov 10 (night):** `resumes/ds.tex` updated: Climate Change Hypothesis Testing, LLM Arena and Hindsight are its projects (SB 79 and Housing Bias moved out), a Statistics & ML skills line (A/B Testing, Hypothesis Testing, Bootstrapping), Foundations of Data Science in coursework, and the Guang Labs bullet names PostgreSQL. ML, SWE and PM bases unchanged. Union-Find and Backpropagation approved as Fundamentals skills.
+
+## Changelog, Nov 14, 2026
+- **Next Step** (Fung Fellowship prototype) added to `bank/projects.json` and to the SWE and PM resumes (replacing Build Your Own World on SWE and SightLine on PM). The PM Fung entry now reads as mentored by The After Collective, with updated interview and DRI numbers. DS and ML are unchanged.
+- `master_doc.md` synced to the Nov 14 Master Doc (Fung status, Next Step project entry, SightLine SIG-22 and SIG-63 update).

@@ -538,5 +538,33 @@
         "from_resume": "ml"
       }
     ]
+  },
+  {
+    "id": "next_step",
+    "title": "Next Step (Fung Fellowship)",
+    "url": "https://next-step-2fg.pages.dev",
+    "stack": [
+      "JavaScript",
+      "Cloudflare",
+      "Claude"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "next_step_1",
+        "markup": "Built with **Claude**: a free website that helps California wildfire survivors write one clear letter to their insurer, in English, Spanish or Chinese.",
+        "from_resume": "swe"
+      },
+      {
+        "id": "next_step_2",
+        "markup": "Grounded a hosted **Llama** model on **Cloudflare Workers AI** in **15** numbered source notes; the server removes citations that do not exist, and nothing is stored server-side.",
+        "from_resume": "swe"
+      },
+      {
+        "id": "next_step_3",
+        "markup": "Built with **Claude**: a site that helps survivors write one clear insurance letter, grounded in **15** cited sources.",
+        "from_resume": "pm"
+      }
+    ]
   }
 ]
