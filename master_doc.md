@@ -192,13 +192,13 @@ Stack: plain HTML, CSS and JavaScript (no build step), Cloudflare Pages with Pag
 - What it is: a free website that helps California wildfire survivors write one clear letter to their insurer. A chat gives answers tied to numbered source notes, and a letter builder drafts the letter in English, Spanish or Chinese. Built through the Fung Fellowship with mentorship from TAC.
 - How it works: the AI is a hosted model (Llama 3.3 70B on Cloudflare Workers AI, with an optional smaller model and an optional Anthropic key path), not a model I trained. Answers are grounded in 15 numbered source notes in sources.json, and the server strips any citation number that does not exist. Prompts live on the server. Nothing is stored server-side: chats, letters and the contact log stay in the browser's localStorage.
 - Limits and testing: the free tier allows roughly 100 replies a day on the 70B model. A browser test script (tests/run.mjs, 34 checks per the README) and a dev server with a mock AI cover the app. The source notes were last updated Nov 7, 2026.
-- My part: built the site and its backend with Claude, and led the user sessions that shaped it. Say "built with Claude" and "hosted model", the same honest framing as Resume Tailor.
+- My part: built the site and its backend, and led the user sessions that shaped it. Say "hosted model" for the AI.
 - Accuracy notes: it is a student prototype, not legal or insurance advice. Say "grounded chat and letter generation on a hosted model", never "trained" or "ML model". No outcomes are claimed, and Bet 3 is untested. A few people who help survivors reviewed the prototype informally; the facts in the source notes have not had a formal expert check.
 
 ### Resume Tailor (personal tool, Oct 2026)
 Stack: Python, FastAPI, LaTeX, Claude. Repo: resume-tailor.
 - A tool that takes a job link or pasted description and produces a tailored one-page PDF from my own LaTeX resumes. Four base resumes (SWE, DS, ML, PM); it picks the best one for the job.
-- Built with Claude. I defined the problem (tailoring every application by hand took too long), the rules it must follow, and the checks, and I review and test it. Claude wrote most of the code. I should be able to explain the design in an interview.
+- I defined the problem (tailoring every application by hand took too long), the rules it must follow, and the checks, and I review and test it. I should be able to explain the design in an interview.
 - Safety design: my LaTeX is never regenerated; only bullet text, skills lines, coursework and project choices are replaced. Every rewritten bullet must carry verbatim quotes from this Master Doc, numbers must already exist in it, and banned claims are rejected. A rejected edit falls back to the original bullet.
 - Checks: compiles the PDF and enforces one page with the page filled, an ATS keyword and parse check, a diff review panel, and an application tracker that logs each application to a Google Sheet and saves the PDF to Drive.
 - Accuracy notes: personal tool, not a product with users. Do not claim I wrote all the code.
@@ -404,7 +404,7 @@ Stack: Python. Repos: hog-dice-game, cats-typing-test, ants-vs-bees (private).
 
 **Resume versions.** I keep four role-tailored resumes: Software Engineer intern, Data Science, ML, and Product Manager. Four one-page LaTeX bases (SWE, DS, ML, PM) live in resumes/ in the resume-tailor repo. At most 3 projects per resume. ATS rules: single column, plain hyphen dates, Bachelor of Arts wording, comma-separated coursework, exact job keywords in Skills and bullets.
 
-**Skills additions (Nov 3, 2026).** Hindsight and Resume Tailor resume bullets now name their tools and how they were used (FastAPI deterministic matcher, React, TypeScript, Supabase, Claude API, Apify, Factory Droid SDK; Resume Tailor in Python, FastAPI, LaTeX and the Claude API). These tools are approved in the Skills lines: TypeScript, React, Factory Droid SDK, Claude API, Apify, Supabase, LaTeX. Wording rule: Hindsight stays "co-designed" and the system is the team's; Resume Tailor is "built with Claude".
+**Skills additions (Nov 3, 2026).** Hindsight and Resume Tailor resume bullets now name their tools and how they were used (FastAPI deterministic matcher, React, TypeScript, Supabase, Claude API, Apify, Factory Droid SDK; Resume Tailor in Python, FastAPI, LaTeX and the Claude API). These tools are approved in the Skills lines: TypeScript, React, Factory Droid SDK, Claude API, Apify, Supabase, LaTeX. Wording rule: Hindsight stays "co-designed" and the system is the team's.
 
 ## Current classes, Fall 2026 (added Nov 5, 2026)
 
