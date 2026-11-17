@@ -207,6 +207,8 @@ Stack: Python, FastAPI, LaTeX, Claude. Repo: resume-tailor.
 
 Resume title rule (Nov 16, 2026): the project title is just "SightLine"; say "On the Open Projects ML team" in the first bullet.
 
+Resume wording (Nov 16, 2026): the ML resume now says I built the CLIP ViT-B/32 embedding stage in PyTorch and OpenCV (about 0.4 seconds per clip on a CPU) and a scoring stage that blends CLIP prompts, novelty and sharpness with MMR. Both tickets have PRs opened, not merged. No Spearman or recall numbers on the resume, since the ratings were drafted from contact sheets.
+
 Stack: Python, PyTorch, OpenCV, YOLO. Repo: sightline-ml-public.
 
 - A mobile app that connects to Meta Ray-Ban glasses, captures audio and video through the day, and outputs a 60-second edited recap.

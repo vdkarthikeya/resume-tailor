@@ -203,7 +203,7 @@
       },
       {
         "id": "sightline_2",
-        "markup": "Building **CLIP ViT-B/32** clip embeddings in PyTorch and OpenCV, checked with cosine-similarity neighbors.",
+        "markup": "Built a **CLIP ViT-B/32** embedding stage in PyTorch and OpenCV, about **0.4 seconds** per clip on a CPU.",
         "from_resume": "ml"
       },
       {
@@ -224,6 +224,11 @@
       {
         "id": "sightline_6",
         "markup": "Writing the clip embedding stage in Python: samples evenly spaced frames per clip with OpenCV, encodes them with a pretrained **CLIP ViT-B/32** model in PyTorch, then averages and L2-normalizes them into one vector per clip.",
+        "from_resume": "ml"
+      },
+      {
+        "id": "sightline_7",
+        "markup": "Built a scoring stage blending **CLIP** prompts, novelty and sharpness, with **MMR** to pick a varied recap.",
         "from_resume": "ml"
       }
     ]
