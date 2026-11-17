@@ -299,7 +299,7 @@ def test_no_project_heading_wraps(tmp_path):
     base = (T.ROOT / "resumes/ml.tex").read_text()
     ok = T.compile_tex(base, tmp_path / "a", "r")
     assert ok.ok and ok.heading_scaled == 0
-    long_ = base.replace("\\emph{PyTorch, OpenCV, in progress}", "\\emph{PyTorch, OpenCV, CLIP, NumPy, pandas, scikit-learn, FastAPI, in progress}")
+    long_ = base.replace("\\emph{PyTorch, OpenCV, in progress}", "\\emph{PyTorch, OpenCV, CLIP, NumPy, pandas, scikit-learn, FastAPI, XGBoost, LightGBM, Jupyter, in progress}")
     assert long_ != base
     b = T.compile_tex(long_, tmp_path / "b", "r")
     import pymupdf

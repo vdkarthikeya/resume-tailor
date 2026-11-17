@@ -14,7 +14,7 @@ This is the full-detail record behind my resumes and website. Those stay short; 
 | CDSS 198 Reader and Tutor, Aug 2026 to present | Careers seminar feedback plus Transfer Seminar exam reviews |
 | Fung Fellow, Health + Innovation, Aug 2026 to present | Team mentored by The After Collective; built Next Step, a hosted guide for wildfire survivors' insurance claims |
 | CSM Junior Mentor, Sep 2026 to present | Weekly Transfer Affinity section for CS 88 / DATA C88C |
-| SightLine (Open Projects, ML team), Fall 2026 | ML pipeline for a smart-glasses daily recap app |
+| SightLine, Fall 2026 (Open Projects, ML team) | ML pipeline for a smart-glasses daily recap app |
 | Projects | Next Step, Hindsight, Resume Tailor, SB 79 analysis, Movie Genres, Housing Bias, Spam Classifier, California Housing, Scheme Interpreter, Ngordnet, Build Your Own World |
 
 ## Education and coursework
@@ -205,6 +205,8 @@ Stack: Python, FastAPI, LaTeX, Claude. Repo: resume-tailor.
 
 ### SightLine (Open Projects, ML team, Fall 2026, in progress)
 
+Resume title rule (Nov 16, 2026): the project title is just "SightLine"; say "On the Open Projects ML team" in the first bullet.
+
 Stack: Python, PyTorch, OpenCV, YOLO. Repo: sightline-ml-public.
 
 - A mobile app that connects to Meta Ray-Ban glasses, captures audio and video through the day, and outputs a 60-second edited recap.
@@ -244,7 +246,7 @@ Stack: ArcGIS Online, StoryMaps. Two-person group project.
 - Delivered a research paper, a policy brief, and an interactive StoryMap. I wrote Methods, Results, Discussion (limitations), Abstract, and Appendices.
 
 ### Movie Genre Classification (DSS Decal, Spring 2026)
-Data source (Oct 28, 2026): MovieLens and TMDB (with IMDb metadata fields), not Netflix. Name it "Movie Genre Classification (MovieLens/TMDB)" on resumes.
+Data source (Oct 28, 2026): MovieLens and TMDB (with IMDb metadata fields), not Netflix. Name it just "Movie Genre Classification" on resumes (no brackets in project titles) and mention MovieLens and TMDB in the first bullet.
 Stack: Python, PyTorch, SentenceTransformers, scikit-learn, XGBoost, LightGBM. Repo: movie-genre-classification-nlp.
 - Multi-label genre prediction on 42K+ MovieLens/TMDB films across 20+ genres. Parsed nested IMDb metadata with regex; engineered log budget and revenue and release-time features.
 - Embedded title, tagline, and overview with MiniLM, MPNet, and e5-large-v2; compared Logistic Regression, XGBoost, and LightGBM.

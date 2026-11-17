@@ -158,7 +158,7 @@ Project headings can be either style: linked title with arrow (`\textbf{\href{ur
 - **Resume Tailor** itself is now a project on the SWE and PM bases (and in `bank/projects.json`).
 - Latest PDFs are hosted in vdkarthikeya.github.io under `resumes/`.
 
-- UI refresh: glass look, one font family, same palette. Movie Genre project now named with its data source (MovieLens/TMDB).
+- UI refresh: glass look, one font family, same palette. Movie Genre project was named with its data source here; as of Nov 16 the title is plain (see below).
 - Movie Genre bullets now name the models (MiniLM, MPNet, e5-large-v2 embeddings; Logistic Regression, XGBoost, LightGBM) and no longer claim per-genre cutoffs, which the project did not use. UI font changed to Plus Jakarta Sans with a gradient title.
 - Hindsight bullets and Master Doc entry now carry the technical design (deterministic matcher and planner, Claude for extraction and cited answers, Droid repair permissions), written as the team's system with Karthik's role kept honest.
 
@@ -187,3 +187,7 @@ Project headings can be either style: linked title with arrow (`\textbf{\href{ur
 ## Changelog, Nov 14, 2026
 - **Next Step** (Fung Fellowship prototype) added to `bank/projects.json` and to the SWE and PM resumes (replacing Build Your Own World on SWE and SightLine on PM). The PM Fung entry now reads as mentored by The After Collective, with updated interview and DRI numbers. DS and ML are unchanged.
 - `master_doc.md` synced to the Nov 14 Master Doc (Fung status, Next Step project entry, SightLine SIG-22 and SIG-63 update).
+
+## Changelog, Nov 16, 2026
+- Project titles on every resume are plain names with no brackets: "SightLine" and "Movie Genre Classification" on the ML base (bank titles updated to match). The Open Projects ML team and the MovieLens/TMDB data source now sit in the first bullet of each project (SightLine bullet shortened to one line so the page stays full but fits).
+- Rebuilt `Resume.pdf` and the hosted ML PDF in vdkarthikeya.github.io from the updated `resumes/ml.tex`.

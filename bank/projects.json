@@ -76,7 +76,7 @@
   },
   {
     "id": "movie_genre",
-    "title": "Movie Genre Classification (MovieLens/TMDB)",
+    "title": "Movie Genre Classification",
     "url": "https://github.com/vdkarthikeya/movie-genre-classification-nlp",
     "stack": [
       "Python",
@@ -90,7 +90,7 @@
     "bullets": [
       {
         "id": "movie_genre_1",
-        "markup": "Built a multi-label NLP model that predicts a movie's genres from its title, tagline, and plot, using MiniLM, MPNet, and e5-large-v2 text embeddings on **42K+** films.",
+        "markup": "Built a multi-label NLP model that predicts a movie's genres from its title, tagline, and plot, using MiniLM, MPNet, and e5-large-v2 text embeddings on **42K+** MovieLens and TMDB films.",
         "from_resume": "ml"
       },
       {
@@ -187,7 +187,7 @@
   },
   {
     "id": "sightline",
-    "title": "SightLine (Open Projects, ML team)",
+    "title": "SightLine",
     "url": "https://github.com/vdkarthikeya/sightline-ml-public",
     "stack": [
       "Python",
@@ -198,7 +198,7 @@
     "bullets": [
       {
         "id": "sightline_1",
-        "markup": "Building the ML pipeline for a smart-glasses app that turns a day of footage into a **60-second** recap.",
+        "markup": "On the Open Projects ML team, building an ML pipeline that turns smart-glasses footage into a **60-second** recap.",
         "from_resume": "ml"
       },
       {
