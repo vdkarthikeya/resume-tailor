@@ -1,6 +1,6 @@
 # Master Doc: Everything I've Done
 
-(Source of truth for the resume tailor. Updated Nov 5, 2026 with current-class sections (Data C101, CS 194, CS 189, ENGIN 188; CS 170 dropped) and IBM interview prep note. Synced Nov 3, 2026 from the Claude Doc "Master Doc: Everything I've Done" (rev 29), plus Oct 28 additions (Hindsight, Resume Tailor, Movie Genre fixes, CS 61A tailoring rule, Fung Oct 28 update, skills list, Nov 2 Hindsight numbers and user testing), which were also added to the Claude Doc. To refresh: export the doc as Markdown and replace this file.)
+(Source of truth for the resume tailor. Synced Nov 16, 2026 with the Claude Doc "Master Doc: Everything I've Done": both now hold the Nov 10 project entries, the approved Skills list, the Nov 14 Fung, Next Step and SightLine updates, and the plain-project-title rule. To refresh: export the doc as Markdown and replace this file.)
 
 ## How to use this doc
 
