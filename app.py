@@ -49,7 +49,7 @@ def slots_view(plan: dict, reverted: set[str]) -> list[dict]:
     for k, e in plan["entries"].items():
         sid = f"entry:{k}"
         changed = [b["markup"] for b in e["new"]] != e["orig"]
-        out.append({"id": sid, "group": "Experience & Leadership", "label": e["label"], "changed": changed, "reverted": sid in reverted,
+        out.append({"id": sid, "group": "Experience", "label": e["label"], "changed": changed, "reverted": sid in reverted,
                     "before": e["orig"], "after": [b["markup"] for b in e["new"]],
                     "notes": [{"kind": b["kind"], "sources": b["sources"]} for b in e["new"]]})
     for k, s in plan["skills"].items():
@@ -72,7 +72,7 @@ def payload(job_id: str) -> dict:
     return {
         "job_id": job_id, "base": j["base"], "base_name": T.BASES[j["base"]]["name"], "base_reason": j.get("base_reason"),
         "provider": j["provider"], "ok": b.ok, "error": None if b.ok else b.log,
-        "pages": b.pages, "heading_scaled": b.heading_scaled if b.ok else 0, "bottom": round(b.bottom), "fill_pct": round(100 * b.bottom / 772) if b.ok else 0,
+        "pages": b.pages, "heading_scaled": b.heading_scaled if b.ok else 0, "bottom": round(b.bottom), "fill_pct": round(100 * b.bottom / 745) if b.ok else 0,
         "warnings": plan["warnings"] + j["log"], "gaps": plan["gaps"], "keywords": plan["keywords"], "summary": plan["summary"],
         "slots": slots_view(plan, j["reverted"]), "ats": T.ats_for(j["base"], plan, b, j["jd"], j["reverted"]), "v": int(time.time() * 1000),
         "meta": jdmod.extract_meta(j["jd"], j.get("url", "")),

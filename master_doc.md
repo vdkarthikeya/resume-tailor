@@ -209,7 +209,7 @@ Resume title rule (Nov 16, 2026): the project title is just "SightLine"; say "On
 
 Resume wording (Nov 16, 2026): the ML resume now says I built the CLIP ViT-B/32 embedding stage in PyTorch and OpenCV (about 0.4 seconds per clip on a CPU) and a scoring stage that blends CLIP prompts, novelty and sharpness with MMR. Both tickets have PRs opened, not merged. No Spearman or recall numbers on the resume, since the ratings were drafted from contact sheets.
 
-Stack: Python, PyTorch, OpenCV, YOLO. Repo: sightline-ml-public.
+Stack: Python, PyTorch, OpenCV, YOLO (team stack; not in my own pipelines), OpenCLIP (open_clip). Repo: sightline-ml-public. Resume heading lists Python, PyTorch, OpenCV, OpenCLIP, with no "in progress" tag (Nov 18, 2026).
 
 - A mobile app that connects to Meta Ray-Ban glasses, captures audio and video through the day, and outputs a 60-second edited recap.
 - ML pipeline: pull footage, split into clips, rank clips with multimodal models on audio and visual cues, assemble the top clips through automated video rendering. The ML team builds and fine-tunes computer vision and audio scoring models.
@@ -404,9 +404,11 @@ Stack: Python. Repos: hog-dice-game, cats-typing-test, ants-vs-bees (private).
 
 **Background (from the old About page).** Grew up in Vijayawada, India, where studying in the U.S. was almost unheard of. Started at community college with no roadmap, and figured most of the path out alone; family, especially my father, believed in it before I did. Learned most of what I know through coursework. Current focus: Machine Learning Engineer roles, later a pivot toward Machine Learning Research. Interests: multimodal AI and reinforcement learning.
 
+**Resume formatting and wording rules (Nov 18, 2026).** Resumes need visible top and bottom margins (about 0.65 in) and less clutter; content stays inside them and each version shows only the most relevant experiences and projects, cut by rank. This replaces the old "fill the whole page" rule. There is no Leadership section; I will add one only when I hold a real club leadership role. Past De Anza club roles (Boundary.0, ISA) stay off resumes. CDSS 198 and CS 61A are teaching roles and sit in Experience. Write "DS classes", never "data science classes". The CDSS 198 bullet says I support transfer students 6 hours a week through exam reviews and practice worksheets for CS and DS classes, with no resume feedback line. No "in progress" labels anywhere on a resume (coursework or project headings). Degree line is "B.A. in Data Science and Applied Mathematics". Decided for ML: CS 61A dropped, Hindsight swapped for Next Step. SWE and DS drop Hindsight (I co-designed it and did not write the code); PM drops CS 61A and Dean's Cabinet.
+
 **Writing rules I settled on.** Short bullets that say what the thing is in plain words, then a number. No em dashes. Nothing goes on a resume or site unless I can explain it in a live conversation.
 
-**Resume versions.** I keep four role-tailored resumes: Software Engineer intern, Data Science, ML, and Product Manager. Four one-page LaTeX bases (SWE, DS, ML, PM) live in resumes/ in the resume-tailor repo. At most 3 projects per resume. ATS rules: single column, plain hyphen dates, Bachelor of Arts wording, comma-separated coursework, exact job keywords in Skills and bullets.
+**Resume versions.** I keep four role-tailored resumes: Software Engineer intern, Data Science, ML, and Product Manager. Four one-page LaTeX bases (SWE, DS, ML, PM) live in resumes/ in the resume-tailor repo. At most 3 projects per resume. ATS rules: single column, plain hyphen dates, the degree line "B.A. in Data Science and Applied Mathematics" (Nov 18, 2026), comma-separated coursework, exact job keywords in Skills and bullets.
 
 **Skills additions (Nov 3, 2026).** Hindsight and Resume Tailor resume bullets now name their tools and how they were used (FastAPI deterministic matcher, React, TypeScript, Supabase, Claude API, Apify, Factory Droid SDK; Resume Tailor in Python, FastAPI, LaTeX and the Claude API). These tools are approved in the Skills lines: TypeScript, React, Factory Droid SDK, Claude API, Apify, Supabase, LaTeX. Wording rule: Hindsight stays "co-designed" and the system is the team's.
 

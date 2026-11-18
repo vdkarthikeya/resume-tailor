@@ -214,9 +214,9 @@ def test_base_rules(k, tmp_path):
     assert all(1 <= len(pb.bullets) <= T.MAX_PROJECT_BULLETS for pb in p.projects.projects)
     heads = [h for h in __import__("re").findall(r"\{((?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]* 20\d\d [-]+ [^}]*)\}", tex)]
     assert heads and all(" - " in h and "--" not in h for h in heads), heads
-    assert "Bachelor of Arts" in tex and "PyTorch" in tex and "TensorFlow" not in tex.split("\\begin{document}")[1].split("Experience")[0]
+    assert "B.A. in Data Science and Applied Mathematics" in tex and "PyTorch" in tex and "TensorFlow" not in tex.split("\\begin{document}")[1].split("Experience")[0]
     b = T.compile_tex(tex, tmp_path, "r")
-    assert b.ok and b.pages == 1 and 740 <= b.bottom <= T.PAGE_BOTTOM_MAX, (k, b.pages, b.bottom)
+    assert b.ok and b.pages == 1 and T.PAGE_BOTTOM_TARGET <= b.bottom <= T.PAGE_BOTTOM_MAX, (k, b.pages, b.bottom)
     text = "\n".join(pg.get_text() for pg in pymupdf.open(b.pdf))
     assert all(c["ok"] for c in ats.parse_check(text)), [c for c in ats.parse_check(text) if not c["ok"]]
 
@@ -299,7 +299,7 @@ def test_no_project_heading_wraps(tmp_path):
     base = (T.ROOT / "resumes/ml.tex").read_text()
     ok = T.compile_tex(base, tmp_path / "a", "r")
     assert ok.ok and ok.heading_scaled == 0
-    long_ = base.replace("\\emph{PyTorch, OpenCV, in progress}", "\\emph{PyTorch, OpenCV, CLIP, NumPy, pandas, scikit-learn, FastAPI, XGBoost, LightGBM, Jupyter, in progress}")
+    long_ = base.replace("\\emph{Python, PyTorch, OpenCV, OpenCLIP}", "\\emph{Python, PyTorch, OpenCV, OpenCLIP, CLIP, NumPy, pandas, scikit-learn, FastAPI, XGBoost, LightGBM, Jupyter}")
     assert long_ != base
     b = T.compile_tex(long_, tmp_path / "b", "r")
     import pymupdf
