@@ -72,7 +72,7 @@ def payload(job_id: str) -> dict:
     return {
         "job_id": job_id, "base": j["base"], "base_name": T.BASES[j["base"]]["name"], "base_reason": j.get("base_reason"),
         "provider": j["provider"], "ok": b.ok, "error": None if b.ok else b.log,
-        "pages": b.pages, "heading_scaled": b.heading_scaled if b.ok else 0, "bottom": round(b.bottom), "fill_pct": round(100 * b.bottom / 745) if b.ok else 0,
+        "pages": b.pages, "heading_scaled": b.heading_scaled if b.ok else 0, "gap_issues": b.gap_issues if b.ok else [], "bottom": round(b.bottom), "fill_pct": round(100 * b.bottom / 745) if b.ok else 0,
         "warnings": plan["warnings"] + j["log"], "gaps": plan["gaps"], "keywords": plan["keywords"], "summary": plan["summary"],
         "slots": slots_view(plan, j["reverted"]), "ats": T.ats_for(j["base"], plan, b, j["jd"], j["reverted"]), "v": int(time.time() * 1000),
         "meta": jdmod.extract_meta(j["jd"], j.get("url", "")),

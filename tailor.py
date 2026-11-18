@@ -12,7 +12,7 @@ import re
 import shutil
 import subprocess
 import tempfile
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import ats as ATS
@@ -381,6 +381,7 @@ class Built:
     log: str
     skill_wrap: list[str]
     heading_scaled: int = 0  # project headings that were too long and had to be scaled to stay on one line
+    gap_issues: list[str] = field(default_factory=list)  # lines followed by an abnormally large vertical gap (a stray blank line)
 
 
 def _engine() -> list[str] | None:
@@ -389,6 +390,29 @@ def _engine() -> list[str] | None:
     if shutil.which("tectonic"):
         return ["tectonic", "--untrusted"]
     return None
+
+
+MAX_LINE_GAP = 14.0  # points. Normal gaps on the bases are at most 12.5 (name to contact line); a stray blank line adds about 12 more.
+
+
+def find_gap_issues(doc) -> list[str]:
+    """Text of each line that is followed by an abnormally large vertical gap on the same page.
+
+    Regression guard for the blank-line bug: a bullet whose last line runs to the right margin used to push an
+    empty line into the page, so the gap after it was about 12 pt too big. Lines are read in page order."""
+    out: list[str] = []
+    for page in doc:
+        lines = []
+        for blk in page.get_text("dict")["blocks"]:
+            for ln in blk.get("lines", []):
+                txt = "".join(sp["text"] for sp in ln["spans"]).strip()
+                if txt:
+                    lines.append((ln["bbox"][1], ln["bbox"][3], txt))
+        lines.sort()
+        for prev, cur in zip(lines, lines[1:]):
+            if cur[0] - prev[1] > MAX_LINE_GAP:
+                out.append(prev[2][:60])
+    return out
 
 
 def compile_tex(tex: str, outdir: Path, name: str = "resume", skills_check: list[tuple[str, str]] | None = None) -> Built:
@@ -429,7 +453,7 @@ def compile_tex(tex: str, outdir: Path, name: str = "resume", skills_check: list
             hit = [ln for ln in lines if ln.strip().startswith(label)]
             if hit and last_item not in hit[0]:
                 wrap.append(label)
-    return Built(True, pdf, pages, bottom, "", wrap, (r.stdout or "").count("HEADING-SCALED"))
+    return Built(True, pdf, pages, bottom, "", wrap, (r.stdout or "").count("HEADING-SCALED"), find_gap_issues(doc))
 
 
 # ---------------------------------------------------------------- providers
@@ -717,6 +741,8 @@ def feedback_text(plan: dict, built: Built) -> str | None:
         msgs.append(f"The page is under-filled (text ends at {built.bottom:.0f} of about 745 points). Keep more detail, using only Master Doc facts.")
     if built.ok and built.skill_wrap:
         msgs.append("These skills lines wrap onto two lines, shorten them: " + ", ".join(built.skill_wrap))
+    if built.ok and built.gap_issues:
+        msgs.append("These lines are followed by an uneven blank gap, usually because the line before runs exactly to the right margin. Reword each of those bullets slightly (a few characters shorter or longer) so its last line no longer fills the line: " + "; ".join(built.gap_issues[:4]))
     if built.ok and built.heading_scaled:
         msgs.append("A project heading is too long for one line. Give that project fewer tools in its \"tech\" list (2 or 3) so the heading, tools and GitHub link fit on one line.")
     return "\n".join(f"- {m}" for m in msgs) if msgs else None
@@ -778,9 +804,11 @@ def generate(base_key: str, jd: str, outdir: Path, provider=None, max_attempts: 
                     + ", ".join(rep["missing_supported"][:10]) + ". Work them in where true, using the job's exact wording (skills line or bullets).")
             feedback = (feedback + "\n- " + note) if feedback else "- " + note
         # only retry for problems the model can fix; rejected edits are already safely reverted
-        retry_needed = built.pages > 1 or built.bottom < PAGE_BOTTOM_TARGET or built.skill_wrap or built.heading_scaled or ats_retry
+        retry_needed = built.pages > 1 or built.bottom < PAGE_BOTTOM_TARGET or built.skill_wrap or built.heading_scaled or built.gap_issues or ats_retry
         if not retry_needed or isinstance(provider, MockProvider):
             break
+    if built and built.ok and built.gap_issues:
+        log.append("Layout check: uneven blank gap after: " + "; ".join(built.gap_issues[:4]) + ". Reword that bullet a little and rebuild.")
     if built and built.ok and built.pages > 1:
         built, reverted = revert_to_fit(parsed, plan, outdir, reverted, built, log)
     return {"jd": jd, "base": base_key, "base_reason": reason, "plan": plan, "built": built, "reverted": reverted, "log": log, "parsed": parsed, "provider": provider.name}

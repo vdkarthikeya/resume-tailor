@@ -317,3 +317,46 @@ def test_coursework_never_labelled_in_progress():
     assert "In progress" not in TS.render_coursework(["Data Structures"], [])
     for k in T.BASES:
         assert "In progress" not in (ROOT / T.BASES[k]["file"]).read_text(), k
+
+
+# ---- stray blank line regression (a bullet whose last line fills the width used to add an empty line)
+def _sweep_doc(base_key: str) -> str:
+    """Preamble of a base resume + 60 one-bullet entries whose text grows a few characters at a time, so some
+    last lines end exactly at the right margin; plus 40 project headings with growing tool lists."""
+    base = (ROOT / T.BASES[base_key]["file"]).read_text()
+    pre = base[: base.index("\\begin{document}")]
+    words = "alpha bravo charlie delta echo foxtrot golf hotel india juliet kilo lima mike november oscar papa quebec romeo sierra tango".split()
+    body = ["\\begin{document}", "\\section{Experience}", "\\resumeSubHeadingListStart"]
+    base_text = " ".join(words * 3)
+    for n in range(60):
+        txt = (base_text + " " + "x" * n) if n else base_text
+        body.append("\\resumeCompactHeading{Company}{Role}{Remote}{2026}")
+        body.append("\\resumeItemListStart\n\\resumeItem{" + txt + "}\n\\resumeItemListEnd\n")
+    body.append("\\resumeSubHeadingListEnd")
+    body.append("\\section{Projects}\n\\resumeSubHeadingListStart")
+    for n in range(40):
+        tech = ", ".join(["Python", "PyTorch", "OpenCV", "OpenCLIP", "pandas", "NumPy", "XGBoost"][: 2 + n % 6]) + "x" * (n // 2)
+        body.append("\\resumeProjectHeading{\\textbf{Proj} $|$ \\emph{" + tech + "} \\hfill \\href{https://example.com}{\\uline{GitHub}}}")
+        body.append("\\resumeItemListStart\n\\resumeItem{" + base_text[: 150 + 3 * n] + "}\n\\resumeItemListEnd\n")
+    body.append("\\resumeSubHeadingListEnd\n\\end{document}")
+    return pre + "\n".join(body) + "\n"
+
+
+@pytest.mark.parametrize("k", list(T.BASES))
+def test_no_stray_blank_lines_any_line_length(k, tmp_path):
+    """Sweep many last-line widths through every base's macros: no gap may exceed the normal maximum."""
+    b = T.compile_tex(_sweep_doc(k), tmp_path, "sweep")
+    assert b.ok, b.log
+    assert b.gap_issues == [], b.gap_issues[:5]
+
+
+def test_macros_have_no_trailing_whitespace_in_definition():
+    """The root cause: whitespace after the macro body became a space token at the end of the bullet paragraph."""
+    import re
+    for f in list((ROOT / "resumes").glob("*.tex")) + list((ROOT / "tests/fixtures").glob("*.tex")):
+        s = f.read_text()
+        for name in ("resumeItem", "classesList"):
+            m = re.search(r"\\newcommand\{\\" + name + r"\}\[\d\]\{%?\n.*?\n\}\n", s, re.S)
+            assert m, (f.name, name)
+            body = m.group(0)
+            assert re.search(r"\}%\n\}\n$", body), (f.name, name, "body must end with }% before the closing brace")
