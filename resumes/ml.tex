@@ -33,11 +33,11 @@
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 
-\addtolength{\oddsidemargin}{-0.6in}
-\addtolength{\evensidemargin}{-0.5in}
-\addtolength{\textwidth}{1.19in}
-\addtolength{\topmargin}{-.7in}
-\addtolength{\textheight}{1.4in}
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.4in}
+\addtolength{\textwidth}{0.99in}
+\addtolength{\topmargin}{-0.29in}
+\addtolength{\textheight}{0.55in}
 
 \urlstyle{same}
 \raggedbottom
@@ -74,14 +74,14 @@
 
 \newcommand{\resumeCompactHeading}[4]{
   \vspace{-1pt}\item
-    \begin{tabularx}{1.0\textwidth}[t]{@{}X@{}>{\raggedright\arraybackslash}p{1.5in}@{}}
+    \begin{tabularx}{1.0\textwidth}[t]{@{}X@{}>{\raggedleft\arraybackslash}p{1.5in}@{}}
       \textbf{#1} $|$ \textbf{#2} $|$ \textbf{\small #3} & \textbf{\small #4} \\
     \end{tabularx}\vspace{-3pt}
 }
 
 \newcommand{\resumeLeadHeading}[4]{
   \vspace{-1pt}\item
-    \begin{tabularx}{1.0\textwidth}[t]{@{}X@{}>{\raggedright\arraybackslash}p{1.5in}@{}}
+    \begin{tabularx}{1.0\textwidth}[t]{@{}X@{}>{\raggedleft\arraybackslash}p{1.5in}@{}}
       \textbf{#1} $|$ \textbf{#2} $|$ \textbf{\small #3} & \textbf{\small #4} \\
     \end{tabularx}\vspace{-5pt}
 }
@@ -132,7 +132,7 @@
     \href{https://www.linkedin.com/in/vdkarthikeya/}{\uline{linkedin.com/in/vdkarthikeya}} $|$
     \href{https://github.com/vdkarthikeya}{\uline{github.com/vdkarthikeya}} $|$
     \href{https://vdkarthikeya.github.io}{\uline{vdkarthikeya.github.io}}
-    \vspace{-8pt}
+    \vspace{-1pt}
 \end{center}
 
 %-----------EDUCATION-----------
@@ -141,11 +141,11 @@
 
 \resumeSubheading
 {University of California, Berkeley}{Expected Dec 2027}
-{Bachelor of Arts in Data Science and Applied Mathematics \;$|$\; GPA: 3.85/4.00}{Berkeley, CA}
+{B.A. in Data Science and Applied Mathematics \;$|$\; GPA: 3.85/4.00}{Berkeley, CA}
 
 \vspace{-6pt}
 \resumeItemListStart
-\resumeItem{\textbf{Relevant Coursework:} Principles \& Techniques of Data Science, Probability for Data Science, Data Structures; \textit{In progress:} Introduction to Machine Learning, Data Engineering}
+\resumeItem{\textbf{Relevant Coursework:} Principles \& Techniques of Data Science, Probability for Data Science, Data Structures, Introduction to Machine Learning, Data Engineering, Computer Security, Optimization Models in Engineering}
 \resumeItemListEnd
 
 \resumeSubHeadingListEnd
@@ -155,10 +155,10 @@
 \section{Technical Skills}
  \begin{itemize}[leftmargin=0.15in, label={}, itemsep=3pt]
     \small{\item{
-     \textbf{Languages}{: Python, SQL, Java, TypeScript} \\[2pt]
-     \textbf{Machine Learning}{: PyTorch, CLIP, scikit-learn, XGBoost, LightGBM, SentenceTransformers, Cross-Validation} \\[2pt]
+     \textbf{Languages}{: Python, SQL, Java, JavaScript, TypeScript} \\[2pt]
+     \textbf{Machine Learning}{: PyTorch, CLIP (OpenCLIP), scikit-learn, XGBoost, LightGBM, SentenceTransformers, Llama} \\[2pt]
      \textbf{Data}{: pandas, NumPy, GeoPandas, OpenCV, Matplotlib, PostgreSQL (query plans, indexing), MongoDB, Jupyter} \\[2pt]
-     \textbf{Engineering}{: FastAPI, React, Supabase, Claude API, Gemini API, Apify, Factory Droid SDK, Pydantic, AWS S3, pytest}
+     \textbf{Engineering}{: FastAPI, React, Cloudflare Workers AI, Claude API, Gemini API, Pydantic, AWS S3, pytest, Git}
     }}
  \end{itemize}
  \vspace{-15pt}
@@ -173,17 +173,21 @@
             \resumeItem{Developed a machine learning model that predicts California home sale prices, typically within \textbf{8.6\%} of the actual price, using \textbf{71K} single-family sales cleaned from \textbf{143K} raw records.}
             \resumeItem{Benchmarked four model types and selected a tuned XGBoost (R\textsuperscript{2} of \textbf{0.88}), finding that deeper trees improved accuracy more than a lower learning rate.}
             \resumeItem{Resolved a data leakage bug that had invalidated early results, and nearly halved a simpler model's error (from \textbf{29\%} to \textbf{15\%}) by engineering a school district feature.}
-            \resumeItem{Analyzed errors by price band to find weak spots: luxury homes (\textbf{13\%} error vs. \textbf{6.5\%} mid-priced) and low-sales towns.}
-            \resumeItem{Retrained the final model from scratch and matched results exactly to confirm reproducibility.}
+            \resumeItem{Found weak spots by price band: luxury homes (\textbf{13\%} error vs. \textbf{6.5\%} mid-priced) and low-sales towns.}
         \resumeItemListEnd
 
     \resumeCompactHeading
         {Guang Labs}{Engineering Intern}{Remote}{May 2026 - Aug 2026}
         \resumeItemListStart
-             \resumeItem{Engineered a service for an AI video startup that classifies a user's image or video by content type (sports, gaming, talking, music) using Google's Gemini, retrying uncertain or malformed responses on different clips, up to \textbf{10} attempts.}
-             \resumeItem{Validated the service end to end with real video clips after code review and expanded the automated test suite from 38 to \textbf{86} tests.}
+             \resumeItem{Engineered a service for an AI video startup that sorts images and videos by content type (sports, gaming, talking, music) using Gemini, retrying uncertain or malformed responses.}
+             \resumeItem{Validated the service end to end with real video clips after code review, and expanded the automated test suite from 38 to \textbf{86} tests using Pydantic schemas and a deterministic fake provider.}
              \resumeItem{Developed an in-app notification bell that alerts users when their video finishes processing or fails.}
-             \resumeItem{Built the service on Pydantic schemas and a deterministic fake provider, so it can be tested without live services.}
+        \resumeItemListEnd
+
+    \resumeCompactHeading
+        {UC Berkeley CDSS}{Undergraduate Course Staff, CDSS 198}{Berkeley, CA}{Aug 2026 - Present}
+        \resumeItemListStart
+            \resumeItem{Support transfer students \textbf{6} hours a week through exam reviews and practice worksheets for CS and DS classes.}
         \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -194,18 +198,9 @@
     \vspace{0pt}
     \resumeSubHeadingListStart
         \resumeProjectHeading
-            {\textbf{Hindsight} $|$ \emph{Claude, FastAPI, React, Supabase, Apify, Factory Droid} \hfill \href{https://github.com/Cal-Hacks-2026/Hindsight}{\uline{GitHub}}}
+            {\textbf{SightLine} $|$ \emph{Python, PyTorch, OpenCV, OpenCLIP} \hfill \href{https://github.com/vdkarthikeya/sightline-ml-public}{\uline{GitHub}}}
         \resumeItemListStart
-            \resumeItem{Co-designed a transfer planner at Cal Hacks 13.0: a \textbf{FastAPI} backend that matches courses to ASSIST agreements with deterministic rules, a \textbf{React} and \textbf{TypeScript} interface, and \textbf{Supabase}.}
-            \resumeItem{\textbf{Claude} reads transcripts and class schedules that students confirm and answers with numbered citations that code validates; \textbf{Apify} scrapes campus pages and a \textbf{Factory Droid} agent repairs only broken scraper scripts, in a sandbox.}
-            \resumeItem{Tested with \textbf{10} transfer students, who said it would have helped during their own transfer.}
-        \resumeItemListEnd
-        \vspace{2pt}
-
-        \resumeProjectHeading
-            {\textbf{SightLine} $|$ \emph{PyTorch, OpenCV, in progress} \hfill \href{https://github.com/vdkarthikeya/sightline-ml-public}{\uline{GitHub}}}
-        \resumeItemListStart
-            \resumeItem{On the Open Projects ML team, building an ML pipeline that turns smart-glasses footage into a \textbf{60-second} recap.}
+            \resumeItem{Building the ML pipeline for an Open Projects app that turns smart-glasses footage into a \textbf{60-second} recap.}
             \resumeItem{Built a \textbf{CLIP ViT-B/32} embedding stage in PyTorch and OpenCV, about \textbf{0.4 seconds} per clip on a CPU.}
             \resumeItem{Built a scoring stage blending \textbf{CLIP} prompts, novelty and sharpness, with \textbf{MMR} to pick a varied recap.}
         \resumeItemListEnd
@@ -217,24 +212,13 @@
             \resumeItem{Built a multi-label NLP model that predicts a movie's genres from its title, tagline, and plot, using MiniLM, MPNet, and e5-large-v2 text embeddings on \textbf{42K+} MovieLens and TMDB films.}
             \resumeItem{Compared Logistic Regression, XGBoost, and LightGBM: Logistic Regression won and trained about \textbf{12$\times$} faster than XGBoost; dropping rare genres and tuning the threshold raised Macro F1 from 0.48 to \textbf{0.66}.}
         \resumeItemListEnd
+        \vspace{2pt}
 
-    \resumeSubHeadingListEnd
-\vspace{-12pt}
-
-%-----------LEADERSHIP-----------
-\section{Leadership \& Involvement}
-    \resumeSubHeadingListStart
-
-        \resumeLeadHeading
-            {UC Berkeley CDSS}{Undergraduate Course Staff, CDSS 198}{Berkeley, CA}{Aug 2026 - Present}
+        \resumeProjectHeading
+            {\textbf{Next Step} $|$ \emph{JavaScript, Cloudflare Workers AI, Llama} \hfill \href{https://github.com/nextstep-wildfire/next-step}{\uline{GitHub}}}
         \resumeItemListStart
-            \resumeItem{Run exam reviews and write practice worksheets for CS and data science classes, and give resume feedback.}
-        \resumeItemListEnd
-
-        \resumeLeadHeading
-            {UC Berkeley}{Undergraduate Course Staff, CS 61A}{Berkeley, CA}{Jun 2026 - Aug 2026}
-        \resumeItemListStart
-            \resumeItem{Taught \textbf{4} weekly exam-prep sections in Python, Scheme, and SQL, reinforcing data structures like linked lists, trees, lists, and dictionaries, held office hours, and helped write midterm and final questions.}
+            \resumeItem{Built a free Fung Fellowship site that helps California wildfire survivors deal with the aftermath, including writing insurer letters in English, Spanish, and Chinese.}
+            \resumeItem{Grounded a hosted \textbf{Llama} model on \textbf{Cloudflare Workers AI} in \textbf{15} numbered source notes; the server removes citations that do not exist, and nothing is stored server-side.}
         \resumeItemListEnd
 
     \resumeSubHeadingListEnd

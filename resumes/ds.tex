@@ -33,11 +33,11 @@
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 
-\addtolength{\oddsidemargin}{-0.6in}
-\addtolength{\evensidemargin}{-0.5in}
-\addtolength{\textwidth}{1.19in}
-\addtolength{\topmargin}{-.7in}
-\addtolength{\textheight}{1.4in}
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.4in}
+\addtolength{\textwidth}{0.99in}
+\addtolength{\topmargin}{-0.29in}
+\addtolength{\textheight}{0.55in}
 
 \urlstyle{same}
 \raggedbottom
@@ -74,14 +74,14 @@
 
 \newcommand{\resumeCompactHeading}[4]{
   \vspace{-1pt}\item
-    \begin{tabularx}{1.0\textwidth}[t]{@{}X@{}>{\raggedright\arraybackslash}p{1.5in}@{}}
+    \begin{tabularx}{1.0\textwidth}[t]{@{}X@{}>{\raggedleft\arraybackslash}p{1.5in}@{}}
       \textbf{#1} $|$ \textbf{#2} $|$ \textbf{\small #3} & \textbf{\small #4} \\
     \end{tabularx}\vspace{-3pt}
 }
 
 \newcommand{\resumeLeadHeading}[4]{
   \vspace{-1pt}\item
-    \begin{tabularx}{1.0\textwidth}[t]{@{}X@{}>{\raggedright\arraybackslash}p{1.5in}@{}}
+    \begin{tabularx}{1.0\textwidth}[t]{@{}X@{}>{\raggedleft\arraybackslash}p{1.5in}@{}}
       \textbf{#1} $|$ \textbf{#2} $|$ \textbf{\small #3} & \textbf{\small #4} \\
     \end{tabularx}\vspace{-5pt}
 }
@@ -132,7 +132,7 @@
     \href{https://www.linkedin.com/in/vdkarthikeya/}{\uline{linkedin.com/in/vdkarthikeya}} $|$
     \href{https://github.com/vdkarthikeya}{\uline{github.com/vdkarthikeya}} $|$
     \href{https://vdkarthikeya.github.io}{\uline{vdkarthikeya.github.io}}
-    \vspace{-8pt}
+    \vspace{-1pt}
 \end{center}
 
 %-----------EDUCATION-----------
@@ -141,11 +141,11 @@
 
 \resumeSubheading
 {University of California, Berkeley}{Expected Dec 2027}
-{Bachelor of Arts in Data Science and Applied Mathematics \;$|$\; GPA: 3.85/4.00}{Berkeley, CA}
+{B.A. in Data Science and Applied Mathematics \;$|$\; GPA: 3.85/4.00}{Berkeley, CA}
 
 \vspace{-6pt}
 \resumeItemListStart
-\resumeItem{\textbf{Relevant Coursework:} Foundations of Data Science, Principles \& Techniques of Data Science, Probability for Data Science; \textit{In progress:} Introduction to Machine Learning, Data Engineering}
+\resumeItem{\textbf{Relevant Coursework:} Foundations of Data Science, Principles \& Techniques of Data Science, Probability for Data Science, Introduction to Machine Learning, Data Engineering, Optimization Models in Engineering}
 \resumeItemListEnd
 
 \resumeSubHeadingListEnd
@@ -173,7 +173,7 @@
             \resumeItem{Developed a machine learning model that predicts California home sale prices, typically within \textbf{8.6\%} of the actual price, using \textbf{71K} single-family sales cleaned from \textbf{143K} raw records.}
             \resumeItem{Benchmarked four model types and selected a tuned XGBoost (R\textsuperscript{2} of \textbf{0.88}), finding that deeper trees improved accuracy more than a lower learning rate.}
             \resumeItem{Resolved a data leakage bug that had invalidated early results, and nearly halved a simpler model's error (from \textbf{29\%} to \textbf{15\%}) by engineering a school district feature.}
-            \resumeItem{Analyzed errors by price band to find weak spots: luxury homes (\textbf{13\%} error vs. \textbf{6.5\%} mid-priced) and low-sales towns.}
+            \resumeItem{Found weak spots by price band: luxury homes (\textbf{13\%} error vs. \textbf{6.5\%} mid-priced) and low-sales towns.}
         \resumeItemListEnd
 
     \resumeCompactHeading
@@ -182,6 +182,18 @@
              \resumeItem{Engineered a service for an AI video startup that classifies videos and images by type (sports, gaming, talking) using Gemini, retrying uncertain or malformed responses on different clips, up to \textbf{10} attempts.}
              \resumeItem{Stored each label, confidence score, and reasoning in a \textbf{PostgreSQL} table for auditing, backed by \textbf{86} tests.}
              \resumeItem{Developed an in-app notification bell that alerts users when their video finishes processing or fails.}
+        \resumeItemListEnd
+
+        \resumeCompactHeading
+            {UC Berkeley CDSS}{Undergraduate Course Staff, CDSS 198}{Berkeley, CA}{Aug 2026 - Present}
+        \resumeItemListStart
+            \resumeItem{Support transfer students \textbf{6} hours a week through exam reviews and practice worksheets for CS and DS classes.}
+        \resumeItemListEnd
+
+        \resumeCompactHeading
+            {UC Berkeley}{Undergraduate Course Staff, CS 61A}{Berkeley, CA}{Jun 2026 - Aug 2026}
+        \resumeItemListStart
+            \resumeItem{Taught \textbf{4} weekly exam-prep sections in Python, Scheme, and SQL, reinforcing data structures like linked lists, trees, lists, and dictionaries, held office hours, and helped write midterm and final questions.}
         \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -208,33 +220,10 @@
         \resumeItemListEnd
         \vspace{2pt}
 
-        \resumeProjectHeading
-            {\textbf{Hindsight} $|$ \emph{Claude, FastAPI, React, Supabase} \hfill \href{https://github.com/Cal-Hacks-2026/Hindsight}{\uline{GitHub}}}
-        \resumeItemListStart
-            \resumeItem{Co-designed a transfer planner at Cal Hacks 13.0: a \textbf{FastAPI} backend that matches courses to ASSIST agreements with deterministic rules, a \textbf{React} and \textbf{TypeScript} interface, and \textbf{Supabase}.}
-            \resumeItem{Tested with \textbf{10} transfer students, who said it would have helped during their own transfer.}
-        \resumeItemListEnd
 
     \resumeSubHeadingListEnd
 \vspace{-12pt}
 
-%-----------LEADERSHIP-----------
-\section{Leadership \& Involvement}
-    \resumeSubHeadingListStart
-
-        \resumeLeadHeading
-            {UC Berkeley CDSS}{Undergraduate Course Staff, CDSS 198}{Berkeley, CA}{Aug 2026 - Present}
-        \resumeItemListStart
-            \resumeItem{Run exam reviews and write practice worksheets for CS and data science classes for transfer students, and give resume feedback.}
-        \resumeItemListEnd
-
-        \resumeLeadHeading
-            {UC Berkeley}{Undergraduate Course Staff, CS 61A}{Berkeley, CA}{Jun 2026 - Aug 2026}
-        \resumeItemListStart
-            \resumeItem{Taught \textbf{4} weekly exam-prep sections in Python, Scheme, and SQL, reinforcing data structures like linked lists, trees, lists, and dictionaries, held office hours, and helped write midterm and final questions.}
-        \resumeItemListEnd
-
-    \resumeSubHeadingListEnd
 \vspace{-6pt}
 
 \end{document}

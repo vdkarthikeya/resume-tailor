@@ -121,7 +121,7 @@ def parse_check(text: str) -> list[dict]:
     add("Standard section headings (Education, Skills, Experience, Projects)", not miss, ("missing: " + ", ".join(miss)) if miss else "")
     add("Graduation month and year", re.search(r"(Expected\s+)?(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+20\d\d", text) is not None)
     add("Portfolio / GitHub / LinkedIn link", re.search(r"github\.com|linkedin\.com|\.github\.io", text, re.I) is not None)
-    add("Degree spelled out (Bachelor of ...)", re.search(r"\bBachelor of (Arts|Science)\b", text) is not None, "ATS degree filters look for this wording")
+    add("Degree line (B.A./B.S. or Bachelor of ...)", re.search(r"\bBachelor of (Arts|Science)\b|\bB\.?[AS]\.? in\b", text) is not None, "ATS degree filters look for a standard degree wording")
     add("Date ranges use plain hyphens", re.search(r"(?:19|20)\d\d\s*[-]\s*(?:(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+)?(?:(?:19|20)\d\d|Present)", text) is not None)
     add("No en or em dashes (parsers split on them)", not re.search(r"[\u2013\u2014]", text), "found a special dash" if re.search(r"[\u2013\u2014]", text) else "")
     order = [m.start() for h in ("Education", "Technical Skills", "Experience", "Projects") for m in [re.search(rf"^\s*{h}\s*$", text, re.M)] if m]

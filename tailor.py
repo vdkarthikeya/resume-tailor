@@ -34,8 +34,8 @@ def is_locked_entry(e) -> bool:
 
 
 BASES = {k: v for k, v in BASES.items() if (ROOT / v["file"]).exists()}
-PAGE_BOTTOM_TARGET = 745.0  # originals end near 772; below this the page looks under-filled
-PAGE_BOTTOM_MAX = 785.0
+PAGE_BOTTOM_TARGET = 700.0  # Nov 18, 2026: bases end near 730 to 745; below this the page looks under-filled
+PAGE_BOTTOM_MAX = 748.0  # text must stay inside the bottom margin (about 0.65 in); the old limit was 785
 SKILL_LINE_MAX_CHARS = 110
 MAX_PROJECTS = 3  # more projects means fewer bullets each; three projects keep room for 2-3 strong bullets apiece
 MAX_PROJECT_BULLETS = 3
@@ -443,11 +443,11 @@ HARD RULES
    Voice: plain, direct, short. Start with a strong action verb (Built, Developed, Engineered, Implemented, Designed, Taught). Bold (**...**) the numbers and the job's key technical terms that the bullet truly demonstrates, at most 3 per bullet. No em dashes, no en dashes, no "--", no filler (leveraged, spearheaded, passionate). Use ² for superscript 2 and × for times. Nothing else: no backslashes, braces, ^, ~ or backticks.
    ATS wording: when the student really did the thing, use the job's exact term (REST APIs, not "web endpoints"; spell out "machine learning" where the job says it). Never use a job term the student did not earn.
 5. Facts to respect: CS 61A is "taught" sections (never "ran", never Gradescope or autograders). Guang Labs work is merged to main; say "merged" unless the Master Doc says otherwise. The classifier is a Gemini-based classification service, not a custom-trained LLM. IDX is a preprocessing and modeling pipeline. SightLine is in progress: say \"building\", never \"built\" or \"deployed\", and give no accuracy or speed numbers, because the Master Doc has none. The CLIP ViT-B/32 embedding stage with cosine-similarity neighbor checks is the documented work. 200+ is the 61A class size, not a caseload. Fung Fellowship: only what is documented as done.
-6. The CS 61A entry is locked: return its bullets unchanged (from_index, identical text). It already says the sections were taught in Python, Scheme, and SQL, reinforcing linked lists, trees, lists, and dictionaries. The CDSS 198 entry must keep saying the student runs exam reviews and writes practice worksheets for CS and data science classes. Keep each entry's bullet count exactly as given and each bullet within about 25% of the original length, so the resume stays one full page. Do not touch headings, dates, titles, or GPA.
+6. The CS 61A entry is locked: return its bullets unchanged (from_index, identical text). It already says the sections were taught in Python, Scheme, and SQL, reinforcing linked lists, trees, lists, and dictionaries. The CDSS 198 entry must keep saying the student supports transfer students 6 hours a week through exam reviews and practice worksheets for CS and DS classes. Always write "DS classes", never "data science classes", and never mention resume feedback. Keep each entry's bullet count exactly as given and each bullet within about 25% of the original length, so the resume stays one full page. Do not touch headings, dates, titles, or GPA.
 
 ATS RULES (the resume must pass automated screening AND read well to a person)
 A. Keywords: list the 8 to 15 hard-skill terms the job uses, exactly as written, in "keywords". Each one the Master Doc supports must appear verbatim in the Skills lines AND be shown in at least one bullet. The first Skills line should lead with the job's own languages and tools.
-B. Parse safety: single column, no tables or icons, plain hyphens in dates ("Jun 2026 - Aug 2026"), standard section names (Education, Technical Skills, Experience, Projects, Leadership & Involvement), standard degree wording ("Bachelor of Arts"). Never change headings, dates, titles, or the degree line.
+B. Parse safety: single column, no tables or icons, plain hyphens in dates ("Jun 2026 - Aug 2026"), standard section names (Education, Technical Skills, Experience, Projects; a Leadership section appears only when the student holds a real club leadership role), the degree line as written ("B.A. in Data Science and Applied Mathematics"). Never change headings, dates, titles, or the degree line.
 C. Spell out and abbreviate once where the job uses both ("machine learning", "natural language processing (NLP)") only if the student's work truly fits.
 D. Pick the strongest evidence for THIS job: the experiences and projects whose bullets best match the job's must-haves go first. Cut a weak project before a weak bullet.
 E. Never keyword-stuff: no white text, no repeated skill lists, no term the student did not earn.
@@ -714,7 +714,7 @@ def feedback_text(plan: dict, built: Built) -> str | None:
     if built.ok and built.pages > 1:
         msgs.append("The resume overflowed to 2 pages. Shorten rewritten bullets or drop low-value skills so it fits on ONE page.")
     elif built.ok and built.bottom < PAGE_BOTTOM_TARGET:
-        msgs.append(f"The page is under-filled (text ends at {built.bottom:.0f} of ~772 points). Keep more detail, using only Master Doc facts.")
+        msgs.append(f"The page is under-filled (text ends at {built.bottom:.0f} of about 745 points). Keep more detail, using only Master Doc facts.")
     if built.ok and built.skill_wrap:
         msgs.append("These skills lines wrap onto two lines, shorten them: " + ", ".join(built.skill_wrap))
     if built.ok and built.heading_scaled:

@@ -192,13 +192,14 @@
     "stack": [
       "Python",
       "PyTorch",
-      "OpenCV"
+      "OpenCV",
+      "OpenCLIP"
     ],
-    "suffix": "in progress",
+    "suffix": "",
     "bullets": [
       {
         "id": "sightline_1",
-        "markup": "On the Open Projects ML team, building an ML pipeline that turns smart-glasses footage into a **60-second** recap.",
+        "markup": "Building the ML pipeline for an Open Projects app that turns smart-glasses footage into a **60-second** recap.",
         "from_resume": "ml"
       },
       {
