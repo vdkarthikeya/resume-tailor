@@ -459,7 +459,7 @@ HOW TO TAILOR
 - Skills: reorder so the job's keywords come first; drop low-value items to make room; only add items that appear in the Master Doc. Keep each line under 110 characters including its label.
 - Projects: pick the same number of projects as the base resume (never more than 3) from the PROJECT BANK, most relevant to the job. Prefer the approved bullets (give bank_id and the exact text). Use 2 or 3 bullets per project (1 only when the bank has just one approved bullet).
 - Product and program management jobs (pm base): lead with discovery and product work (The After Collective interviews and concepts, Hindsight's product role, SightLine's cross-team work), then cross-functional and documentation work. Hindsight is a product-and-vision contribution built with Claude, never a backend you wrote.
-- Coursework: choose from ALLOWED COURSES only, no more courses than the base has.
+- Coursework: choose from ALLOWED COURSES only, no more courses than the base has. The resume shows ONE plain list with no \"In progress\" label anywhere, so courses the student is taking next may be listed like any other course.
 - Return your answer by calling the tool."""
 
 TAILOR_TOOL = {

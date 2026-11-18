@@ -307,3 +307,13 @@ def test_no_project_heading_wraps(tmp_path):
     head_y = next(w[1] for w in words if w[4] == "SightLine")
     gh = [w for w in words if w[4] == "GitHub" and abs(w[1] - head_y) < 3]
     assert b.heading_scaled == 1 and gh, "GitHub link left the heading line"  # page count is not checked: the base is now exactly one full page
+
+
+def test_coursework_never_labelled_in_progress():
+    """Resume rule: no 'In progress' label anywhere. In-progress courses render as ordinary list items."""
+    out = TS.render_coursework(["Data Structures", "Probability for Data Science"], ["Introduction to Machine Learning", "Data Engineering"])
+    assert "In progress" not in out
+    assert out.endswith("Probability for Data Science, Introduction to Machine Learning, Data Engineering")
+    assert "In progress" not in TS.render_coursework(["Data Structures"], [])
+    for k in T.BASES:
+        assert "In progress" not in (ROOT / T.BASES[k]["file"]).read_text(), k

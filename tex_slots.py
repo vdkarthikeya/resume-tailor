@@ -294,10 +294,9 @@ def parse(text: str) -> Parsed:
 
 # ---------------------------------------------------------------- rendering
 def render_coursework(completed: list[str], in_progress: list[str]) -> str:
-    out = "\\textbf{Relevant Coursework:} " + ", ".join(names_to_latex_list(completed))
-    if in_progress:
-        out += ("; " if completed else "") + "\\textit{In progress:} " + ", ".join(names_to_latex_list(in_progress))
-    return out
+    """One plain list. Never writes an "In progress:" label (resume rule); in-progress courses
+    are listed after the completed ones, like any other course."""
+    return "\\textbf{Relevant Coursework:} " + ", ".join(names_to_latex_list(completed + in_progress))
 
 
 def render_projects(projs: list[dict]) -> str:
