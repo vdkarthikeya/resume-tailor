@@ -37,6 +37,8 @@ UC Berkeley B.A. in Data Science (Applied Mathematics and Modeling domain emphas
 
 Note: resumes list full course names, never course codes.
 
+Also on resumes as coursework (Nov 18, 2026): Computer Security and Optimization Models in Engineering (in progress). Resumes never label any course as in progress; they show one plain list.
+
 ## Guang Labs (Engineering Intern, May to Aug 2026, Remote)
 
 Guang Labs is an AI video platform: users upload video, the system ingests it, and the product supports search, highlights, Agent editing, and export. I worked in the guang-labs repo with Akin as mentor and reviewer, on two tickets. Stack: React and Vite frontend (ui/), FastAPI backend (restapi/) with Auth0 Bearer auth, Postgres, S3, SQS, Qdrant, SQL migrations in dbscripts/.
