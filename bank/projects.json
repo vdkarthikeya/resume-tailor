@@ -41,40 +41,6 @@
     ]
   },
   {
-    "id": "resume_tailor",
-    "title": "Resume Tailor",
-    "url": "https://github.com/vdkarthikeya/resume-tailor",
-    "stack": [
-      "Python",
-      "FastAPI",
-      "LaTeX",
-      "Claude"
-    ],
-    "suffix": "",
-    "bullets": [
-      {
-        "id": "resume_tailor_1",
-        "markup": "Built a **Python** and **FastAPI** app that tailors a **LaTeX** resume to a job posting.",
-        "from_resume": "swe"
-      },
-      {
-        "id": "resume_tailor_2",
-        "markup": "**Claude API** rewrites must quote my own records; code rejects invented numbers and checks page fit and ATS parsing.",
-        "from_resume": "swe"
-      },
-      {
-        "id": "resume_tailor_3",
-        "markup": "Built a tool that tailors a one-page LaTeX resume to a job posting, leaving the layout untouched and rewriting only the bullet text.",
-        "from_resume": "swe"
-      },
-      {
-        "id": "resume_tailor_4",
-        "markup": "Rejects any rewrite that lacks a quote from my own records, and checks that the PDF fits one page and passes ATS parsing.",
-        "from_resume": "swe"
-      }
-    ]
-  },
-  {
     "id": "movie_genre",
     "title": "Movie Genre Classification",
     "url": "https://github.com/vdkarthikeya/movie-genre-classification-nlp",
@@ -141,7 +107,7 @@
   },
   {
     "id": "sb79",
-    "title": "SB 79 Transit Housing Analysis (Los Angeles)",
+    "title": "SB 79 Transit Housing Analysis",
     "url": "https://github.com/vdkarthikeya/sb79-tod-analysis-public",
     "stack": [
       "ArcGIS Online",
