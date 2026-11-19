@@ -360,3 +360,14 @@ def test_macros_have_no_trailing_whitespace_in_definition():
             assert m, (f.name, name)
             body = m.group(0)
             assert re.search(r"\}%\n\}\n$", body), (f.name, name, "body must end with }% before the closing brace")
+
+
+def test_resume_tailor_never_a_resume_project():
+    import json
+    bank, _ = T.load_bank()
+    assert "resume_tailor" not in bank
+    raw = json.load(open(T.ROOT / "bank/projects.json"))
+    assert all(p["id"] not in T.NEVER_LIST_PROJECTS for p in raw)
+    for v in ("ml", "ds", "swe", "pm"):
+        tex = (T.ROOT / f"resumes/{v}.tex").read_text()
+        assert "textbf{Resume Tailor}" not in tex, v
