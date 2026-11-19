@@ -63,8 +63,12 @@ def numbers_in(s: str) -> set[str]:
     return {m.group(0).rstrip(",") for m in NUM_RE.finditer(s)}
 
 
+# Never listed as a resume project (his rule, Nov 18, 2026): filtered out even if someone re-adds it to the bank.
+NEVER_LIST_PROJECTS = {"resume_tailor"}
+
+
 def load_bank():
-    projects = json.load(open(ROOT / "bank/projects.json"))
+    projects = [p for p in json.load(open(ROOT / "bank/projects.json")) if p["id"] not in NEVER_LIST_PROJECTS]
     courses = json.load(open(ROOT / "bank/courses.json"))
     return {p["id"]: p for p in projects}, courses
 
