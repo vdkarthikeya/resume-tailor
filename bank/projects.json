@@ -15,22 +15,22 @@
     "bullets": [
       {
         "id": "hindsight_1",
-        "markup": "Co-designed a transfer planner at Cal Hacks 13.0: a **FastAPI** backend that matches courses to ASSIST agreements with deterministic rules, a **React** and **TypeScript** interface, and **Supabase**.",
+        "markup": "Co-designed a transfer planner at Cal Hacks 13.0: a FastAPI backend that matches courses to ASSIST agreements with deterministic rules, a React and TypeScript interface, and Supabase.",
         "from_resume": "ml"
       },
       {
         "id": "hindsight_2",
-        "markup": "**Claude** reads transcripts and class schedules that students confirm and answers with numbered citations that code validates; **Apify** scrapes campus pages and a **Factory Droid** agent repairs only broken scraper scripts, in a sandbox.",
+        "markup": "Claude reads transcripts and class schedules that students confirm and answers with numbered citations that code validates; Apify scrapes campus pages and a Factory Droid agent repairs only broken scraper scripts, in a sandbox.",
         "from_resume": "ml"
       },
       {
         "id": "hindsight_3",
-        "markup": "Kept data grounded: **Apify** scrapes campus pages, a **Factory Droid** agent repairs broken scrapers under deny-by-default permissions, and guide items must quote their source.",
+        "markup": "Kept data grounded: Apify scrapes campus pages, a Factory Droid agent repairs broken scrapers under deny-by-default permissions, and guide items must quote their source.",
         "from_resume": "ml"
       },
       {
         "id": "hindsight_4",
-        "markup": "**Claude** reads confirmed transcripts and answers with sources; **Apify** scrapes campus pages, a **Factory Droid** agent repairs broken scrapers, and **Supabase** stores student data.",
+        "markup": "Claude reads confirmed transcripts and answers with sources; Apify scrapes campus pages, a Factory Droid agent repairs broken scrapers, and Supabase stores student data.",
         "from_resume": "pm"
       },
       {
@@ -55,22 +55,17 @@
     "bullets": [
       {
         "id": "resume_tailor_1",
-        "markup": "Built a **Python** and **FastAPI** app that tailors a one-page **LaTeX** resume to a job posting, replacing only bullet text, skills and project picks so the layout never changes.",
+        "markup": "Built a Python and FastAPI app that tailors a one-page LaTeX resume to a job posting; **92%** of its Claude API prompt is cacheable and **77** pytest tests cover it.",
         "from_resume": "swe"
       },
       {
         "id": "resume_tailor_2",
-        "markup": "Wrote checks that reject any **Claude API** rewrite that lacks a verbatim quote from my own records or uses a number not found in them, then compile the PDF and test page fit and ATS parsing.",
+        "markup": "Rejects any Claude API rewrite whose quote or number is not in my records, then checks page fit and ATS parsing.",
         "from_resume": "swe"
       },
       {
         "id": "resume_tailor_3",
-        "markup": "Added a **FastAPI** job queue for up to **25** jobs that runs **3** at a time on worker threads and downloads each PDF automatically; 8 test jobs finished **1.9x** faster than one at a time.",
-        "from_resume": "swe"
-      },
-      {
-        "id": "resume_tailor_4",
-        "markup": "Reordered the **Claude API** prompt so **92%** of its roughly **22,700** tokens can be cached, and covered the pipeline with **77** **pytest** tests, including parallel runs and failed jobs.",
+        "markup": "Added a job queue (**25** jobs, **3** at a time) with auto-download and a notification bell; **8** test jobs took **47%** less time.",
         "from_resume": "swe"
       }
     ]
@@ -96,7 +91,7 @@
       },
       {
         "id": "movie_genre_2",
-        "markup": "Compared Logistic Regression, XGBoost, and LightGBM: Logistic Regression won and trained about **12×** faster than XGBoost; dropping rare genres and tuning the threshold raised Macro F1 from 0.48 to **0.66**.",
+        "markup": "Compared Logistic Regression, XGBoost, and LightGBM: Logistic Regression won and trained about **12×** faster than XGBoost; dropping rare genres and tuning the threshold raised Macro F1 from **0.48** to **0.66**.",
         "from_resume": "ml"
       },
       {
@@ -176,7 +171,7 @@
       },
       {
         "id": "spam_2",
-        "markup": "Built a spam filter from 50+ engineered signals (link counts, dollar signs, HTML) that correctly sorts **92.1%** of unseen emails.",
+        "markup": "Built a spam filter from **50+** engineered signals (link counts, dollar signs, HTML) that correctly sorts **92.1%** of unseen emails.",
         "from_resume": "ml"
       },
       {
@@ -205,7 +200,7 @@
       },
       {
         "id": "sightline_2",
-        "markup": "Built a **CLIP ViT-B/32** embedding stage in PyTorch and OpenCV, about **0.4 seconds** per clip on a CPU.",
+        "markup": "Built a CLIP ViT-B/32 embedding stage in PyTorch and OpenCV, about **0.4 seconds** per clip on a CPU.",
         "from_resume": "ml"
       },
       {
@@ -225,12 +220,12 @@
       },
       {
         "id": "sightline_6",
-        "markup": "Writing the clip embedding stage in Python: samples evenly spaced frames per clip with OpenCV, encodes them with a pretrained **CLIP ViT-B/32** model in PyTorch, then averages and L2-normalizes them into one vector per clip.",
+        "markup": "Writing the clip embedding stage in Python: samples evenly spaced frames per clip with OpenCV, encodes them with a pretrained CLIP ViT-B/32 model in PyTorch, then averages and L2-normalizes them into one vector per clip.",
         "from_resume": "ml"
       },
       {
         "id": "sightline_7",
-        "markup": "Built a scoring stage blending **CLIP** prompts, novelty and sharpness, with **MMR** to pick a varied recap.",
+        "markup": "Built a scoring stage blending CLIP prompts, novelty and sharpness, with MMR to pick a varied recap.",
         "from_resume": "ml"
       }
     ]
@@ -325,7 +320,7 @@
     "bullets": [
       {
         "id": "climate_1",
-        "markup": "Ran an **A/B test** (permutation test, **5,000** simulations) to check whether drought years were truly drier than other years, rejecting chance at the 5% level (p = **0.026**).",
+        "markup": "Ran an A/B test (permutation test, **5,000** simulations) to check whether drought years were truly drier than other years, rejecting chance at the **5%** level (p = **0.026**).",
         "from_resume": "ds"
       },
       {
@@ -402,7 +397,7 @@
       },
       {
         "id": "micrograd_2",
-        "markup": "Trained an MLP built on the engine with gradient descent, cutting loss from **4.85** to **0.033** in **20** steps, and checked gradients against **PyTorch** autograd.",
+        "markup": "Trained an MLP built on the engine with gradient descent, cutting loss from **4.85** to **0.033** in **20** steps, and checked gradients against PyTorch autograd.",
         "from_resume": "ml"
       }
     ]
@@ -419,7 +414,7 @@
     "bullets": [
       {
         "id": "pg_perf_1",
-        "markup": "Tuned **PostgreSQL** queries on a baseball database by reading EXPLAIN ANALYZE plans: an index cut a MIN(salary) query cost from about **525** to **0.33**.",
+        "markup": "Tuned PostgreSQL queries on a baseball database by reading EXPLAIN ANALYZE plans: an index cut a MIN(salary) query cost from about **525** to **0.33**.",
         "from_resume": "ds"
       },
       {
@@ -559,12 +554,12 @@
     "bullets": [
       {
         "id": "next_step_1",
-        "markup": "Built a free site in about **3,400** lines of plain **JavaScript** for the Fung Fellowship that helps wildfire survivors write one clear insurer letter in **3** languages (English, Spanish, Chinese).",
+        "markup": "Built a free site in about **3,400** lines of plain JavaScript for the Fung Fellowship that helps wildfire survivors write one clear insurer letter in **3** languages (English, Spanish, Chinese).",
         "from_resume": "swe"
       },
       {
         "id": "next_step_2",
-        "markup": "Grounded a hosted **Llama** model on **Cloudflare Workers AI** in **15** numbered source notes, streamed its replies, and cut the prompt **30%** on 30 test questions by sending only matching notes; **129** browser checks cover it.",
+        "markup": "Grounded a hosted Llama model on Cloudflare Workers AI in **15** numbered source notes, streamed its replies, and cut the prompt **30%** on **30** test questions by sending only matching notes; **129** browser checks cover it.",
         "from_resume": "swe"
       },
       {

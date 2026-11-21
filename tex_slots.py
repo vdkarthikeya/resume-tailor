@@ -95,6 +95,39 @@ def _esc(seg: str) -> str:
     return seg
 
 
+# ---- house rule: only numbers are bold in a bullet ------------------------
+_NUM_SPAN = re.compile(r"^\$?\d[\d,.]*(?:\+|%|K\+?|M|x|\u00d7)?(?:-?\s?(?:seconds?|minutes?|hours?|weeks?))?$")
+_ID_WORDS = {"CS", "CDSS", "DATA", "STAT", "EECS", "ENG", "ENGIN", "SB", "ENGLISH", "MATH", "COMPSCI", "INFO", "IEOR", "HACKS"}
+_NUM_TOKEN = re.compile(r"(?<![\w./-])\d[\d,.]*(?:%|K\+?|\+|\u00d7|M)?(?![\w-])")
+
+
+def numbers_only_bold(m: str) -> str:
+    """Drop bold from any span that is not a number, so only numbers stand out."""
+    parts = m.split("**")
+    if len(parts) % 2 == 0:
+        return m
+    out = []
+    for k, seg in enumerate(parts):
+        out.append(("**" + seg + "**") if (k % 2 == 1 and _NUM_SPAN.match(seg.strip())) else seg)
+    return "".join(out)
+
+
+def unbolded_numbers(m: str) -> list[str]:
+    """Numbers in a bullet that are not bold (years and course numbers are exempt)."""
+    plain_parts = m.split("**")[::2]
+    found = []
+    for seg in plain_parts:
+        for t in _NUM_TOKEN.finditer(seg):
+            tok = t.group(0).rstrip(".,")
+            before = seg[: t.start()].split()
+            prev = before[-1].strip("(").upper() if before else ""
+            if re.fullmatch(r"(19|20)\d\d", tok) or prev in _ID_WORDS:
+                continue
+            found.append(tok)
+    return found
+
+
+
 def markup_to_latex(m: str) -> str:
     """Light markup -> LaTeX. Rejects anything that is not plain text + **bold**."""
     m = m.replace("\u2019", "'").replace("\u2018", "'").replace("\u201c", '"').replace("\u201d", '"')
@@ -108,6 +141,7 @@ def markup_to_latex(m: str) -> str:
     parts = m.split("**")
     if len(parts) % 2 == 0:
         raise MarkupError("unbalanced ** bold markers")
+    parts = numbers_only_bold(m).split("**")
     out = []
     for k, seg in enumerate(parts):
         if k % 2 == 1:

@@ -148,6 +148,10 @@ The repo copy of `apps_script.gs` ships a placeholder token. Replace it with you
 Project headings can be either style: linked title with arrow (`\textbf{\href{url}{\uline{Title}}\lk}`) or plain bold title with an underlined GitHub link at the right edge (`\hfill \href{url}{\uline{GitHub}}`). The app reads both and writes back in the style your file uses. Experience headings can be linked or plain. Delete any base file from `resumes/` to hide that option in the app.
 
 ## Changelog
+### Nov 20, 2026 (numbers-only bold, percentages on the resumes)
+- Only numbers are bold in a bullet, and every number is bold. Enforced in `tex_slots.py` (`numbers_only_bold`, `unbolded_numbers`), `check_bullet_text`, the tailor prompt and a test (78 tests). The bank and all four base resumes follow it.
+- SWE base lists Resume Tailor (92% cacheable prompt, 77 tests, 25-job queue, 47% less time on 8 test jobs) instead of Build Your Own World. Next Step shows 30% and 129 checks. Hosted PDFs and `resumes/src` were rebuilt in the website repo.
+
 ### Nov 20, 2026 (Next Step speed update recorded)
 - `master_doc.md` Next Step entry now covers the Nov 20 speed update (streaming replies, only the matching source notes sent, paid-path caching, repeat-answer caching skipped on purpose) with its numbers: prompt 2,761 to 1,941 tokens on 30 test questions (29.7% fewer; 39.1% on the 23 that match a topic), first words 1.43 s (27%) earlier on a mock at Cloudflare's published speed, about 109 to 142 to 158 chat replies a day (computed). Counts re-verified from the repo: 129 browser checks (the old 34 was stale), 28 commits, about 3,400 lines.
 - Bank bullets for Next Step use 3,400 lines, streaming, 30% smaller prompt on 30 test questions, and 129 checks. Base resumes are unchanged (their Next Step bullets are still true). The website line says chat replies stream.

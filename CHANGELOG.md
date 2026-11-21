@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-20 (Numbers-only bold, percentages)
+- House rule: only numbers are bold in a bullet, and every number is bold. Enforced by `tex_slots.numbers_only_bold` and `unbolded_numbers`, the tailor prompt, `check_bullet_text`, a test, and the bank and all four base resumes were rewritten to follow it.
+- SWE base resume now lists Resume Tailor (3 bullets: 92% cacheable prompt and 77 tests, evidence checks, 25-job queue with notification bell and 47% less time on 8 test jobs) in place of Build Your Own World. Next Step bullet reads 15 notes, 30% smaller prompt on 30 questions, 129 checks.
+- Hosted PDFs and `resumes/src` in vdkarthikeya.github.io rebuilt. They were built here with stand-ins for `ulem` and `fontawesome5`, so link underlines may sit a hair differently than a full LaTeX build.
+
 ## 2026-11-20 (Next Step update recorded)
 - Base resumes ml.tex and swe.tex: the Next Step bullet now matches the bank (streamed replies, 30% smaller prompt on 30 test questions, 129 browser checks). Both still fit on one page. pm.tex and ds.tex keep their shorter Next Step line. Hosted PDFs still need a rebuild with full LaTeX (sandbox lacks ulem and fontawesome5).
 - Master Doc, bank and README updated for the Next Step speed update (commit 962452a in nextstep-wildfire/next-step). 129 checks, 28 commits, about 3,400 lines, prompt 29.7% smaller on 30 test questions.

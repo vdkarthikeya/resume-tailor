@@ -376,8 +376,9 @@ def test_resume_tailor_is_in_the_bank_again():
         assert "hindsight" not in low
     master = ctx.master.lower()
     assert all(t.lower() in master for t in rt["stack"]), [t for t in rt["stack"] if t.lower() not in master]
-    for v in ("ml", "ds", "swe", "pm"):
-        assert "textbf{Resume Tailor}" not in (T.ROOT / f"resumes/{v}.tex").read_text(), v  # not on a base resume unless he adds it
+    for v in ("ml", "ds", "pm"):
+        assert "textbf{Resume Tailor}" not in (T.ROOT / f"resumes/{v}.tex").read_text(), v  # only the SWE base lists it (Nov 20, asked by him)
+    assert "textbf{Resume Tailor}" in (T.ROOT / "resumes/swe.tex").read_text()
 
 
 def test_resume_tailor_can_be_picked_for_a_job(tmp_path):
@@ -708,3 +709,20 @@ def test_sync_check_catches_drift(tmp_path):
     (site / "resumes/src/resume_swe.tex").write_text("old")
     out = "\n".join(sync_check.check_site(tmp_path, site))
     assert "resume_swe.tex differs" in out and "resume_ml.tex is missing" in out
+
+
+def test_only_numbers_are_bold_everywhere():
+    """Nov 20, 2026 rule: in a bullet only numbers are bold, and every number is bold (years and course numbers excepted)."""
+    import re, json
+    assert TS.markup_to_latex("Built a **Python** app, **47%** faster, **CLIP ViT-B/32**") == "Built a Python app, \\textbf{47\\%} faster, CLIP ViT-B/32"
+    assert TS.unbolded_numbers("Cut 30% on **25** jobs in 2026 for CS 61A") == ["30%"]
+    assert T.check_bullet_text("Built a thing for 8 test jobs", ctx, 500)
+    for p in json.loads((T.ROOT / "bank/projects.json").read_text()):
+        for b in p["bullets"]:
+            assert not TS.unbolded_numbers(b["markup"]) and TS.numbers_only_bold(b["markup"]) == b["markup"], b["id"]
+    for v in ("ml", "ds", "swe", "pm"):
+        for line in (T.ROOT / f"resumes/{v}.tex").read_text().splitlines():
+            m = re.match(r"\s*\\resumeItem\{(.*)\}\s*$", line)
+            if m and "Relevant Coursework" not in line:
+                mk = TS.latex_to_markup(m.group(1))
+                assert not TS.unbolded_numbers(mk) and TS.numbers_only_bold(mk) == mk, (v, mk[:70])
