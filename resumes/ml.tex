@@ -111,7 +111,7 @@
 
 \newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
-\newcommand{\resumeItemListStart}{\begin{itemize}[itemsep=2.5pt, topsep=3pt]}
+\newcommand{\resumeItemListStart}{\begin{itemize}[itemsep=4pt, topsep=3pt]}
 \newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-4pt}}
 
 %-------------------------------------------
@@ -147,18 +147,6 @@
 \resumeSubHeadingListEnd
 \vspace{-14pt}
 
-%-----------TECHNICAL SKILLS-----------
-\section{Technical Skills}
- \begin{itemize}[leftmargin=0.15in, label={}, itemsep=3pt]
-    \small{\item{
-     \textbf{Languages}{: Python, SQL, Java, JavaScript, TypeScript} \\[2pt]
-     \textbf{Machine Learning}{: PyTorch, CLIP (OpenCLIP), scikit-learn, XGBoost, LightGBM, SentenceTransformers, Llama} \\[2pt]
-     \textbf{Data}{: pandas, NumPy, GeoPandas, OpenCV, Matplotlib, PostgreSQL (query plans, indexing), MongoDB, Jupyter} \\[2pt]
-     \textbf{Engineering}{: FastAPI, React, Cloudflare Workers AI, Claude API, Gemini API, Pydantic, AWS S3, pytest, Git}
-    }}
- \end{itemize}
- \vspace{-15pt}
-
 %-----------EXPERIENCE-----------
 \section{Experience}
   \resumeSubHeadingListStart
@@ -166,24 +154,24 @@
     \resumeCompactHeading
         {IDX Exchange}{Data Science Intern}{Remote}{Jun 2026 - Aug 2026}
         \resumeItemListStart
-            \resumeItem{Developed a machine learning model that predicts California home sale prices, typically within \textbf{8.6\%} of the actual price, using \textbf{71K} single-family sales cleaned from \textbf{143K} raw records.}
-            \resumeItem{Benchmarked four model types and selected a tuned XGBoost (R\textsuperscript{2} of \textbf{0.88}), finding that deeper trees improved accuracy more than a lower learning rate.}
-            \resumeItem{Resolved a data leakage bug that had invalidated early results, and nearly halved a simpler model's error (from \textbf{29\%} to \textbf{15\%}) by engineering a school district feature.}
-            \resumeItem{Found weak spots by price band: luxury homes (\textbf{13\%} error vs. \textbf{6.5\%} mid-priced) and low-sales towns.}
+            \resumeItem{Developed a machine learning model that predicts California home sale prices, typically within 8.6\% of the actual price, using 71K single-family sales cleaned from 143K raw records.}
+            \resumeItem{Benchmarked four model types and selected a tuned XGBoost (R\textsuperscript{2} of 0.88), finding that deeper trees improved accuracy more than a lower learning rate.}
+            \resumeItem{Resolved a data leakage bug that had invalidated early results, and nearly halved a simpler model's error (from 29\% to 15\%) by engineering a school district feature.}
+            \resumeItem{Found weak spots by price band: luxury homes (13\% error vs. 6.5\% mid-priced) and low-sales towns.}
         \resumeItemListEnd
 
     \resumeCompactHeading
         {Guang Labs}{Engineering Intern}{Remote}{May 2026 - Aug 2026}
         \resumeItemListStart
              \resumeItem{Engineered a service for an AI video startup that sorts images and videos by content type (sports, gaming, talking, music) using Gemini, retrying uncertain or malformed responses.}
-             \resumeItem{Validated the service end to end with real video clips after code review, and expanded the automated test suite from \textbf{38} to \textbf{86} tests using Pydantic schemas and a deterministic fake provider.}
+             \resumeItem{Validated the service end to end with real video clips after code review, and expanded the automated test suite from 38 to 86 tests using Pydantic schemas and a deterministic fake provider.}
              \resumeItem{Developed an in-app notification bell that alerts users when their video finishes processing or fails.}
         \resumeItemListEnd
 
     \resumeCompactHeading
         {UC Berkeley CDSS}{Undergraduate Course Staff, CDSS 198}{Berkeley, CA}{Aug 2026 - Present}
         \resumeItemListStart
-            \resumeItem{Support transfer students \textbf{6} hours a week through exam reviews and practice worksheets for CS and DS classes.}
+            \resumeItem{Support transfer students 6 hours a week through exam reviews and practice worksheets for CS and DS classes.}
         \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -196,8 +184,8 @@
         \resumeProjectHeading
             {\textbf{SightLine} $|$ \emph{Python, PyTorch, OpenCV, OpenCLIP} \hfill \href{https://github.com/vdkarthikeya/sightline-ml-public}{\uline{GitHub}}}
         \resumeItemListStart
-            \resumeItem{Building the ML pipeline for an Open Projects app that turns smart-glasses footage into a \textbf{60-second} recap.}
-            \resumeItem{Built a CLIP ViT-B/32 embedding stage in PyTorch and OpenCV, about \textbf{0.4 seconds} per clip on a CPU.}
+            \resumeItem{Building the ML pipeline for an Open Projects app that turns smart-glasses footage into a 60-second recap.}
+            \resumeItem{Built a CLIP ViT-B/32 embedding stage in PyTorch and OpenCV, about 0.4 seconds per clip on a CPU.}
             \resumeItem{Built a scoring stage blending CLIP prompts, novelty and sharpness, with MMR to pick a varied recap.}
         \resumeItemListEnd
         \vspace{2pt}
@@ -205,8 +193,8 @@
         \resumeProjectHeading
             {\textbf{Movie Genre Classification} $|$ \emph{Python, PyTorch, scikit-learn, XGBoost, LightGBM} \hfill \href{https://github.com/vdkarthikeya/movie-genre-classification-nlp}{\uline{GitHub}}}
         \resumeItemListStart
-            \resumeItem{Built a multi-label NLP model that predicts a movie's genres from its title, tagline, and plot, using MiniLM, MPNet, and e5-large-v2 text embeddings on \textbf{42K+} MovieLens and TMDB films.}
-            \resumeItem{Compared Logistic Regression, XGBoost, and LightGBM: Logistic Regression won and trained about \textbf{12$\times$} faster than XGBoost; dropping rare genres and tuning the threshold raised Macro F1 from \textbf{0.48} to \textbf{0.66}.}
+            \resumeItem{Built a multi-label NLP model that predicts a movie's genres from its title, tagline, and plot, using MiniLM, MPNet, and e5-large-v2 text embeddings on 42K+ MovieLens and TMDB films.}
+            \resumeItem{Compared Logistic Regression, XGBoost, and LightGBM: Logistic Regression won and trained about 12$\times$ faster than XGBoost; dropping rare genres and tuning the threshold raised Macro F1 from 0.48 to 0.66.}
         \resumeItemListEnd
         \vspace{2pt}
 
@@ -214,10 +202,22 @@
             {\textbf{Next Step} $|$ \emph{JavaScript, Cloudflare Workers AI, Llama} \hfill \href{https://github.com/nextstep-wildfire/next-step}{\uline{GitHub}}}
         \resumeItemListStart
             \resumeItem{Built a free Fung Fellowship site that helps California wildfire survivors deal with the aftermath, including writing insurer letters in English, Spanish, and Chinese.}
-            \resumeItem{Grounded a hosted Llama model on Cloudflare Workers AI in \textbf{15} numbered source notes, streamed its replies, and cut the prompt \textbf{30\%} on \textbf{30} test questions by sending only matching notes; \textbf{129} browser checks cover it.}
+            \resumeItem{Grounded a hosted Llama model on Cloudflare Workers AI in 15 numbered source notes, streamed its replies, and cut the prompt 30\% on 30 test questions by sending only matching notes; 129 browser checks cover it.}
         \resumeItemListEnd
 
     \resumeSubHeadingListEnd
-\vspace{-6pt}
+\vspace{-12pt}
+
+%-----------TECHNICAL SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}, itemsep=3pt]
+    \small{\item{
+     \textbf{Languages}{: Python, SQL, Java, JavaScript, TypeScript} \\[2pt]
+     \textbf{Machine Learning}{: PyTorch, CLIP (OpenCLIP), scikit-learn, XGBoost, LightGBM, SentenceTransformers, Llama} \\[2pt]
+     \textbf{Data}{: pandas, NumPy, GeoPandas, OpenCV, Matplotlib, PostgreSQL (query plans, indexing), MongoDB, Jupyter} \\[2pt]
+     \textbf{Engineering}{: FastAPI, React, Cloudflare Workers AI, Claude API, Gemini API, Pydantic, AWS S3, pytest, Git}
+    }}
+ \end{itemize}
+ \vspace{-15pt}
 
 \end{document}

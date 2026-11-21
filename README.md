@@ -148,6 +148,11 @@ The repo copy of `apps_script.gs` ships a placeholder token. Replace it with you
 Project headings can be either style: linked title with arrow (`\textbf{\href{url}{\uline{Title}}\lk}`) or plain bold title with an underlined GitHub link at the right edge (`\hfill \href{url}{\uline{GitHub}}`). The app reads both and writes back in the style your file uses. Experience headings can be linked or plain. Delete any base file from `resumes/` to hide that option in the app.
 
 ## Changelog
+### Nov 21, 2026 (standard layout, no bold, name moved up)
+- **Section order** on all four bases is now Education, Experience, Projects, Technical Skills (skills last), the order the standard Jake template uses. The ATS check in `ats.py` and the model prompt expect this order.
+- **No bold inside bullets.** This replaces the Nov 20 numbers-only-bold rule: `tex_slots.markup_to_latex` drops any `**` markers, `latex_to_markup` reads old `\textbf` bullets as plain text, the bold-every-number check is gone from `check_bullet_text`, the prompt says plain text, `bank/projects.json` and the test fixtures are unbolded, and `test_no_bold_in_bullets` replaces the old test. Headings, company names, project names, skills labels and the "Relevant Coursework:" label keep their bold (the parser reads that label).
+- **Top margin** moved up again (`\topmargin` -0.723in, `\textheight` +0.983in, about 0.27 in above the name, matching the template). That freed about 25 pt, so bullet spacing is `itemsep=4pt` to keep each base ending between `PAGE_BOTTOM_TARGET` and `PAGE_BOTTOM_MAX`.
+
 ### Nov 20, 2026 (numbers-only bold, percentages on the resumes)
 - Only numbers are bold in a bullet, and every number is bold. Enforced in `tex_slots.py` (`numbers_only_bold`, `unbolded_numbers`), `check_bullet_text`, the tailor prompt and a test (78 tests). The bank and all four base resumes follow it.
 - SWE base lists Resume Tailor (92% cacheable prompt, 77 tests, 25-job queue, 47% less time on 8 test jobs) instead of Build Your Own World. Next Step shows 30% and 129 checks. Hosted PDFs and `resumes/src` were rebuilt in the website repo.

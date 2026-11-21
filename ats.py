@@ -118,14 +118,14 @@ def parse_check(text: str) -> list[dict]:
     add("Phone found", re.search(r"\+?\d[\d\s().-]{8,}\d", text) is not None)
     heads = ["education", "experience", "skills", "projects"]
     miss = [h for h in heads if not re.search(rf"^\s*(technical )?{h}", text, re.I | re.M)]
-    add("Standard section headings (Education, Skills, Experience, Projects)", not miss, ("missing: " + ", ".join(miss)) if miss else "")
+    add("Standard section headings (Education, Experience, Projects, Skills)", not miss, ("missing: " + ", ".join(miss)) if miss else "")
     add("Graduation month and year", re.search(r"(Expected\s+)?(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+20\d\d", text) is not None)
     add("Portfolio / GitHub / LinkedIn link", re.search(r"github\.com|linkedin\.com|\.github\.io", text, re.I) is not None)
     add("Degree line (B.A./B.S. or Bachelor of ...)", re.search(r"\bBachelor of (Arts|Science)\b|\bB\.?[AS]\.? in\b", text) is not None, "ATS degree filters look for a standard degree wording")
     add("Date ranges use plain hyphens", re.search(r"(?:19|20)\d\d\s*[-]\s*(?:(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+)?(?:(?:19|20)\d\d|Present)", text) is not None)
     add("No en or em dashes (parsers split on them)", not re.search(r"[\u2013\u2014]", text), "found a special dash" if re.search(r"[\u2013\u2014]", text) else "")
-    order = [m.start() for h in ("Education", "Technical Skills", "Experience", "Projects") for m in [re.search(rf"^\s*{h}\s*$", text, re.M)] if m]
-    add("Sections read in a standard order", len(order) == 4 and order == sorted(order), "Education, Technical Skills, Experience, Projects")
+    order = [m.start() for h in ("Education", "Experience", "Projects", "Technical Skills") for m in [re.search(rf"^\s*{h}\s*$", text, re.M)] if m]
+    add("Sections read in a standard order", len(order) == 4 and order == sorted(order), "Education, Experience, Projects, Technical Skills")
     weird = re.findall(r"[\ufffd\u25a0\u2022\u00a0]{3,}|\(cid:\d+\)", text)
     add("No garbled characters", not weird)
     return checks

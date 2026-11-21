@@ -74,9 +74,10 @@ def test_accepts_grounded_rewrite(tmp_path):
 
 
 def test_markup_guards():
-    for bad in ["a \\textbf{x}", "dash — here", "unbal **x", "x -- y", "{brace}"]:
+    for bad in ["a \\textbf{x}", "dash — here", "x -- y", "{brace}"]:
         with pytest.raises(TS.MarkupError): TS.markup_to_latex(bad)
-    assert TS.markup_to_latex("**8.6%** R² 5×") == "\\textbf{8.6\\%} R\\textsuperscript{2} 5$\\times$"
+    assert TS.markup_to_latex("8.6% R² 5×") == "8.6\\% R\\textsuperscript{2} 5$\\times$"
+    assert TS.markup_to_latex("**8.6%** R² 5×") == "8.6\\% R\\textsuperscript{2} 5$\\times$"  # stray markers are dropped
 
 
 def test_revert_to_fit(tmp_path):
@@ -214,7 +215,7 @@ def test_base_rules(k, tmp_path):
     assert all(1 <= len(pb.bullets) <= T.MAX_PROJECT_BULLETS for pb in p.projects.projects)
     heads = [h for h in __import__("re").findall(r"\{((?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]* 20\d\d [-]+ [^}]*)\}", tex)]
     assert heads and all(" - " in h and "--" not in h for h in heads), heads
-    assert "B.A. in Data Science and Applied Mathematics" in tex and "PyTorch" in tex and "TensorFlow" not in tex.split("\\begin{document}")[1].split("Experience")[0]
+    assert "B.A. in Data Science and Applied Mathematics" in tex and "PyTorch" in tex and "TensorFlow" not in tex.split("\\section{Technical Skills}")[1]
     b = T.compile_tex(tex, tmp_path, "r")
     assert b.ok and b.pages == 1 and T.PAGE_BOTTOM_TARGET <= b.bottom <= T.PAGE_BOTTOM_MAX, (k, b.pages, b.bottom)
     text = "\n".join(pg.get_text() for pg in pymupdf.open(b.pdf))
@@ -711,18 +712,17 @@ def test_sync_check_catches_drift(tmp_path):
     assert "resume_swe.tex differs" in out and "resume_ml.tex is missing" in out
 
 
-def test_only_numbers_are_bold_everywhere():
-    """Nov 20, 2026 rule: in a bullet only numbers are bold, and every number is bold (years and course numbers excepted)."""
+def test_no_bold_in_bullets():
+    """Nov 21, 2026 rule (replaces the Nov 20 numbers-only-bold rule): bullets are plain sentences, no bold anywhere in them."""
     import re, json
-    assert TS.markup_to_latex("Built a **Python** app, **47%** faster, **CLIP ViT-B/32**") == "Built a Python app, \\textbf{47\\%} faster, CLIP ViT-B/32"
-    assert TS.unbolded_numbers("Cut 30% on **25** jobs in 2026 for CS 61A") == ["30%"]
-    assert T.check_bullet_text("Built a thing for 8 test jobs", ctx, 500)
+    assert TS.markup_to_latex("Built a **Python** app, **47%** faster, **CLIP ViT-B/32**") == "Built a Python app, 47\\% faster, CLIP ViT-B/32"
+    assert TS.latex_to_markup("Cut \\textbf{30\\%} on \\textbf{25} jobs") == "Cut 30% on 25 jobs"
     for p in json.loads((T.ROOT / "bank/projects.json").read_text()):
         for b in p["bullets"]:
-            assert not TS.unbolded_numbers(b["markup"]) and TS.numbers_only_bold(b["markup"]) == b["markup"], b["id"]
+            assert "**" not in b["markup"], b["id"]
     for v in ("ml", "ds", "swe", "pm"):
         for line in (T.ROOT / f"resumes/{v}.tex").read_text().splitlines():
             m = re.match(r"\s*\\resumeItem\{(.*)\}\s*$", line)
             if m and "Relevant Coursework" not in line:
                 mk = TS.latex_to_markup(m.group(1))
-                assert not TS.unbolded_numbers(mk) and TS.numbers_only_bold(mk) == mk, (v, mk[:70])
+                assert "textbf" not in m.group(1) and "**" not in mk, (v, mk[:70])

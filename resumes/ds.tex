@@ -111,7 +111,7 @@
 
 \newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
-\newcommand{\resumeItemListStart}{\begin{itemize}[itemsep=2.5pt, topsep=3pt]}
+\newcommand{\resumeItemListStart}{\begin{itemize}[itemsep=4pt, topsep=3pt]}
 \newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-4pt}}
 
 %-------------------------------------------
@@ -147,18 +147,6 @@
 \resumeSubHeadingListEnd
 \vspace{-14pt}
 
-%-----------TECHNICAL SKILLS-----------
-\section{Technical Skills}
- \begin{itemize}[leftmargin=0.15in, label={}, itemsep=3pt]
-    \small{\item{
-     \textbf{Languages}{: Python, SQL, Java, TypeScript} \\[2pt]
-     \textbf{Statistics \& ML}{: A/B Testing, Hypothesis Testing, Bootstrapping, scikit-learn, XGBoost, PyTorch, Cross-Validation} \\[2pt]
-     \textbf{Data}{: pandas, NumPy, Matplotlib, seaborn, PostgreSQL (query plans, indexing), Plotly, Feature Engineering, Jupyter} \\[2pt]
-     \textbf{Engineering}{: FastAPI, React, Supabase, Claude API, REST APIs, AWS S3, pytest, Git}
-    }}
- \end{itemize}
- \vspace{-15pt}
-
 %-----------EXPERIENCE-----------
 \section{Experience}
   \resumeSubHeadingListStart
@@ -166,30 +154,30 @@
     \resumeCompactHeading
         {IDX Exchange}{Data Science Intern}{Remote}{Jun 2026 - Aug 2026}
         \resumeItemListStart
-            \resumeItem{Developed a machine learning model that predicts California home sale prices, typically within \textbf{8.6\%} of the actual price, using \textbf{71K} single-family sales cleaned from \textbf{143K} raw records.}
-            \resumeItem{Benchmarked four model types and selected a tuned XGBoost (R\textsuperscript{2} of \textbf{0.88}), finding that deeper trees improved accuracy more than a lower learning rate.}
-            \resumeItem{Resolved a data leakage bug that had invalidated early results, and nearly halved a simpler model's error (from \textbf{29\%} to \textbf{15\%}) by engineering a school district feature.}
-            \resumeItem{Found weak spots by price band: luxury homes (\textbf{13\%} error vs. \textbf{6.5\%} mid-priced) and low-sales towns.}
+            \resumeItem{Developed a machine learning model that predicts California home sale prices, typically within 8.6\% of the actual price, using 71K single-family sales cleaned from 143K raw records.}
+            \resumeItem{Benchmarked four model types and selected a tuned XGBoost (R\textsuperscript{2} of 0.88), finding that deeper trees improved accuracy more than a lower learning rate.}
+            \resumeItem{Resolved a data leakage bug that had invalidated early results, and nearly halved a simpler model's error (from 29\% to 15\%) by engineering a school district feature.}
+            \resumeItem{Found weak spots by price band: luxury homes (13\% error vs. 6.5\% mid-priced) and low-sales towns.}
         \resumeItemListEnd
 
     \resumeCompactHeading
         {Guang Labs}{Engineering Intern}{Remote}{May 2026 - Aug 2026}
         \resumeItemListStart
-             \resumeItem{Engineered a service for an AI video startup that classifies videos and images by type (sports, gaming, talking) using Gemini, retrying uncertain or malformed responses on different clips, up to \textbf{10} attempts.}
-             \resumeItem{Stored each label, confidence score, and reasoning in a PostgreSQL table for auditing, backed by \textbf{86} tests.}
+             \resumeItem{Engineered a service for an AI video startup that classifies videos and images by type (sports, gaming, talking) using Gemini, retrying uncertain or malformed responses on different clips, up to 10 attempts.}
+             \resumeItem{Stored each label, confidence score, and reasoning in a PostgreSQL table for auditing, backed by 86 tests.}
              \resumeItem{Developed an in-app notification bell that alerts users when their video finishes processing or fails.}
         \resumeItemListEnd
 
         \resumeCompactHeading
             {UC Berkeley CDSS}{Undergraduate Course Staff, CDSS 198}{Berkeley, CA}{Aug 2026 - Present}
         \resumeItemListStart
-            \resumeItem{Support transfer students \textbf{6} hours a week through exam reviews and practice worksheets for CS and DS classes.}
+            \resumeItem{Support transfer students 6 hours a week through exam reviews and practice worksheets for CS and DS classes.}
         \resumeItemListEnd
 
         \resumeCompactHeading
             {UC Berkeley}{Undergraduate Course Staff, CS 61A}{Berkeley, CA}{Jun 2026 - Aug 2026}
         \resumeItemListStart
-            \resumeItem{Taught \textbf{4} weekly exam-prep sections in Python, Scheme, and SQL, reinforcing data structures like linked lists, trees, lists, and dictionaries, held office hours, and helped write midterm and final questions.}
+            \resumeItem{Taught 4 weekly exam-prep sections in Python, Scheme, and SQL, reinforcing data structures like linked lists, trees, lists, and dictionaries, held office hours, and helped write midterm and final questions.}
         \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -202,17 +190,17 @@
         \resumeProjectHeading
             {\textbf{Climate Change Hypothesis Testing} $|$ \emph{Python, NumPy, Matplotlib} \hfill \href{https://github.com/vdkarthikeya/climate-analysis}{\uline{GitHub}}}
         \resumeItemListStart
-            \resumeItem{Ran an A/B test (permutation test, \textbf{5,000} simulations) to check whether drought years were truly drier than other years, rejecting chance at the \textbf{5\%} level (p = \textbf{0.026}).}
-            \resumeItem{Built \textbf{99\%} bootstrap confidence intervals (\textbf{5,000} resamples) for monthly max temperatures, finding \textbf{9} of \textbf{12} months significantly hotter in 2019-2021 than in 1900-1960.}
-            \resumeItem{Flagged the multiple-testing risk of running \textbf{12} tests at once at a \textbf{1\%} cutoff.}
+            \resumeItem{Ran an A/B test (permutation test, 5,000 simulations) to check whether drought years were truly drier than other years, rejecting chance at the 5\% level (p = 0.026).}
+            \resumeItem{Built 99\% bootstrap confidence intervals (5,000 resamples) for monthly max temperatures, finding 9 of 12 months significantly hotter in 2019-2021 than in 1900-1960.}
+            \resumeItem{Flagged the multiple-testing risk of running 12 tests at once at a 1\% cutoff.}
         \resumeItemListEnd
         \vspace{2pt}
 
         \resumeProjectHeading
             {\textbf{LLM Arena Leaderboard} $|$ \emph{Python, scikit-learn, pandas, Plotly}}
         \resumeItemListStart
-            \resumeItem{Ranked the top \textbf{20} LLMs from about \textbf{26K} human-preference battles by fitting a Bradley-Terry model (logistic regression) and comparing it to raw win rates on held-out battles.}
-            \resumeItem{Bootstrapped \textbf{200} resamples for confidence intervals on each model's rank, and grouped prompts into topics with LSA and K-Means to compare leaderboards by topic.}
+            \resumeItem{Ranked the top 20 LLMs from about 26K human-preference battles by fitting a Bradley-Terry model (logistic regression) and comparing it to raw win rates on held-out battles.}
+            \resumeItem{Bootstrapped 200 resamples for confidence intervals on each model's rank, and grouped prompts into topics with LSA and K-Means to compare leaderboards by topic.}
         \resumeItemListEnd
         \vspace{2pt}
 
@@ -221,5 +209,17 @@
 \vspace{-12pt}
 
 \vspace{-6pt}
+
+%-----------TECHNICAL SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}, itemsep=3pt]
+    \small{\item{
+     \textbf{Languages}{: Python, SQL, Java, TypeScript} \\[2pt]
+     \textbf{Statistics \& ML}{: A/B Testing, Hypothesis Testing, Bootstrapping, scikit-learn, XGBoost, PyTorch, Cross-Validation} \\[2pt]
+     \textbf{Data}{: pandas, NumPy, Matplotlib, seaborn, PostgreSQL (query plans, indexing), Plotly, Feature Engineering, Jupyter} \\[2pt]
+     \textbf{Engineering}{: FastAPI, React, Supabase, Claude API, REST APIs, AWS S3, pytest, Git}
+    }}
+ \end{itemize}
+ \vspace{-15pt}
 
 \end{document}

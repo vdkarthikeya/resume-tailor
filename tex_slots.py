@@ -60,13 +60,13 @@ def plain(s: str) -> str:
 
 # ---------------------------------------------------------------- markup <-> latex
 def latex_to_markup(s: str) -> str:
-    """LaTeX bullet text -> light markup (**bold**, unicode superscript 2, x)."""
+    """LaTeX bullet text -> plain markup (unicode superscript 2, x). Bold is dropped."""
     out: list[str] = []
     i = 0
     while i < len(s):
         if s.startswith("\\textbf{", i):
             j = match_brace(s, i + len("\\textbf"))
-            out.append("**" + latex_to_markup(s[i + len("\\textbf{") : j]) + "**")
+            out.append(latex_to_markup(s[i + len("\\textbf{") : j]))  # no bold in bullets (Nov 21, 2026)
             i = j + 1
         elif s.startswith("\\textsuperscript{2}", i):
             out.append("\u00b2")
@@ -95,62 +95,23 @@ def _esc(seg: str) -> str:
     return seg
 
 
-# ---- house rule: only numbers are bold in a bullet ------------------------
-_NUM_SPAN = re.compile(r"^\$?\d[\d,.]*(?:\+|%|K\+?|M|x|\u00d7)?(?:-?\s?(?:seconds?|minutes?|hours?|weeks?))?$")
-_ID_WORDS = {"CS", "CDSS", "DATA", "STAT", "EECS", "ENG", "ENGIN", "SB", "ENGLISH", "MATH", "COMPSCI", "INFO", "IEOR", "HACKS"}
-_NUM_TOKEN = re.compile(r"(?<![\w./-])\d[\d,.]*(?:%|K\+?|\+|\u00d7|M)?(?![\w-])")
-
-
-def numbers_only_bold(m: str) -> str:
-    """Drop bold from any span that is not a number, so only numbers stand out."""
-    parts = m.split("**")
-    if len(parts) % 2 == 0:
-        return m
-    out = []
-    for k, seg in enumerate(parts):
-        out.append(("**" + seg + "**") if (k % 2 == 1 and _NUM_SPAN.match(seg.strip())) else seg)
-    return "".join(out)
-
-
-def unbolded_numbers(m: str) -> list[str]:
-    """Numbers in a bullet that are not bold (years and course numbers are exempt)."""
-    plain_parts = m.split("**")[::2]
-    found = []
-    for seg in plain_parts:
-        for t in _NUM_TOKEN.finditer(seg):
-            tok = t.group(0).rstrip(".,")
-            before = seg[: t.start()].split()
-            prev = before[-1].strip("(").upper() if before else ""
-            if re.fullmatch(r"(19|20)\d\d", tok) or prev in _ID_WORDS:
-                continue
-            found.append(tok)
-    return found
-
+# ---- house rule (Nov 21, 2026): no bold inside a bullet ---------------------
+def strip_bold(m: str) -> str:
+    """Bullets are plain sentences. Drop any ** markers a model or the bank still carries."""
+    return m.replace("**", "")
 
 
 def markup_to_latex(m: str) -> str:
-    """Light markup -> LaTeX. Rejects anything that is not plain text + **bold**."""
+    """Plain markup -> LaTeX. Rejects anything that is not plain text (bold markers are dropped)."""
     m = m.replace("\u2019", "'").replace("\u2018", "'").replace("\u201c", '"').replace("\u201d", '"')
-    m = m.strip()
+    m = strip_bold(m).strip()
     if not m:
         raise MarkupError("empty text")
     if any(c in _BAD_CHARS for c in m):
         raise MarkupError("contains a character that is not allowed (backslash, braces, ~, ^, backtick, newline)")
     if "\u2014" in m or "\u2013" in m or "--" in m:
         raise MarkupError("contains a dash that reads as AI-written (em dash, en dash, or --)")
-    parts = m.split("**")
-    if len(parts) % 2 == 0:
-        raise MarkupError("unbalanced ** bold markers")
-    parts = numbers_only_bold(m).split("**")
-    out = []
-    for k, seg in enumerate(parts):
-        if k % 2 == 1:
-            if not seg.strip():
-                raise MarkupError("empty bold span")
-            out.append("\\textbf{" + _esc(seg) + "}")
-        else:
-            out.append(_esc(seg))
-    return "".join(out)
+    return _esc(m)
 
 
 def latex_list_to_names(items: list[str]) -> list[str]:

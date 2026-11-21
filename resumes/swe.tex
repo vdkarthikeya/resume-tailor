@@ -111,7 +111,7 @@
 
 \newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
-\newcommand{\resumeItemListStart}{\begin{itemize}[itemsep=2.5pt, topsep=3pt]}
+\newcommand{\resumeItemListStart}{\begin{itemize}[itemsep=4pt, topsep=3pt]}
 \newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-4pt}}
 
 %-------------------------------------------
@@ -146,19 +146,6 @@
 \resumeSubHeadingListEnd
 \vspace{-14pt}
 
-%-----------TECHNICAL SKILLS-----------
-\section{Technical Skills}
- \begin{itemize}[leftmargin=0.15in, label={}, itemsep=3pt]
-    \small{\item{
-     \textbf{Languages}{: Python, Java, SQL, JavaScript, TypeScript, Gleam, LaTeX} \\[2pt]
-     \textbf{Engineering}{: FastAPI, React, REST APIs, PostgreSQL (query plans, indexing), MongoDB, Auth0, AWS S3} \\[2pt]
-     \textbf{Tools}{: Supabase, Apify, Cloudflare, Git} \\[2pt]
-     \textbf{Fundamentals}{: Data Structures, Graph Algorithms, Complexity Analysis, OOP, Functional Programming} \\[2pt]
-     \textbf{ML \& Data}{: PyTorch, scikit-learn, XGBoost, pandas, NumPy, Claude API, Factory Droid SDK}
-    }}
- \end{itemize}
- \vspace{-15pt}
-
 %-----------EXPERIENCE-----------
 \section{Experience}
   \resumeSubHeadingListStart
@@ -168,28 +155,28 @@
         \resumeItemListStart
              \resumeItem{Engineered a backend REST API service for an AI video startup that classifies a user's image or video by content type (sports, gaming, talking) using the Gemini API.}
              \resumeItem{Architected an asynchronous submit-and-poll workflow that processes long videos in the background rather than blocking users (FastAPI, PostgreSQL, Auth0).}
-             \resumeItem{Delivered the service end to end after code review, supporting uploads from \textbf{4} sources (local, S3, web links) and validating it with \textbf{86} automated tests.}
+             \resumeItem{Delivered the service end to end after code review, supporting uploads from 4 sources (local, S3, web links) and validating it with 86 automated tests.}
              \resumeItem{Developed an in-app notification bell, from the database to the React interface, that alerts users when their video finishes processing or fails, and ensured failures never disrupt processing or send duplicate alerts on retries.}
         \resumeItemListEnd
 
     \resumeCompactHeading
         {IDX Exchange}{Data Science Intern}{Remote}{Jun 2026 - Aug 2026}
         \resumeItemListStart
-            \resumeItem{Engineered a pipeline predicting California home prices from \textbf{143K} records, typically within \textbf{8.6\%} of actual price.}
-            \resumeItem{Benchmarked four model types and selected a tuned XGBoost (R\textsuperscript{2} of \textbf{0.88}), resolving a data leakage bug and cutting a simpler model's error from \textbf{29\%} to \textbf{15\%} with a school district feature.}
-            \resumeItem{Found weak spots by price band: luxury homes (\textbf{13\%} error vs. \textbf{6.5\%} mid-priced) and low-sales towns.}
+            \resumeItem{Engineered a pipeline predicting California home prices from 143K records, typically within 8.6\% of actual price.}
+            \resumeItem{Benchmarked four model types and selected a tuned XGBoost (R\textsuperscript{2} of 0.88), resolving a data leakage bug and cutting a simpler model's error from 29\% to 15\% with a school district feature.}
+            \resumeItem{Found weak spots by price band: luxury homes (13\% error vs. 6.5\% mid-priced) and low-sales towns.}
         \resumeItemListEnd
 
         \resumeCompactHeading
             {UC Berkeley CDSS}{Undergraduate Course Staff, CDSS 198}{Berkeley, CA}{Aug 2026 - Present}
         \resumeItemListStart
-            \resumeItem{Support transfer students \textbf{6} hours a week through exam reviews and practice worksheets for CS and DS classes.}
+            \resumeItem{Support transfer students 6 hours a week through exam reviews and practice worksheets for CS and DS classes.}
         \resumeItemListEnd
 
         \resumeCompactHeading
             {UC Berkeley}{Undergraduate Course Staff, CS 61A}{Berkeley, CA}{Jun 2026 - Aug 2026}
         \resumeItemListStart
-            \resumeItem{Taught \textbf{4} weekly exam-prep sections in Python, Scheme, and SQL, reinforcing data structures like linked lists, trees, lists, and dictionaries, held office hours, and helped write midterm and final questions.}
+            \resumeItem{Taught 4 weekly exam-prep sections in Python, Scheme, and SQL, reinforcing data structures like linked lists, trees, lists, and dictionaries, held office hours, and helped write midterm and final questions.}
         \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -203,21 +190,34 @@
             {\textbf{Next Step} $|$ \emph{JavaScript, Cloudflare Workers AI, Llama} \hfill \href{https://github.com/nextstep-wildfire/next-step}{\uline{GitHub}}}
         \resumeItemListStart
             \resumeItem{Built a free Fung Fellowship site that helps California wildfire survivors deal with the aftermath, including writing insurer letters in English, Spanish, and Chinese.}
-            \resumeItem{Grounded a hosted Llama model on Cloudflare Workers AI in \textbf{15} numbered source notes, streamed its replies, and cut the prompt \textbf{30\%} on \textbf{30} test questions by sending only matching notes; \textbf{129} browser checks cover it.}
+            \resumeItem{Grounded a hosted Llama model on Cloudflare Workers AI in 15 numbered source notes, streamed its replies, and cut the prompt 30\% on 30 test questions by sending only matching notes; 129 browser checks cover it.}
         \resumeItemListEnd
         \vspace{2pt}
 
         \resumeProjectHeading
             {\textbf{Resume Tailor} $|$ \emph{Python, FastAPI, LaTeX, Claude API, pytest} \hfill \href{https://github.com/vdkarthikeya/resume-tailor}{\uline{GitHub}}}
         \resumeItemListStart
-            \resumeItem{Built a Python and FastAPI app that tailors a one-page LaTeX resume to a job posting; \textbf{92\%} of its Claude API prompt is cacheable and \textbf{77} pytest tests cover it.}
+            \resumeItem{Built a Python and FastAPI app that tailors a one-page LaTeX resume to a job posting; 92\% of its Claude API prompt is cacheable and 77 pytest tests cover it.}
             \resumeItem{Rejects any Claude API rewrite whose quote or number is not in my records, then checks page fit and ATS parsing.}
-            \resumeItem{Added a job queue (\textbf{25} jobs, \textbf{3} at a time) with auto-download and a notification bell; \textbf{8} test jobs took \textbf{47\%} less time.}
+            \resumeItem{Added a job queue (25 jobs, 3 at a time) with auto-download and a notification bell; 8 test jobs took 47\% less time.}
         \resumeItemListEnd
 
     \resumeSubHeadingListEnd
 \vspace{-12pt}
 
 \vspace{-6pt}
+
+%-----------TECHNICAL SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}, itemsep=3pt]
+    \small{\item{
+     \textbf{Languages}{: Python, Java, SQL, JavaScript, TypeScript, Gleam, LaTeX} \\[2pt]
+     \textbf{Engineering}{: FastAPI, React, REST APIs, PostgreSQL (query plans, indexing), MongoDB, Auth0, AWS S3} \\[2pt]
+     \textbf{Tools}{: Supabase, Apify, Cloudflare, Git} \\[2pt]
+     \textbf{Fundamentals}{: Data Structures, Graph Algorithms, Complexity Analysis, OOP, Functional Programming} \\[2pt]
+     \textbf{ML \& Data}{: PyTorch, scikit-learn, XGBoost, pandas, NumPy, Claude API, Factory Droid SDK}
+    }}
+ \end{itemize}
+ \vspace{-15pt}
 
 \end{document}

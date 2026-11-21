@@ -35,7 +35,7 @@
       },
       {
         "id": "hindsight_5",
-        "markup": "Tested with **10** transfer students, who said it would have helped during their own transfer.",
+        "markup": "Tested with 10 transfer students, who said it would have helped during their own transfer.",
         "from_resume": "all"
       }
     ]
@@ -55,7 +55,7 @@
     "bullets": [
       {
         "id": "resume_tailor_1",
-        "markup": "Built a Python and FastAPI app that tailors a one-page LaTeX resume to a job posting; **92%** of its Claude API prompt is cacheable and **77** pytest tests cover it.",
+        "markup": "Built a Python and FastAPI app that tailors a one-page LaTeX resume to a job posting; 92% of its Claude API prompt is cacheable and 77 pytest tests cover it.",
         "from_resume": "swe"
       },
       {
@@ -65,7 +65,7 @@
       },
       {
         "id": "resume_tailor_3",
-        "markup": "Added a job queue (**25** jobs, **3** at a time) with auto-download and a notification bell; **8** test jobs took **47%** less time.",
+        "markup": "Added a job queue (25 jobs, 3 at a time) with auto-download and a notification bell; 8 test jobs took 47% less time.",
         "from_resume": "swe"
       }
     ]
@@ -86,12 +86,12 @@
     "bullets": [
       {
         "id": "movie_genre_1",
-        "markup": "Built a multi-label NLP model that predicts a movie's genres from its title, tagline, and plot, using MiniLM, MPNet, and e5-large-v2 text embeddings on **42K+** MovieLens and TMDB films.",
+        "markup": "Built a multi-label NLP model that predicts a movie's genres from its title, tagline, and plot, using MiniLM, MPNet, and e5-large-v2 text embeddings on 42K+ MovieLens and TMDB films.",
         "from_resume": "ml"
       },
       {
         "id": "movie_genre_2",
-        "markup": "Compared Logistic Regression, XGBoost, and LightGBM: Logistic Regression won and trained about **12×** faster than XGBoost; dropping rare genres and tuning the threshold raised Macro F1 from **0.48** to **0.66**.",
+        "markup": "Compared Logistic Regression, XGBoost, and LightGBM: Logistic Regression won and trained about 12× faster than XGBoost; dropping rare genres and tuning the threshold raised Macro F1 from 0.48 to 0.66.",
         "from_resume": "ml"
       },
       {
@@ -101,7 +101,7 @@
       },
       {
         "id": "movie_genre_4",
-        "markup": "Compared Logistic Regression, XGBoost, and LightGBM on text embeddings; the simpler Logistic Regression won and trained about **12×** faster.",
+        "markup": "Compared Logistic Regression, XGBoost, and LightGBM on text embeddings; the simpler Logistic Regression won and trained about 12× faster.",
         "from_resume": "ds"
       }
     ]
@@ -120,17 +120,17 @@
     "bullets": [
       {
         "id": "housing_bias_1",
-        "markup": "Built a model that estimates home values from **200K+** Cook County (Chicago) property records, and audited its fairness across price ranges to show which homes get over- or under-valued and taxed unfairly.",
+        "markup": "Built a model that estimates home values from 200K+ Cook County (Chicago) property records, and audited its fairness across price ranges to show which homes get over- or under-valued and taxed unfairly.",
         "from_resume": "ds"
       },
       {
         "id": "housing_bias_2",
-        "markup": "Built a model that estimates home values from **200K+** Chicago-area property records and checked which homes are over- or under-valued.",
+        "markup": "Built a model that estimates home values from 200K+ Chicago-area property records and checked which homes are over- or under-valued.",
         "from_resume": "ml"
       },
       {
         "id": "housing_bias_3",
-        "markup": "Engineered **15+** features (log square footage, polynomial age and location terms) and validated with 4-fold cross-validation (test RMSE **0.562**).",
+        "markup": "Engineered 15+ features (log square footage, polynomial age and location terms) and validated with 4-fold cross-validation (test RMSE 0.562).",
         "from_resume": "ds"
       }
     ]
@@ -147,7 +147,7 @@
     "bullets": [
       {
         "id": "sb79_1",
-        "markup": "Mapped the parts of Los Angeles that qualify for denser housing near transit under a new California law (**6,413** eligible zoning areas), layering in displacement risk, pollution, and fire hazard data in an interactive StoryMap.",
+        "markup": "Mapped the parts of Los Angeles that qualify for denser housing near transit under a new California law (6,413 eligible zoning areas), layering in displacement risk, pollution, and fire hazard data in an interactive StoryMap.",
         "from_resume": "ds"
       }
     ]
@@ -166,17 +166,17 @@
     "bullets": [
       {
         "id": "spam_1",
-        "markup": "Built a spam filter that reads an email's text and flags spam, correctly sorting **92.1%** of emails it had never seen.",
+        "markup": "Built a spam filter that reads an email's text and flags spam, correctly sorting 92.1% of emails it had never seen.",
         "from_resume": "ds"
       },
       {
         "id": "spam_2",
-        "markup": "Built a spam filter from **50+** engineered signals (link counts, dollar signs, HTML) that correctly sorts **92.1%** of unseen emails.",
+        "markup": "Built a spam filter from 50+ engineered signals (link counts, dollar signs, HTML) that correctly sorts 92.1% of unseen emails.",
         "from_resume": "ml"
       },
       {
         "id": "spam_3",
-        "markup": "Tuned an L1-regularized Logistic Regression with GridSearchCV and **10**-fold cross-validation, weighing precision against recall because false positives cost more.",
+        "markup": "Tuned an L1-regularized Logistic Regression with GridSearchCV and 10-fold cross-validation, weighing precision against recall because false positives cost more.",
         "from_resume": "ml"
       }
     ]
@@ -195,22 +195,22 @@
     "bullets": [
       {
         "id": "sightline_1",
-        "markup": "Building the ML pipeline for an Open Projects app that turns smart-glasses footage into a **60-second** recap.",
+        "markup": "Building the ML pipeline for an Open Projects app that turns smart-glasses footage into a 60-second recap.",
         "from_resume": "ml"
       },
       {
         "id": "sightline_2",
-        "markup": "Built a CLIP ViT-B/32 embedding stage in PyTorch and OpenCV, about **0.4 seconds** per clip on a CPU.",
+        "markup": "Built a CLIP ViT-B/32 embedding stage in PyTorch and OpenCV, about 0.4 seconds per clip on a CPU.",
         "from_resume": "ml"
       },
       {
         "id": "sightline_3",
-        "markup": "ML team member on a smart-glasses recap app, embedding clips with CLIP to rank them for the **60**-second video.",
+        "markup": "ML team member on a smart-glasses recap app, embedding clips with CLIP to rank them for the 60-second video.",
         "from_resume": "pm"
       },
       {
         "id": "sightline_4",
-        "markup": "Building the ML pipeline for an app that turns a day of Meta Ray-Ban smart glasses footage into a **60-second** highlight video, splitting footage into clips and using audio and visual models to pick the best moments.",
+        "markup": "Building the ML pipeline for an app that turns a day of Meta Ray-Ban smart glasses footage into a 60-second highlight video, splitting footage into clips and using audio and visual models to pick the best moments.",
         "from_resume": "swe"
       },
       {
@@ -246,7 +246,7 @@
       },
       {
         "id": "byow_2",
-        "markup": "Designed a quiz-battle system with **100+** CS 61B trivia questions: enemy contact drains health until the player answers correctly, and health packs restore it.",
+        "markup": "Designed a quiz-battle system with 100+ CS 61B trivia questions: enemy contact drains health until the player answers correctly, and health packs restore it.",
         "from_resume": "swe"
       }
     ]
@@ -302,7 +302,7 @@
     "bullets": [
       {
         "id": "calhousing_1",
-        "markup": "Compared linear regression with k-nearest-neighbors regression on **20,640** California block groups using scikit-learn Pipelines, cutting test RMSE from about **$70,000** to about **$61,000**.",
+        "markup": "Compared linear regression with k-nearest-neighbors regression on 20,640 California block groups using scikit-learn Pipelines, cutting test RMSE from about $70,000 to about $61,000.",
         "from_resume": "ds"
       }
     ]
@@ -320,17 +320,17 @@
     "bullets": [
       {
         "id": "climate_1",
-        "markup": "Ran an A/B test (permutation test, **5,000** simulations) to check whether drought years were truly drier than other years, rejecting chance at the **5%** level (p = **0.026**).",
+        "markup": "Ran an A/B test (permutation test, 5,000 simulations) to check whether drought years were truly drier than other years, rejecting chance at the 5% level (p = 0.026).",
         "from_resume": "ds"
       },
       {
         "id": "climate_2",
-        "markup": "Built **99%** bootstrap confidence intervals (**5,000** resamples) for monthly max temperatures, finding **9** of **12** months significantly hotter in 2019-2021 than in 1900-1960.",
+        "markup": "Built 99% bootstrap confidence intervals (5,000 resamples) for monthly max temperatures, finding 9 of 12 months significantly hotter in 2019-2021 than in 1900-1960.",
         "from_resume": "ds"
       },
       {
         "id": "climate_3",
-        "markup": "Flagged the multiple-testing risk of running **12** tests at once, and showed why unequal group sizes do not bias a permutation test.",
+        "markup": "Flagged the multiple-testing risk of running 12 tests at once, and showed why unequal group sizes do not bias a permutation test.",
         "from_resume": "ds"
       }
     ]
@@ -348,12 +348,12 @@
     "bullets": [
       {
         "id": "poverty_1",
-        "markup": "Joined and grouped Gapminder country tables to track world population by decade (**2.6** billion in 1960 to **6.8** billion in 2020) and fertility versus child mortality across the **50** most populous countries.",
+        "markup": "Joined and grouped Gapminder country tables to track world population by decade (2.6 billion in 1960 to 6.8 billion in 2020) and fertility versus child mortality across the 50 most populous countries.",
         "from_resume": "ds"
       },
       {
         "id": "poverty_2",
-        "markup": "Estimated that about **14.4%** of the world lived in extreme poverty around 2010 by joining each country's latest poverty rate with its population, then mapped poverty by region.",
+        "markup": "Estimated that about 14.4% of the world lived in extreme poverty around 2010 by joining each country's latest poverty rate with its population, then mapped poverty by region.",
         "from_resume": "ds"
       }
     ]
@@ -370,12 +370,12 @@
     "bullets": [
       {
         "id": "knn_movies_1",
-        "markup": "Built a k-nearest-neighbors classifier that labels **333** movies as comedy or thriller from script word frequencies, reaching **70%** test accuracy with **10** hand-picked features.",
+        "markup": "Built a k-nearest-neighbors classifier that labels 333 movies as comedy or thriller from script word frequencies, reaching 70% test accuracy with 10 hand-picked features.",
         "from_resume": "ds"
       },
       {
         "id": "knn_movies_2",
-        "markup": "Analyzed the errors (darker comedies read as thrillers) and cut to **4** features, reaching about **78%** accuracy on a second test set.",
+        "markup": "Analyzed the errors (darker comedies read as thrillers) and cut to 4 features, reaching about 78% accuracy on a second test set.",
         "from_resume": "ml"
       }
     ]
@@ -397,7 +397,7 @@
       },
       {
         "id": "micrograd_2",
-        "markup": "Trained an MLP built on the engine with gradient descent, cutting loss from **4.85** to **0.033** in **20** steps, and checked gradients against PyTorch autograd.",
+        "markup": "Trained an MLP built on the engine with gradient descent, cutting loss from 4.85 to 0.033 in 20 steps, and checked gradients against PyTorch autograd.",
         "from_resume": "ml"
       }
     ]
@@ -414,12 +414,12 @@
     "bullets": [
       {
         "id": "pg_perf_1",
-        "markup": "Tuned PostgreSQL queries on a baseball database by reading EXPLAIN ANALYZE plans: an index cut a MIN(salary) query cost from about **525** to **0.33**.",
+        "markup": "Tuned PostgreSQL queries on a baseball database by reading EXPLAIN ANALYZE plans: an index cut a MIN(salary) query cost from about 525 to 0.33.",
         "from_resume": "ds"
       },
       {
         "id": "pg_perf_2",
-        "markup": "Measured trade-offs: the index made inserting **300,000** rows about **33%** slower, and clustering a table cut one query from **11.4** ms to **1.9** ms.",
+        "markup": "Measured trade-offs: the index made inserting 300,000 rows about 33% slower, and clustering a table cut one query from 11.4 ms to 1.9 ms.",
         "from_resume": "ds"
       }
     ]
@@ -441,7 +441,7 @@
       },
       {
         "id": "percolation_2",
-        "markup": "Ran Monte Carlo trials to estimate the percolation threshold with its mean, standard deviation, and **95%** confidence interval.",
+        "markup": "Ran Monte Carlo trials to estimate the percolation threshold with its mean, standard deviation, and 95% confidence interval.",
         "from_resume": "swe"
       }
     ]
@@ -473,7 +473,7 @@
     "bullets": [
       {
         "id": "hog_1",
-        "markup": "Wrote higher-order functions that simulate a dice game **1,000** times per setting to find the best number of dice to roll and compare strategy win rates.",
+        "markup": "Wrote higher-order functions that simulate a dice game 1,000 times per setting to find the best number of dice to roll and compare strategy win rates.",
         "from_resume": "swe"
       }
     ]
@@ -489,7 +489,7 @@
     "bullets": [
       {
         "id": "ants_1",
-        "markup": "Built a tower defense game with object-oriented programming: about **20** ant and bee classes sharing behavior through inheritance.",
+        "markup": "Built a tower defense game with object-oriented programming: about 20 ant and bee classes sharing behavior through inheritance.",
         "from_resume": "swe"
       }
     ]
@@ -508,12 +508,12 @@
     "bullets": [
       {
         "id": "llm_arena_1",
-        "markup": "Ranked the top **20** LLMs from about **26K** human-preference battles by fitting a Bradley-Terry model (logistic regression) and comparing it to raw win rates on held-out battles.",
+        "markup": "Ranked the top 20 LLMs from about 26K human-preference battles by fitting a Bradley-Terry model (logistic regression) and comparing it to raw win rates on held-out battles.",
         "from_resume": "ml"
       },
       {
         "id": "llm_arena_2",
-        "markup": "Bootstrapped **200** resamples for confidence intervals on each model's rank, and grouped prompts into topics with LSA and K-Means to compare leaderboards by topic.",
+        "markup": "Bootstrapped 200 resamples for confidence intervals on each model's rank, and grouped prompts into topics with LSA and K-Means to compare leaderboards by topic.",
         "from_resume": "ds"
       },
       {
@@ -536,7 +536,7 @@
     "bullets": [
       {
         "id": "fashion_mnist_1",
-        "markup": "Trained an MLP classifier on **70K** Fashion-MNIST images and made it robust to a rotated test set with rotation augmentation, a rotation-angle regressor, and test-time augmentation.",
+        "markup": "Trained an MLP classifier on 70K Fashion-MNIST images and made it robust to a rotated test set with rotation augmentation, a rotation-angle regressor, and test-time augmentation.",
         "from_resume": "ml"
       }
     ]
@@ -554,17 +554,17 @@
     "bullets": [
       {
         "id": "next_step_1",
-        "markup": "Built a free site in about **3,400** lines of plain JavaScript for the Fung Fellowship that helps wildfire survivors write one clear insurer letter in **3** languages (English, Spanish, Chinese).",
+        "markup": "Built a free site in about 3,400 lines of plain JavaScript for the Fung Fellowship that helps wildfire survivors write one clear insurer letter in 3 languages (English, Spanish, Chinese).",
         "from_resume": "swe"
       },
       {
         "id": "next_step_2",
-        "markup": "Grounded a hosted Llama model on Cloudflare Workers AI in **15** numbered source notes, streamed its replies, and cut the prompt **30%** on **30** test questions by sending only matching notes; **129** browser checks cover it.",
+        "markup": "Grounded a hosted Llama model on Cloudflare Workers AI in 15 numbered source notes, streamed its replies, and cut the prompt 30% on 30 test questions by sending only matching notes; 129 browser checks cover it.",
         "from_resume": "swe"
       },
       {
         "id": "next_step_3",
-        "markup": "Built a site for the Fung Fellowship that helps survivors write one clear insurance letter, grounded in **15** cited sources.",
+        "markup": "Built a site for the Fung Fellowship that helps survivors write one clear insurance letter, grounded in 15 cited sources.",
         "from_resume": "pm"
       }
     ]
