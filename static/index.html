@@ -213,6 +213,7 @@
         <ul class="dd-list" id="ddList" role="listbox" tabindex="-1" aria-label="Base resume" hidden></ul>
       </div>
       <label style="display:flex;gap:8px;align-items:center;margin-top:14px"><input type="checkbox" id="mock"> Dry run without the AI (only reorders skills, free)</label>
+      <label style="display:flex;gap:8px;align-items:center;margin-top:8px"><input type="checkbox" id="autoTrack"> Add to the tracker when each resume is ready (skips ones already logged)</label>
       <button class="primary" id="go">Tailor my resume</button>
       <div class="hint">This adds the job to the queue and runs in the background, so you can paste the next one right away.</div>
       <div class="msg" id="genmsg"></div>
@@ -250,6 +251,12 @@
       <div id="warns" style="margin-top:8px"></div>
       <div id="gaps" style="margin-top:8px"></div>
     </div>
+    <div class="card hide" id="emailCard">
+      <h2>Email draft <span class="sub">(short, uses only what is on this resume)</span></h2>
+      <input type="text" id="emailSubject" readonly aria-label="Email subject">
+      <textarea id="emailBody" rows="8" readonly aria-label="Email body" style="margin-top:8px"></textarea>
+      <div class="actions" style="margin-top:8px"><button type="button" id="emailCopy">Copy email</button><span class="msg" id="emailMsg"></span></div>
+    </div>
     <div class="card hide" id="atsCard">
       <h2>ATS check</h2>
       <div id="atsBody"></div>
@@ -270,7 +277,7 @@ const md = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 async function api(path, body) {
   const r = await fetch(path, body ? {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)} : {});
   const j = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(j.detail || r.statusText);
+  if (!r.ok) { const e = new Error(j.detail || r.statusText); e.status = r.status; throw e; }
   return j;
 }
 
@@ -362,7 +369,7 @@ const store = {
   get(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v === null ? d : { ...d, ...v }; } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
 };
-const prefs = store.get('rt-prefs', {auto:true, desktop:true, sound:true});
+const prefs = store.get('rt-prefs', {auto:true, desktop:true, sound:true, autoTrack:false});
 let queue = [], clockOff = 0, pollTimer = null, notes = [], dlChain = Promise.resolve(), audioCtx = null;
 const known = new Map();            // job id -> last status this page saw, so only changes we watched trigger an alert
 const ACTIVE = st => st === 'queued' || st === 'running';
@@ -423,6 +430,8 @@ $('bell').onclick = () => ($('bellPanel').classList.contains('hide') ? openBell(
 $('bellRead').onclick = () => { notes.forEach(n => n.seen = true); paintBell(); };
 document.addEventListener('mousedown', e => { if (!$('bellPanel').classList.contains('hide') && !$('bellPanel').contains(e.target) && !$('bell').contains(e.target)) closeBell(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('bellPanel').classList.contains('hide')) { closeBell(); $('bell').focus(); } });
+$('autoTrack').checked = !!prefs.autoTrack;
+$('autoTrack').onchange = () => { prefs.autoTrack = $('autoTrack').checked; store.set('rt-prefs', prefs); };
 for (const [id, k] of [['prefAuto', 'auto'], ['prefDesktop', 'desktop'], ['prefSound', 'sound']]) {
   $(id).checked = !!prefs[k];
   $(id).onchange = () => { prefs[k] = $(id).checked; store.set('rt-prefs', prefs); if (k === 'desktop') askNotifyPermission(); if (k === 'sound') { unlockAudio(); ding(true); } };
@@ -465,10 +474,11 @@ function renderQueue() {
     const st = e.status, t = nowS();
     const dot = st === 'done' ? '✓' : st === 'failed' || st === 'error' ? '✕' : st === 'cancelled' ? '–' : '';
     const sub = st === 'queued' ? 'Waiting for a free slot' : st === 'running' ? `Working, ${fmt(t - e.started)}`
-      : st === 'done' ? `${esc(e.base_name || '')} · ${e.pages} page${e.pages === 1 ? '' : 's'} · took ${fmt(e.finished - e.started)}<span class="tag ${e.tracked ? 'ok' : 'no'}">${e.tracked ? '✓ Tracked' : 'Not tracked'}</span>`
+      : st === 'done' ? `${esc(e.base_name || '')} · ${e.pages} page${e.pages === 1 ? '' : 's'} · took ${fmt(e.finished - e.started)}<span class="tag ${e.tracked ? 'ok' : 'no'}">${e.tracked ? '✓ Tracked' : e.duplicate ? 'Already logged' : 'Not tracked'}</span>${e.track_error ? '<span class="tag no" title="' + esc(e.track_error) + '">Tracker failed</span>' : ''}`
       : st === 'cancelled' ? 'Cancelled' : `<span class="err">${esc((e.error || 'Failed').slice(0, 160))}</span>`;
     const btns = st === 'done' ? `<button type="button" data-open="${e.id}">Open</button><a href="${e.pdf_url}" download>PDF</a>${e.tracked ? '' : `<button type="button" class="qtrack" data-track="${e.id}">Add to tracker</button>`}`
-      : st === 'failed' ? `<button type="button" data-open="${e.id}">Open</button>`
+      : st === 'failed' ? `<button type="button" data-open="${e.id}">Open</button><button type="button" data-retry="${e.id}">Retry</button>`
+      : st === 'error' || st === 'cancelled' ? `<button type="button" data-retry="${e.id}">Retry</button>`
       : st === 'queued' ? `<button type="button" data-cancel="${e.id}">Cancel</button>` : '';
     return `<div class="qrow ${job && job.job_id === e.id ? 'cur' : ''}"><span class="qdot ${st}" aria-hidden="true">${dot}</span><div class="qmain"><div class="qname">${esc(e.label)}</div><div class="qsub">${sub}</div></div><div class="qbtns">${btns}</div></div>`;
   }).join('');
@@ -476,14 +486,23 @@ function renderQueue() {
   $('queueList').querySelectorAll('[data-track]').forEach(b => b.onclick = async () => {   // log straight from the row, using the company and role we detected
     const e = queue.find(x => x.id === b.dataset.track); if (!e) return;
     b.disabled = true; b.textContent = 'Adding...';
-    try { await api('/api/track', {job_id: e.id, company: e.company || '', role: e.role || ''}); }
+    try { await trackWithConfirm({job_id: e.id, company: e.company || '', role: e.role || ''}); }
     catch (err) { await openJob(e.id); const m = $('trackmsg'); m.className = 'msg err'; m.textContent = err.message + ' Fill in the company and role, then press Add to tracker.'; $('tco').focus(); }
     poll();
   });
+  $('queueList').querySelectorAll('[data-retry]').forEach(b => b.onclick = async () => { b.disabled = true; b.textContent = 'Retrying...'; try { await api(`/api/jobs/${b.dataset.retry}/retry`, {}); } catch (err) { alert(err.message); } poll(); });
   $('queueList').querySelectorAll('[data-cancel]').forEach(b => b.onclick = async () => { try { await api(`/api/jobs/${b.dataset.cancel}/cancel`, {}); } catch (e) {} poll(); });
 }
 setInterval(() => { if (queue.some(e => e.status === 'running')) renderQueue(); }, 1000);   // keeps the elapsed timers moving
 $('queueClear').onclick = async () => { try { const d = await api('/api/jobs/clear', {}); onQueue(d.jobs); } catch (e) {} };
+
+async function trackWithConfirm(body) {   // a duplicate comes back as 409: ask once, then log again with force
+  try { return await api('/api/track', body); }
+  catch (err) {
+    if (err.status === 409 && /^Already logged/.test(err.message) && confirm(err.message)) return await api('/api/track', {...body, force: true});
+    throw err;
+  }
+}
 
 async function openJob(id) {
   try { job = await api('/api/jobs/' + id); dirty.tco = dirty.trole = false; jdMeta.company = (job.meta && job.meta.company) || ''; render(true); renderQueue(); const q = queue.find(x => x.id === id); if (q && q.tracked) { $('trackmsg').className = 'msg okc'; $('trackmsg').textContent = 'Already added to your tracker.'; } window.scrollTo({top: 0, behavior: 'smooth'}); }
@@ -496,7 +515,7 @@ $('go').onclick = async () => {
   if (jd.trim().length < 80 && !url.trim()) { m.className = 'msg err'; m.textContent = 'Paste the job description above first (at least a few sentences), or a job link.'; return; }
   unlockAudio(); askNotifyPermission();
   try {
-    const d = await api('/api/batch', {items: [{jd, url, base: $('base').value}], mock: $('mock').checked});
+    const d = await api('/api/batch', {items: [{jd, url, base: $('base').value}], mock: $('mock').checked, auto_track: $('autoTrack').checked});
     submitted(d.jobs);
     m.className = 'msg okc'; m.textContent = 'Added to the queue. Paste the next job whenever you like.';
     $('jd').value = ''; $('url').value = ''; $('metahint').textContent = ''; dirty.tco = dirty.trole = false;   // ready for the next one
@@ -508,14 +527,23 @@ $('bulkGo').onclick = async () => {
   if (!urls.length) { m.className = 'msg err'; m.textContent = 'Paste one job link per line.'; return; }
   unlockAudio(); askNotifyPermission();
   try {
-    const d = await api('/api/batch', {items: urls.map(u => ({jd: '', url: u, base: $('base').value})), mock: $('mock').checked});
+    const d = await api('/api/batch', {items: urls.map(u => ({jd: '', url: u, base: $('base').value})), mock: $('mock').checked, auto_track: $('autoTrack').checked});
     submitted(d.jobs); $('bulk').value = '';
     m.className = 'msg okc'; m.textContent = `Queued ${d.jobs.length} job${d.jobs.length === 1 ? '' : 's'}.`;
   } catch (e) { m.className = 'msg err'; m.textContent = e.message; }
 };
 poll(); paintBell();
 
+async function loadEmail() {
+  $('emailCard').classList.add('hide');
+  if (!job || !job.ok) return;
+  const id = job.job_id;
+  try { const e = await api('/api/email/' + id); if (!job || job.job_id !== id) return; $('emailSubject').value = e.subject; $('emailBody').value = e.body; $('emailMsg').textContent = ''; $('emailCard').classList.remove('hide'); } catch (err) {}
+}
+$('emailCopy').onclick = async () => { try { await navigator.clipboard.writeText('Subject: ' + $('emailSubject').value + '\n\n' + $('emailBody').value); $('emailMsg').className = 'msg okc'; $('emailMsg').textContent = 'Copied'; } catch (e) { $('emailBody').select(); $('emailMsg').textContent = 'Press Ctrl+C to copy'; } };
+
 function render(fresh) {
+  if (fresh) loadEmail();
   document.querySelector('main').classList.add('has-job');
   $('trackCard').classList.remove('hide');
   if (fresh) applyMeta(job.meta, 'generate');   // a new resume always refreshes the boxes (unless you already typed in them)
@@ -596,7 +624,7 @@ for (const id of ['dl', 'dltex']) $(id).addEventListener('click', setDl);
 $('track').onclick = async () => {
   const m = $('trackmsg'); m.className = 'msg'; m.textContent = 'Saving...'; $('track').disabled = true;
   try {
-    const r = await api('/api/track', {job_id: job.job_id, company: $('tco').value, role: $('trole').value});
+    const r = await trackWithConfirm({job_id: job.job_id, company: $('tco').value, role: $('trole').value});
     $('tco').value = r.company || $('tco').value; $('trole').value = r.role || $('trole').value; setDl();
     m.className = 'msg okc'; poll();
     m.innerHTML = r.mode === 'google' ? `Added ${esc(r.company)}: ${esc(r.role)}. <a href="${r.drive_url}" target="_blank">Resume PDF</a> · <a href="${r.sheet_url}" target="_blank">Open sheet</a>` : `Saved locally: ${esc(r.job)}`;
@@ -607,7 +635,7 @@ $('track').onclick = async () => {
 async function onToggle() {
   const reverted = [...document.querySelectorAll('#slots input[type=checkbox]')].filter(c => !c.checked).map(c => c.dataset.id);
   document.querySelectorAll('#slots input').forEach(c => c.disabled = true);
-  try { job = await api('/api/revert', {job_id: job.job_id, reverted}); render(false); }
+  try { job = await api('/api/revert', {job_id: job.job_id, reverted}); render(false); loadEmail(); }
   catch (e) { $('genmsg').className = 'msg err'; $('genmsg').textContent = e.message; }
 }
 

@@ -70,7 +70,7 @@
       },
       {
         "id": "resume_tailor_4",
-        "markup": "Reordered the **Claude API** prompt so **92%** of its roughly **22,700** tokens can be cached, and covered the pipeline with **68** **pytest** tests, including parallel runs and failed jobs.",
+        "markup": "Reordered the **Claude API** prompt so **92%** of its roughly **22,700** tokens can be cached, and covered the pipeline with **77** **pytest** tests, including parallel runs and failed jobs.",
         "from_resume": "swe"
       }
     ]

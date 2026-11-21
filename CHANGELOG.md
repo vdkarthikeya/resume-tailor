@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-11-20 (later still): retry, auto-track, duplicates, saved queue, email, sync check
+See the README entry of the same name. 9 new tests, 77 in total.
+
 ## 2026-11-20 (Next Step numbers)
 - Next Step bank bullets and the Master Doc entry now carry counted numbers from the repo: about 3,000 lines, 15 source notes, 3 languages, 34 browser checks, 27 commits.
 

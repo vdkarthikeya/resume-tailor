@@ -24,6 +24,15 @@ def safe(s: str) -> str:
     return re.sub(r"[^A-Za-z0-9 ._&+-]+", "", s).strip()[:70] or "x"
 
 
+def logged_before(company: str, role: str) -> bool:
+    """True if a resume for this company and role is already in the local Resumes folder (every logged application leaves a copy there)."""
+    d = LOCAL_DIR / "Resumes"
+    if not d.is_dir():
+        return False
+    prefix = f"{safe(company)} - {safe(clean_role(role, company))} - ".lower()
+    return any(p.name.lower().startswith(prefix) for p in d.glob("*.pdf"))
+
+
 def webhook_cfg() -> dict | None:
     import json
 

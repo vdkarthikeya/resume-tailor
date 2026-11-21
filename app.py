@@ -1,6 +1,7 @@
 """Local resume tailor. Run: uvicorn app:app --port 8000"""
 from __future__ import annotations
 
+import json
 import os
 import re
 import threading
@@ -15,6 +16,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
+import email_draft
 import jd as jdmod
 import tracker
 import tailor as T
@@ -34,6 +36,38 @@ QUEUE: dict[str, dict] = {}  # job_id -> queue entry, in submit order
 FUTURES: dict[str, Future] = {}
 QLOCK = threading.Lock()
 MAX_BATCH = 25
+
+
+def _qfile() -> Path:
+    return OUT / "queue.json"
+
+
+def _persist() -> None:
+    """Save the queue rows so a restart does not lose them. Call with QLOCK held."""
+    try:
+        OUT.mkdir(parents=True, exist_ok=True)
+        tmp = _qfile().with_suffix(".tmp")
+        tmp.write_text(json.dumps(list(QUEUE.values())))
+        tmp.replace(_qfile())
+    except OSError:
+        pass
+
+
+def _load_queue() -> None:
+    """On start: bring back saved rows. Anything that was waiting or running when the server stopped is marked as interrupted (Retry re-runs it)."""
+    try:
+        rows = json.loads(_qfile().read_text())
+    except (OSError, ValueError):
+        return
+    for e in rows:
+        if e.get("status") in ("queued", "running"):
+            e.update(status="error", finished=time.time(), error="The server restarted before this job finished. Press Retry.")
+        QUEUE[e["id"]] = e
+
+
+def _save_input(job_id: str, jd: str, url: str, base: str, mock: bool, auto_track: bool) -> None:
+    (OUT / job_id).mkdir(parents=True, exist_ok=True)
+    (OUT / job_id / "job.json").write_text(json.dumps({"jd": jd, "url": url, "base": base, "mock": mock, "auto_track": auto_track}))
 
 
 class FetchReq(BaseModel):
@@ -61,6 +95,7 @@ class BatchItem(BaseModel):
 class BatchReq(BaseModel):
     items: list[BatchItem]
     mock: bool = False
+    auto_track: bool = False  # log each finished resume to the tracker without a click (duplicates are skipped)
 
 
 class RevertReq(BaseModel):
@@ -142,6 +177,7 @@ def _entry_view(e: dict) -> dict:
 def _update(job_id: str, **kw) -> None:
     with QLOCK:
         QUEUE[job_id].update(kw)
+        _persist()
 
 
 def _guess_label(jd: str, url: str) -> tuple[str, str, str]:
@@ -155,7 +191,7 @@ def _guess_label(jd: str, url: str) -> tuple[str, str, str]:
     return company, role, label
 
 
-def _run_job(job_id: str, jd: str, url: str, base: str, mock: bool) -> None:
+def _run_job(job_id: str, jd: str, url: str, base: str, mock: bool, auto_track: bool = False) -> None:
     _update(job_id, status="running", started=time.time())
     try:
         if not jd.strip():  # a link only: fetch it here so many links fetch in parallel too
@@ -171,15 +207,37 @@ def _run_job(job_id: str, jd: str, url: str, base: str, mock: bool) -> None:
         b = r["built"]
         meta = jdmod.extract_meta(jd, url)
         company, role = meta.get("company") or "", meta.get("role") or ""
-        _update(job_id, status="done" if b.ok else "failed", finished=time.time(), company=company, role=role,
+        dup = bool(b.ok and company and role and _already_logged(company, role, job_id))
+        _update(job_id, duplicate=dup, status="done" if b.ok else "failed", finished=time.time(), company=company, role=role,
                 label=": ".join(x for x in (company, role) if x) or QUEUE[job_id]["label"], base=r["base"], base_name=T.BASES[r["base"]]["name"],
                 ok=b.ok, pages=b.pages, fill_pct=round(100 * b.bottom / 745) if b.ok else 0, timings=r.get("timings"),
                 error=None if b.ok else (b.log or "LaTeX failed")[-300:],
                 pdf_url=f"/api/pdf/{job_id}?download=true&company={quote(company)}" if b.ok else None)
+        if auto_track and b.ok and company and role and not dup:
+            try:
+                res = tracker.log_application(b.pdf, OUT / job_id / "resume.tex", company, role)
+                _update(job_id, tracked=True, company=res.get("company") or company, role=res.get("role") or role)
+            except Exception as e:  # the resume is still fine; the row says the log failed so the button can be used
+                _update(job_id, track_error=f"{type(e).__name__}: {e}"[:200])
     except jdmod.JDError as e:
         _update(job_id, status="error", finished=time.time(), error=str(e))
     except Exception as e:  # API errors, timeouts, etc. One bad job never stops the rest of the queue
         _update(job_id, status="error", finished=time.time(), error=f"{type(e).__name__}: {e}"[:400])
+
+
+def _enqueue(jd: str, url: str, base: str, mock: bool, auto_track: bool) -> dict:
+    job_id = uuid.uuid4().hex[:10]
+    company, role, label = _guess_label(jd, url)
+    entry = {"id": job_id, "status": "queued", "label": label, "company": company, "role": role, "url": url.strip(), "requested_base": base,
+             "base": None, "base_name": None, "created": time.time(), "started": None, "finished": None, "error": None,
+             "ok": None, "pages": None, "fill_pct": None, "pdf_url": None, "timings": None, "tracked": False, "duplicate": False,
+             "auto_track": auto_track, "track_error": None}
+    _save_input(job_id, jd, url.strip(), base, mock, auto_track)
+    with QLOCK:
+        QUEUE[job_id] = entry
+        FUTURES[job_id] = EXEC.submit(_run_job, job_id, jd, url.strip(), base, mock, auto_track)
+        _persist()
+    return entry
 
 
 @app.post("/api/batch")
@@ -193,18 +251,29 @@ def batch(req: BatchReq):
             raise HTTPException(400, "unknown base resume")
         if len(it.jd.strip()) < 80 and not it.url.strip():
             raise HTTPException(400, "Each job needs a link or at least a few sentences of job text.")
-    out = []
-    for it in req.items:
-        job_id = uuid.uuid4().hex[:10]
-        company, role, label = _guess_label(it.jd, it.url)
-        entry = {"id": job_id, "status": "queued", "label": label, "company": company, "role": role, "url": it.url.strip(), "requested_base": it.base,
-                 "base": None, "base_name": None, "created": time.time(), "started": None, "finished": None, "error": None,
-                 "ok": None, "pages": None, "fill_pct": None, "pdf_url": None, "timings": None, "tracked": False}
-        with QLOCK:
-            QUEUE[job_id] = entry
-            FUTURES[job_id] = EXEC.submit(_run_job, job_id, it.jd, it.url.strip(), it.base, req.mock)
-        out.append(_entry_view(entry))
+    out = [_entry_view(_enqueue(it.jd, it.url.strip(), it.base, req.mock, req.auto_track)) for it in req.items]
     return {"jobs": out, "workers": WORKERS}
+
+
+@app.post("/api/jobs/{job_id}/retry")
+def job_retry(job_id: str):
+    """Run a failed, errored or cancelled job again from its saved input. The old row is replaced by a new one."""
+    with QLOCK:
+        e = QUEUE.get(job_id)
+    if not e:
+        raise HTTPException(404, "unknown job")
+    if e["status"] not in ("failed", "error", "cancelled"):
+        raise HTTPException(409, "Only failed or cancelled jobs can be retried.")
+    try:
+        saved = json.loads((OUT / job_id / "job.json").read_text())
+    except (OSError, ValueError):
+        raise HTTPException(409, "The saved input for this job is gone. Queue it again.")
+    new = _enqueue(saved["jd"], saved["url"], saved["base"], saved["mock"], saved.get("auto_track", False))
+    with QLOCK:
+        QUEUE.pop(job_id, None); FUTURES.pop(job_id, None)
+        # keep the new row where the old one was, at the end is fine: rows are ordered by creation time in the page
+        _persist()
+    return _entry_view(new)
 
 
 @app.get("/api/jobs")
@@ -219,7 +288,7 @@ def job_result(job_id: str):
     if job_id not in QUEUE:
         raise HTTPException(404, "unknown job")
     if job_id not in JOBS:
-        raise HTTPException(409, "not finished yet")
+        raise HTTPException(409, "not finished yet" if QUEUE[job_id]["status"] in ("queued", "running") else "This result was cleared when the server restarted. Download the PDF, or queue the job again.")
     return payload(job_id)
 
 
@@ -231,6 +300,7 @@ def job_cancel(job_id: str):
             raise HTTPException(404, "unknown job")
         if e["status"] == "queued" and fut is not None and fut.cancel():
             e.update(status="cancelled", finished=time.time())
+            _persist()
         return _entry_view(e)
 
 
@@ -240,6 +310,7 @@ def jobs_clear():
     with QLOCK:
         for k in [k for k, e in QUEUE.items() if e["status"] in ("done", "failed", "error", "cancelled")]:
             QUEUE.pop(k, None); FUTURES.pop(k, None)
+        _persist()
         return {"jobs": [_entry_view(e) for e in QUEUE.values()]}
 
 
@@ -264,9 +335,12 @@ def download_name(company: str, ext: str) -> str:
 @app.get("/api/pdf/{job_id}")
 def pdf(job_id: str, download: bool = False, company: str = ""):
     j = JOBS.get(job_id)
-    if not j or not j["built"].ok:
+    path = j["built"].pdf if j and j["built"].ok else None
+    if path is None and job_id in QUEUE and QUEUE[job_id].get("ok") and (OUT / job_id / "resume.pdf").exists():
+        path = OUT / job_id / "resume.pdf"  # finished before a restart: the file is still on disk
+    if path is None:
         raise HTTPException(404, "no pdf")
-    return FileResponse(j["built"].pdf, media_type="application/pdf",
+    return FileResponse(path, media_type="application/pdf",
                         headers={"Content-Disposition": f'{"attachment" if download else "inline"}; filename="{download_name(company, "pdf")}"'})
 
 
@@ -282,6 +356,15 @@ class TrackReq(BaseModel):
     job_id: str
     company: str
     role: str
+    force: bool = False  # log again even though this company and role are already logged
+
+
+def _already_logged(company: str, role: str, except_job: str = "") -> bool:
+    if tracker.logged_before(company, role):
+        return True
+    with QLOCK:
+        return any(e.get("tracked") and e["id"] != except_job and e.get("company", "").lower() == company.lower() and e.get("role", "").lower() == role.lower()
+                   for e in QUEUE.values())
 
 
 @app.post("/api/track")
@@ -293,16 +376,30 @@ def track(req: TrackReq):
     if not company or not role:  # safety net: never log a blank, fill it from the job text
         m = jdmod.extract_meta(j["jd"], j.get("url", ""))
         company, role = company or m["company"], role or m["role"]
+    if not req.force and _already_logged(company, role, req.job_id):
+        raise HTTPException(409, f"Already logged: {company}, {role}. Log it again anyway?")
     try:
         res = tracker.log_application(j["built"].pdf, OUT / req.job_id / "resume.tex", company, role)
         with QLOCK:  # the queue row shows a "Tracked" tag, whether it was added from the row or from the tracker bar
             if req.job_id in QUEUE:
-                QUEUE[req.job_id].update(tracked=True, company=res.get("company") or company, role=res.get("role") or role)
+                QUEUE[req.job_id].update(tracked=True, duplicate=False, company=res.get("company") or company, role=res.get("role") or role)
+                _persist()
         return res
     except ValueError as e:
         raise HTTPException(400, str(e))
     except Exception as e:
         raise HTTPException(502, f"Could not log to Google ({type(e).__name__}: {e}). A local copy was saved in applications/Resumes.")
+
+
+@app.get("/api/email/{job_id}")
+def email(job_id: str):
+    """A short cover email for a finished resume (no model call)."""
+    j = JOBS.get(job_id)
+    if not j or not j["built"].ok:
+        raise HTTPException(404, "Generate a resume first.")
+    import ats as ATS
+    meta = jdmod.extract_meta(j["jd"], j.get("url", ""))
+    return email_draft.build(meta.get("company", ""), meta.get("role", ""), j["plan"].get("keywords", []), ATS.pdf_text(j["built"].pdf), T.BASES[j["base"]]["name"])
 
 
 @app.get("/api/status")
@@ -311,4 +408,5 @@ def status():
     return {"tracker": "google" if tracker.google_ready() else "local", "sheet_url": tracker.SHEET_URL, "folder_url": tracker.FOLDER_URL, "api_key": T.provider_kind() != "none", "provider": T.provider_kind(), "latex": bool(T._engine()), "workers": WORKERS, "bases": {k: v["name"] for k, v in T.BASES.items()}, "base_info": {k: {"name": v["name"], "blurb": v.get("blurb", "")} for k, v in T.BASES.items()}}
 
 
+_load_queue()
 app.mount("/", StaticFiles(directory=ROOT / "static", html=True), name="static")

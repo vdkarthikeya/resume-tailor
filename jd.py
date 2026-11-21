@@ -218,6 +218,15 @@ def from_page(client, u) -> dict:
     return _result(clean_role(raw_title, company), company, text, u.geturl(), "page")
 
 
+SHELL_MARKERS = ("enable javascript", "javascript is required", "javascript must be enabled", "you need to enable javascript", "please turn on javascript", "loading...", "just a moment")
+
+
+def looks_like_js_shell(text: str) -> bool:
+    """A page that is only a loader or a 'turn on JavaScript' notice. Short text with one of these marks is not a job post, and tailoring from it would give a weak resume."""
+    low = text.lower()
+    return len(text) < 1200 and any(m in low for m in SHELL_MARKERS)
+
+
 def fetch_jd(url: str) -> dict:
     url = url.strip()
     if not re.match(r"^https?://", url):
@@ -243,7 +252,7 @@ def fetch_jd(url: str) -> dict:
                 res = from_page(client, u)
     except httpx.HTTPError as e:
         raise JDError(f"Network error while fetching the link ({type(e).__name__}). Paste the job description instead.")
-    if len(res["text"]) < 300:
+    if len(res["text"]) < 300 or looks_like_js_shell(res["text"]):
         raise JDError("The page loaded but I found almost no job text (it is probably rendered by JavaScript). Paste the job description instead.")
     guess = extract_meta(res["text"], url)
     if not res["company"] or (res["source"] == "page" and guess["company"] and guess["confidence"]["company"] == "high"):

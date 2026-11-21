@@ -572,3 +572,139 @@ def test_queue_row_shows_tracked_flag(tmp_path, monkeypatch):
     assert rows[jobs[0]["id"]]["tracked"] is True and rows[jobs[0]["id"]]["company"] == "Acme" and rows[jobs[0]["id"]]["role"] == "ML Intern"
     assert rows[jobs[1]["id"]]["tracked"] is False
     assert c.post("/api/track", json={"job_id": jobs[1]["id"], "company": "", "role": ""}).status_code in (200, 400)  # blank boxes: falls back to the job text, else a clear error
+
+
+# ---------------------------------------------------------------- Nov 20 later: retry, auto-track, duplicates, saved queue, email, sync check
+JD_ACME = "Acme Corp\nMachine Learning Engineer Intern\n\nAbout Acme Corp\nAcme Corp is hiring. We use PyTorch, embeddings and LightGBM to build models. " * 2
+
+
+def test_retry_failed_job(tmp_path, monkeypatch):
+    A, c = _client(tmp_path, monkeypatch)
+    calls = {"n": 0}
+    real = A.T.generate
+    def flaky(base, jd, out, provider):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise RuntimeError("boom")
+        return real(base, jd, out, provider)
+    monkeypatch.setattr(A.T, "generate", flaky)
+    c.post("/api/batch", json={"items": [{"jd": JD, "base": "ml"}], "mock": True})
+    jobs = _wait_idle(c)
+    assert jobs[0]["status"] == "error"
+    assert c.post(f"/api/jobs/{jobs[0]['id']}/retry").status_code == 200
+    jobs = _wait_idle(c)
+    assert len(jobs) == 1 and jobs[0]["status"] == "done" and jobs[0]["id"] != ""
+    assert c.post(f"/api/jobs/{jobs[0]['id']}/retry").status_code == 409  # a finished job is not retried
+    assert c.post("/api/jobs/nope/retry").status_code == 404
+
+
+def test_duplicate_warning_and_force(tmp_path, monkeypatch):
+    import tracker
+    A, c = _client(tmp_path / "o", monkeypatch)
+    monkeypatch.setattr(tracker, "LOCAL_DIR", tmp_path / "apps"); monkeypatch.setattr(tracker, "google_ready", lambda: False)
+    c.post("/api/batch", json={"items": [{"jd": JD, "base": "ml"}], "mock": True})
+    j1 = _wait_idle(c)[0]
+    assert c.post("/api/track", json={"job_id": j1["id"], "company": "Acme", "role": "ML Intern"}).status_code == 200
+    assert tracker.logged_before("acme", "ML Intern") and not tracker.logged_before("Other", "ML Intern")
+    c.post("/api/batch", json={"items": [{"jd": JD, "base": "ml"}], "mock": True})
+    j2 = [j for j in _wait_idle(c) if j["id"] != j1["id"]][0]
+    r = c.post("/api/track", json={"job_id": j2["id"], "company": "Acme", "role": "ML Intern"})
+    assert r.status_code == 409 and r.json()["detail"].startswith("Already logged")
+    assert c.post("/api/track", json={"job_id": j2["id"], "company": "Acme", "role": "ML Intern", "force": True}).status_code == 200
+
+
+def test_auto_track_logs_once_and_skips_duplicates(tmp_path, monkeypatch):
+    import tracker
+    A, c = _client(tmp_path / "o", monkeypatch)
+    monkeypatch.setattr(tracker, "LOCAL_DIR", tmp_path / "apps"); monkeypatch.setattr(tracker, "google_ready", lambda: False)
+    c.post("/api/batch", json={"items": [{"jd": JD_ACME, "base": "ml"}], "mock": True, "auto_track": True})
+    row = _wait_idle(c)[0]
+    assert row["status"] == "done" and row["company"] == "Acme" and row["tracked"] is True and row["duplicate"] is False
+    c.post("/api/batch", json={"items": [{"jd": JD_ACME, "base": "ml"}], "mock": True, "auto_track": True})
+    rows = _wait_idle(c)
+    second = [r for r in rows if r["id"] != row["id"]][0]
+    assert second["status"] == "done" and second["tracked"] is False and second["duplicate"] is True
+    assert len(list((tmp_path / "apps" / "Resumes").glob("*.pdf"))) == 1
+
+
+def test_auto_track_failure_keeps_the_resume(tmp_path, monkeypatch):
+    import tracker
+    A, c = _client(tmp_path / "o", monkeypatch)
+    monkeypatch.setattr(tracker, "LOCAL_DIR", tmp_path / "apps")
+    def bad(*a, **k): raise RuntimeError("sheet down")
+    monkeypatch.setattr(tracker, "log_application", bad)
+    c.post("/api/batch", json={"items": [{"jd": JD_ACME, "base": "ml"}], "mock": True, "auto_track": True})
+    row = _wait_idle(c)[0]
+    assert row["status"] == "done" and row["tracked"] is False and "sheet down" in row["track_error"]
+
+
+def test_queue_survives_restart(tmp_path, monkeypatch):
+    A, c = _client(tmp_path, monkeypatch)
+    c.post("/api/batch", json={"items": [{"jd": JD, "base": "ml"}], "mock": True})
+    done = _wait_idle(c)[0]
+    assert (tmp_path / "queue.json").exists() and (tmp_path / done["id"] / "job.json").exists()
+    # a job that was running when the server stopped
+    q = json.loads((tmp_path / "queue.json").read_text())
+    q.append(dict(done, id="halfway", status="running", ok=None, pdf_url=None))
+    (tmp_path / "queue.json").write_text(json.dumps(q))
+    monkeypatch.setattr(A, "QUEUE", {}); monkeypatch.setattr(A, "FUTURES", {})
+    A._load_queue()
+    rows = {r["id"]: r for r in c.get("/api/jobs").json()["jobs"]}
+    assert rows[done["id"]]["status"] == "done" and rows["halfway"]["status"] == "error" and "restarted" in rows["halfway"]["error"]
+    assert c.get(rows[done["id"]]["pdf_url"]).content[:4] == b"%PDF"        # the finished PDF still downloads
+    A.JOBS.pop(done["id"], None)                                            # a real restart empties the in-memory results
+    assert c.get(f"/api/jobs/{done['id']}").status_code == 409              # the review panel needs a re-run
+    assert c.post(f"/api/jobs/{done['id']}/cancel").status_code == 200
+    (tmp_path / "halfway").mkdir(); (tmp_path / "halfway" / "job.json").write_text(json.dumps({"jd": JD, "url": "", "base": "ml", "mock": True}))
+    assert c.post("/api/jobs/halfway/retry").status_code == 200
+    assert _wait_idle(c)[-1]["status"] == "done"
+
+
+def test_js_shell_pages_are_refused(monkeypatch):
+    assert J.looks_like_js_shell("Loading...") and J.looks_like_js_shell("You need to enable JavaScript to run this app. " * 3)
+    assert not J.looks_like_js_shell("Data Scientist Intern. " * 200)  # a long real post is never a shell
+    monkeypatch.setattr(J, "from_greenhouse", lambda c, u: None); monkeypatch.setattr(J, "from_lever", lambda c, u: None); monkeypatch.setattr(J, "from_ashby", lambda c, u: None)
+    monkeypatch.setattr(J, "from_page", lambda c, u: {"title": "", "company": "", "text": ("Please enable JavaScript to view this page. " * 12), "source": "page", "url": u})
+    with pytest.raises(J.JDError, match="JavaScript"):
+        J.fetch_jd("https://jobs.example.com/123")
+
+
+def test_email_draft_uses_only_what_is_on_the_resume(tmp_path, monkeypatch):
+    import email_draft
+    e = email_draft.build("Acme Corp", "ML Intern", ["PyTorch", "Kubernetes", "LightGBM", "Python", "SQL"], "I used PyTorch, LightGBM and Python daily.")
+    assert e["keywords"] == ["PyTorch", "LightGBM", "Python"] and "Kubernetes" not in e["body"]
+    assert "Acme Corp" in e["body"] and "ML Intern" in e["subject"] and not any(ch in e["body"] + e["subject"] for ch in "–—")
+    assert len(e["body"].split()) < 90
+    A, c = _client(tmp_path, monkeypatch)
+    c.post("/api/batch", json={"items": [{"jd": JD_ACME, "base": "ml"}], "mock": True})
+    row = _wait_idle(c)[0]
+    d = c.get(f"/api/email/{row['id']}").json()
+    assert "Acme" in d["body"] and d["subject"].startswith("Machine Learning Engineer Intern")
+    assert c.get("/api/email/nope").status_code == 404
+
+
+def test_sync_check_repo_is_consistent():
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import sync_check
+    assert sync_check.check_repo(ROOT) == []
+
+
+def test_sync_check_catches_drift(tmp_path):
+    import shutil
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import sync_check
+    for n in ("bank", "resumes"):
+        shutil.copytree(ROOT / n, tmp_path / n)
+    shutil.copy(ROOT / "master_doc.md", tmp_path / "master_doc.md")
+    bank = json.loads((tmp_path / "bank/projects.json").read_text())
+    rt = next(p for p in bank if p["id"] == "resume_tailor")
+    rt["bullets"][0]["markup"] = "Built a tool in 9,999 lines — Built with Claude."
+    (tmp_path / "bank/projects.json").write_text(json.dumps(bank))
+    tex = (tmp_path / "resumes/swe.tex").read_text()
+    (tmp_path / "resumes/swe.tex").write_text(tex.replace("textbf{Next Step}", "textbf{Ghost Project}", 1))
+    bad = "\n".join(sync_check.check_repo(tmp_path))
+    assert "9,999" in bad and "Built with Claude" in bad and "dash" in bad and "Ghost Project" in bad
+    site = tmp_path / "site"; (site / "resumes/src").mkdir(parents=True)
+    (site / "resumes/src/resume_swe.tex").write_text("old")
+    out = "\n".join(sync_check.check_site(tmp_path, site))
+    assert "resume_swe.tex differs" in out and "resume_ml.tex is missing" in out

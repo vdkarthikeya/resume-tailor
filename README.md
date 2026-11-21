@@ -148,6 +148,15 @@ The repo copy of `apps_script.gs` ships a placeholder token. Replace it with you
 Project headings can be either style: linked title with arrow (`\textbf{\href{url}{\uline{Title}}\lk}`) or plain bold title with an underlined GitHub link at the right edge (`\hfill \href{url}{\uline{GitHub}}`). The app reads both and writes back in the style your file uses. Experience headings can be linked or plain. Delete any base file from `resumes/` to hide that option in the app.
 
 ## Changelog
+### Nov 20, 2026 (later: retry, auto-track, duplicates, saved queue, email, sync check)
+- **Retry** button on failed, errored and cancelled queue rows (`POST /api/jobs/{id}/retry`, re-runs from the saved `out/<id>/job.json`).
+- **Auto-track** switch (`auto_track` on `/api/batch`): finished resumes are logged to the tracker without a click; a company and role already logged is skipped and tagged "Already logged". The Add to tracker button asks before logging a duplicate (`force` on `/api/track`).
+- **Saved queue**: rows are written to `out/queue.json`. After a restart finished rows and their PDFs are still there; jobs that were running show as interrupted and can be retried. The review panel of a finished job needs a re-run after a restart.
+- **JavaScript-only pages** (a loader or "enable JavaScript" notice) are refused with a clear message instead of being tailored from nothing.
+- **Email draft** (`GET /api/email/{id}`, `email_draft.py`): a short note per resume, no model call, naming at most three job keywords that really appear on the PDF, no dashes.
+- **Consistency check**: `python scripts/sync_check.py [--site <clone of vdkarthikeya.github.io>]` compares the bank, the four bases, `master_doc.md` and the website repo (numbers, tools, project titles, banned phrases, hosted resume sources and PDFs). The repo part runs as a test, so a drift fails the test run. The Claude Doc itself cannot be read from here.
+- 9 new tests (77 in total). Real model timings could not be measured in the sandbox (no signed-in Claude CLI or API key), so `scripts/bench_queue.py` still needs a run on your machine.
+
 ### Nov 20, 2026 (Resume Tailor is back in the bank)
 - **Reverses the Nov 18 removal.** `resume_tailor` is in `bank/projects.json` again (Python, FastAPI, LaTeX, Claude API, pytest) with four bullets covering the tailoring and checks, the job queue, and prompt caching plus tests. No numbers beyond what the Master Doc and repo support; no speedup claim.
 - `NEVER_LIST_PROJECTS` in `tailor.py` is now an empty set (the mechanism stays). `test_resume_tailor_never_a_resume_project` is replaced by `test_resume_tailor_is_in_the_bank_again` (bullets clean, stack in the Master Doc, none of the four bases lists it) and `test_resume_tailor_can_be_picked_for_a_job` (a tailored resume can pick it and still build one page). 68 tests pass.
