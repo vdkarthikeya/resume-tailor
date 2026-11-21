@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2026-11-20 (Next Step update recorded)
+- Base resumes ml.tex and swe.tex: the Next Step bullet now matches the bank (streamed replies, 30% smaller prompt on 30 test questions, 129 browser checks). Both still fit on one page. pm.tex and ds.tex keep their shorter Next Step line. Hosted PDFs still need a rebuild with full LaTeX (sandbox lacks ulem and fontawesome5).
 - Master Doc, bank and README updated for the Next Step speed update (commit 962452a in nextstep-wildfire/next-step). 129 checks, 28 commits, about 3,400 lines, prompt 29.7% smaller on 30 test questions.
 
 ## 2026-11-20 (measurements)
