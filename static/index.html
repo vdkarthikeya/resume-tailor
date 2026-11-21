@@ -36,7 +36,7 @@
       radial-gradient(760px 560px at 100% 4%, var(--glow2), transparent 60%),
       radial-gradient(900px 600px at 50% 115%, var(--glow1), transparent 62%),
       linear-gradient(180deg, var(--bg2), var(--bg)); background-attachment:fixed; transition:background .3s, color .3s; }
-  header { padding:30px 32px 12px; max-width:1280px; margin:0 auto; position:relative; text-align:center; }
+  header { padding:30px 32px 12px; max-width:1760px; margin:0 auto; position:relative; text-align:center; }
   .brand { font:700 clamp(22px,3vw,32px)/1.1 var(--display); letter-spacing:.42em; text-transform:uppercase; margin:0; padding-left:.42em; color:var(--ink); }
   .brand b { color:var(--head); font-weight:700; }
   .tagline { font:500 11.5px var(--display); letter-spacing:.3em; text-transform:uppercase; color:var(--mute); margin-top:10px; }
@@ -46,8 +46,13 @@
   #theme:hover:not(:disabled) { background:var(--teal-soft); border-color:var(--tan); }
   #theme svg { width:20px; height:20px; }
   :root[data-theme=dark] .i-moon, :root[data-theme=light] .i-sun { display:none; }
-  main { display:grid; grid-template-columns:minmax(340px,500px) 1fr; gap:24px; padding:16px 32px 56px; align-items:start; max-width:1280px; margin:0 auto; }
-  @media (max-width:980px) { main { grid-template-columns:1fr; padding:12px 16px 40px; } header { padding:76px 16px 8px; } #theme { right:16px; top:18px; } }
+  /* Wide screens: input and queue | PDF with the tracker bar above it (sticky, always in view) | results and edits */
+  main { display:grid; grid-template-columns:minmax(320px,410px) minmax(440px,1fr) minmax(340px,450px); grid-template-areas:"in pdf res"; gap:22px; padding:16px 32px 56px; align-items:start; max-width:1760px; margin:0 auto; }
+  .col-in { grid-area:in; } .col-res { grid-area:res; } .col-pdf { grid-area:pdf; position:sticky; top:12px; }
+  .col-in, .col-res, .col-pdf { min-width:0; }
+  @media (min-width:1381px) { main:not(.has-job) { grid-template-columns:minmax(320px,410px) 1fr; grid-template-areas:"in pdf"; } }   /* no results yet: the PDF area takes the right side */
+  @media (max-width:1380px) { main { grid-template-columns:minmax(320px,420px) 1fr; grid-template-areas:"in pdf" "res pdf"; } }
+  @media (max-width:980px) { main { grid-template-columns:1fr; grid-template-areas:"in" "pdf" "res"; padding:12px 16px 40px; } .col-pdf { position:static; } header { padding:76px 16px 8px; } #theme { right:16px; top:18px; } }
   .card { background:var(--card); border:1px solid var(--card-line); border-radius:16px; padding:20px 22px; margin-bottom:18px; box-shadow:var(--shadow); position:relative; -webkit-backdrop-filter:blur(18px) saturate(130%); backdrop-filter:blur(18px) saturate(130%); }
   /* HUD corner ticks, a nod to the reference */
   .card::before, .card::after { content:""; position:absolute; width:14px; height:14px; border:1px solid var(--tan); opacity:.75; pointer-events:none; }
@@ -63,7 +68,7 @@
   input:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible, .dd-list:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
   input[type=text]:focus, textarea:focus { border-color:var(--tan); }
   input[type=checkbox] { accent-color:var(--teal); width:16px; height:16px; }
-  textarea { min-height:190px; resize:vertical; font-size:13px; line-height:1.55; }
+  textarea { min-height:140px; resize:vertical; font-size:13px; line-height:1.55; }
   .row { display:flex; gap:10px; } .row > * { flex:1; min-width:0; } .row > button { flex:0 0 auto; align-self:stretch; }
   button { padding:9px 18px; border-radius:12px; border:1px solid var(--tan); background:transparent; color:var(--head); font:600 13px var(--ui); cursor:pointer; transition:background .15s, color .15s, border-color .15s, transform .1s; }
   button:hover:not(:disabled) { background:var(--teal-soft); }
@@ -75,7 +80,14 @@
   .msg { font:500 13px var(--ui); margin-top:8px; } .err { color:var(--bad); } .okc { color:var(--ok); } .warnc { color:var(--warn); }
   .chips { display:flex; flex-wrap:wrap; gap:6px; } .chip { background:var(--field); border:1px solid var(--line); border-radius:99px; padding:2px 11px; font:500 12px var(--ui); }
   .stat { display:flex; gap:18px; flex-wrap:wrap; font:500 13px var(--ui); } .stat b { font-weight:700; }
-  iframe { width:100%; height:80vh; border:1px solid var(--line); border-radius:12px; background:#fff; }
+  iframe { width:100%; height:calc(100vh - 240px); min-height:520px; border:1px solid var(--line); border-radius:12px; background:#fff; }
+  @media (max-width:980px) { iframe { height:75vh; } }
+  .pdf-empty { display:grid; place-items:center; text-align:center; height:calc(100vh - 140px); min-height:420px; border:1px dashed var(--line); border-radius:12px; color:var(--mute); font:500 14px var(--ui); padding:24px; }
+  .trk { display:grid; grid-template-columns:1fr 1fr auto; gap:10px; align-items:end; }
+  .trk label { margin:0 0 5px; } .trk button.primary { width:auto; margin:0; padding:11px 18px; white-space:nowrap; }
+  .trk-sub { display:flex; flex-wrap:wrap; gap:8px 12px; align-items:center; margin-top:10px; } .trk-sub .actions { margin:0; } .trk-sub .msg, .trk-sub .hint, .trk-sub .sub { margin:0; }
+  #trackCard { padding:14px 16px; margin-bottom:12px; }
+  @media (max-width:560px) { .trk { grid-template-columns:1fr; } }
   .slot { border-top:1px dashed var(--line); padding:12px 0; } .slot:first-of-type { border-top:0; }
   .slot-h { display:flex; justify-content:space-between; gap:8px; align-items:center; font:600 14px var(--ui); }
   .slot-h label { margin:0; font:500 12px var(--ui); display:flex; gap:6px; align-items:center; }
@@ -91,6 +103,38 @@
   a.btn:hover { background:var(--acc-hover); border-color:var(--acc-hover); color:var(--acc-ink); } a.btn.alt:hover { background:var(--teal-soft); color:var(--head); border-color:var(--tan); }
   .grp { font:600 11px var(--display); letter-spacing:.2em; text-transform:uppercase; color:var(--tan); margin-top:10px; }
   .hint { font:500 12px var(--ui); margin-top:5px; color:var(--mute); } .hint.warn { color:var(--warn); }
+
+  /* Notification bell, queue rows */
+  #bell { position:absolute; right:84px; top:26px; width:42px; height:42px; padding:0; border-radius:12px; display:grid; place-items:center; background:var(--card); border:1px solid var(--card-line); color:var(--head); }
+  #bell:hover:not(:disabled), #bell[aria-expanded=true] { background:var(--teal-soft); border-color:var(--tan); }
+  #bell svg { width:20px; height:20px; transform-origin:50% 8%; }
+  #bell.ring svg { animation:ring .9s ease-in-out 1; }
+  @keyframes ring { 0%,100% { transform:rotate(0); } 15% { transform:rotate(16deg); } 30% { transform:rotate(-14deg); } 45% { transform:rotate(10deg); } 60% { transform:rotate(-8deg); } 75% { transform:rotate(4deg); } }
+  .bell-count { position:absolute; top:-6px; right:-6px; min-width:18px; height:18px; padding:0 5px; border-radius:99px; background:var(--acc); color:var(--acc-ink); font:700 11px/18px var(--ui); text-align:center; }
+  .bell-panel { position:absolute; right:32px; top:76px; width:min(380px, calc(100vw - 32px)); z-index:80; text-align:left; background:var(--bg2); border:1px solid var(--tan); border-radius:14px; box-shadow:0 26px 50px -18px rgba(0,0,0,.65); padding:10px; }
+  :root[data-theme=light] .bell-panel { background:#f6fbf9; }
+  .bell-h { display:flex; justify-content:space-between; align-items:center; padding:4px 6px 8px; font:600 12px var(--display); letter-spacing:.18em; text-transform:uppercase; color:var(--head); }
+  .bell-h button { padding:3px 10px; font-size:12px; }
+  .bell-list { max-height:300px; overflow:auto; }
+  .note { display:flex; gap:10px; align-items:flex-start; width:100%; text-align:left; padding:9px 10px; border-radius:10px; border:0; background:transparent; color:var(--ink); font:500 13px/1.4 var(--ui); cursor:pointer; }
+  .note:hover { background:var(--teal-soft); } .note.unseen { box-shadow:inset 3px 0 0 var(--acc); }
+  .note b { display:block; font-weight:700; } .note span.t { color:var(--mute); font-size:12px; }
+  .bell-empty { padding:14px 8px; color:var(--mute); font:500 13px var(--ui); }
+  .bell-set { border-top:1px solid var(--line); margin-top:8px; padding-top:6px; }
+  .bell-set label { display:flex; gap:8px; align-items:center; margin:6px 6px; font:500 13px var(--ui); color:var(--ink); }
+  .sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+  .qrow { display:flex; align-items:center; gap:10px; padding:9px 0; border-top:1px dashed var(--line); } .qrow:first-child { border-top:0; }
+  .qrow.cur { box-shadow:inset 3px 0 0 var(--acc); padding-left:8px; }
+  .qdot { flex:0 0 auto; width:22px; height:22px; display:grid; place-items:center; font:700 13px var(--ui); border-radius:50%; border:1.5px solid var(--line); color:var(--mute); }
+  .qdot.running { border-color:var(--acc); border-top-color:transparent; animation:spin .9s linear infinite; }
+  .qdot.done { border-color:var(--okbd); color:var(--ok); } .qdot.failed, .qdot.error { border-color:var(--bad); color:var(--bad); }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  @media (prefers-reduced-motion:reduce) { .qdot.running, #bell.ring svg { animation:none; } }
+  .qmain { flex:1; min-width:0; } .qname { font:600 13.5px/1.3 var(--ui); overflow-wrap:anywhere; } .qsub { font:500 12px/1.4 var(--ui); color:var(--mute); overflow-wrap:anywhere; }
+  .qbtns { flex:0 0 auto; display:flex; gap:6px; } .qbtns button, .qbtns a { padding:4px 11px; font:600 12px var(--ui); border-radius:10px; }
+  .qbtns a { text-decoration:none; border:1px solid var(--tan); color:var(--head); }
+  details.bulk { margin:10px 0 0; } details.bulk summary { cursor:pointer; font:600 12.5px var(--ui); color:var(--mute); } details.bulk textarea { min-height:90px; margin-top:8px; }
+  @media (max-width:980px) { #bell { right:68px; top:18px; } .bell-panel { right:16px; top:68px; } }
 
   /* Resume picker: a roomy custom dropdown whose rows wrap instead of spilling */
   .card.raised { z-index:60; }   /* lets the open list sit above the cards below it */
@@ -117,12 +161,26 @@
     <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5.3 5.3 7 7M17 17l1.7 1.7M5.3 18.7 7 17M17 7l1.7-1.7"/></svg>
     <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.6 8.6 0 0 1 9.8 3.5a8.6 8.6 0 1 0 10.7 10.7Z"/></svg>
   </button>
+  <button id="bell" type="button" aria-label="Notifications" aria-haspopup="true" aria-expanded="false" aria-controls="bellPanel" title="Notifications">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+    <span class="bell-count hide" id="bellCount" aria-hidden="true">0</span>
+  </button>
+  <div class="bell-panel hide" id="bellPanel" role="dialog" aria-label="Notifications">
+    <div class="bell-h"><span>Notifications</span><button type="button" id="bellRead">Mark all read</button></div>
+    <div class="bell-list" id="bellList"></div>
+    <div class="bell-set">
+      <label><input type="checkbox" id="prefAuto"> Download the PDF automatically when it is ready</label>
+      <label><input type="checkbox" id="prefDesktop"> Desktop alerts (even when this tab is in the background)</label>
+      <label><input type="checkbox" id="prefSound"> Play a sound</label>
+    </div>
+  </div>
+  <div class="sr" id="live" aria-live="polite"></div>
   <h1 class="brand">Resume <b>Tailor</b></h1>
   <div class="tagline">One page. Every fact checked.</div>
   <span class="sub" id="status"></span>
 </header>
 <main>
-  <section>
+  <section class="col-in">
     <div class="card">
       <h2><span class="n">1</span>Job</h2>
       <label for="url" style="margin-top:0">Job link (optional: Greenhouse, Lever, Ashby, most career pages)</label>
@@ -131,6 +189,11 @@
       <label for="jd">Job description. Paste the full text here if the link misses anything.</label>
       <textarea id="jd" placeholder="Paste the job description..."></textarea>
       <div class="hint" id="metahint"></div>
+      <details class="bulk"><summary>Queue several links at once</summary>
+        <textarea id="bulk" placeholder="One job link per line. Each one is fetched, tailored and downloaded in the background."></textarea>
+        <button id="bulkGo" type="button" style="margin-top:8px">Queue all links</button>
+        <div class="msg" id="bulkmsg"></div>
+      </details>
     </div>
     <div class="card">
       <h2><span class="n">2</span>Base resume</h2>
@@ -145,8 +208,34 @@
       </div>
       <label style="display:flex;gap:8px;align-items:center;margin-top:14px"><input type="checkbox" id="mock"> Dry run without the AI (only reorders skills, free)</label>
       <button class="primary" id="go">Tailor my resume</button>
+      <div class="hint">This adds the job to the queue and runs in the background, so you can paste the next one right away.</div>
       <div class="msg" id="genmsg"></div>
     </div>
+    <div class="card hide" id="queueCard">
+      <h2>Queue <span class="sub" id="queueSub"></span><button type="button" id="queueClear" style="margin-left:auto;padding:3px 10px;font-size:12px">Clear finished</button></h2>
+      <div id="queueList"></div>
+    </div>
+  </section>
+  <section class="col-pdf">
+    <div class="card hide" id="trackCard">
+      <div class="trk">
+        <div><label for="tco">Company</label><input type="text" id="tco" autocomplete="off"></div>
+        <div><label for="trole">Role</label><input type="text" id="trole" autocomplete="off"></div>
+        <button class="primary" id="track">Add to tracker</button>
+      </div>
+      <div class="trk-sub">
+        <div class="actions"><a class="btn hide" id="dl" href="#">Download PDF</a><a class="btn alt hide" id="dltex" href="#">Download .tex</a></div>
+        <div class="msg" id="trackmsg"></div>
+      </div>
+      <div class="hint" id="trackhint"></div>
+      <div class="sub" id="tracksub" style="margin-top:4px"></div>
+    </div>
+    <div class="card" style="padding:10px">
+      <div class="pdf-empty" id="pdfEmpty">Your tailored resume appears here. Paste a job on the left and it is built in the background.</div>
+      <iframe id="pdf" class="hide" title="Resume preview"></iframe>
+    </div>
+  </section>
+  <section class="col-res">
     <div class="card hide" id="report">
       <h2>What changed</h2>
       <div id="summary" style="font-size:14px"></div>
@@ -159,23 +248,9 @@
       <h2>ATS check</h2>
       <div id="atsBody"></div>
     </div>
-    <div class="card hide" id="trackCard">
-      <h2><span class="n">3</span>Log this application</h2>
-      <div class="row"><div><label for="tco" style="margin-top:0">Company</label><input type="text" id="tco" autocomplete="off"></div><div><label for="trole" style="margin-top:0">Role</label><input type="text" id="trole" autocomplete="off"></div></div>
-      <div class="hint" id="trackhint"></div>
-      <button class="primary" id="track">Add to tracker</button>
-      <div class="msg" id="trackmsg"></div>
-      <div class="sub" id="tracksub" style="margin-top:4px"></div>
-    </div>
     <div class="card hide" id="slotsCard">
       <h2>Review edits <span class="sub">(untick to keep your original for that part)</span></h2>
       <div id="slots"></div>
-    </div>
-  </section>
-  <section>
-    <div class="card" style="padding:10px">
-      <div class="actions" style="margin:0 0 8px"><a class="btn hide" id="dl" href="#">Download PDF</a><a class="btn alt hide" id="dltex" href="#">Download .tex</a></div>
-      <iframe id="pdf" title="Resume preview"></iframe>
     </div>
   </section>
 </main>
@@ -276,16 +351,159 @@ $('fetch').onclick = async () => {
   $('fetch').disabled = false;
 };
 
+/* ---------- queue, auto-download and the notification bell ---------- */
+const store = {
+  get(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v === null ? d : { ...d, ...v }; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+};
+const prefs = store.get('rt-prefs', {auto:true, desktop:true, sound:true});
+let queue = [], clockOff = 0, pollTimer = null, notes = [], dlChain = Promise.resolve(), audioCtx = null;
+const known = new Map();            // job id -> last status this page saw, so only changes we watched trigger an alert
+const ACTIVE = st => st === 'queued' || st === 'running';
+const fmt = sec => { sec = Math.max(0, Math.round(sec)); return Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0'); };
+const nowS = () => Date.now() / 1000 + clockOff;
+
+function unlockAudio() {
+  try { const C = window.AudioContext || window.webkitAudioContext; if (!C) return; audioCtx = audioCtx || new C(); if (audioCtx.state === 'suspended') audioCtx.resume(); } catch (e) {}
+}
+function ding(ok) {
+  if (!prefs.sound || !audioCtx) return;
+  try {
+    const t = audioCtx.currentTime;
+    (ok ? [880, 1319] : [330, 262]).forEach((f, i) => {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = 'sine'; o.frequency.value = f; o.connect(g); g.connect(audioCtx.destination);
+      g.gain.setValueAtTime(0.0001, t + i * 0.14); g.gain.exponentialRampToValueAtTime(0.18, t + i * 0.14 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + i * 0.14 + 0.35);
+      o.start(t + i * 0.14); o.stop(t + i * 0.14 + 0.4);
+    });
+  } catch (e) {}
+}
+function askNotifyPermission() { try { if (prefs.desktop && 'Notification' in window && Notification.permission === 'default') Notification.requestPermission(); } catch (e) {} }
+function desktopNotify(title, body, id) {
+  try {
+    if (!prefs.desktop || !('Notification' in window) || Notification.permission !== 'granted') return;
+    const n = new Notification(title, {body, tag: id});
+    n.onclick = () => { window.focus(); if (id) openJob(id); n.close(); };
+  } catch (e) {}
+}
+function downloadNow(url) {   // same-origin link with Content-Disposition: attachment, so the browser saves it without leaving the page
+  const a = document.createElement('a'); a.href = url; a.download = ''; a.style.display = 'none'; document.body.appendChild(a); a.click(); a.remove();
+}
+function autoDownload(url) { dlChain = dlChain.then(() => { downloadNow(url); return new Promise(r => setTimeout(r, 800)); }); }  // spaced out so browsers do not block a burst
+
+/* bell */
+function unseenCount() { return notes.filter(n => !n.seen).length; }
+function paintBell() {
+  const n = unseenCount(), c = $('bellCount');
+  c.textContent = n > 9 ? '9+' : n; c.classList.toggle('hide', n === 0);
+  $('bell').setAttribute('aria-label', n ? `Notifications, ${n} new` : 'Notifications');
+  const running = queue.filter(e => e.status === 'running').length, waiting = queue.filter(e => e.status === 'queued').length;
+  document.title = (n ? `(${n}) ` : '') + (running || waiting ? `Working on ${running + waiting} · ` : '') + 'Resume Tailor';
+  $('bellList').innerHTML = notes.length ? notes.slice(0, 20).map((x, i) =>
+    `<button type="button" class="note ${x.seen ? '' : 'unseen'}" data-i="${i}"><span>${x.ok ? '✓' : '✕'}</span><span><b>${esc(x.title)}</b>${esc(x.text)}<br><span class="t">${esc(x.when)}</span></span></button>`).join('')
+    : '<div class="bell-empty">Nothing yet. You will be told here when a resume is ready.</div>';
+  $('bellList').querySelectorAll('.note').forEach(el => el.onclick = () => { const x = notes[+el.dataset.i]; x.seen = true; paintBell(); if (x.id && x.ok) { openJob(x.id); closeBell(); } });
+}
+function pushNote(e, ok, title, text) {
+  notes.unshift({id: e.id, ok, title, text, when: new Date().toLocaleTimeString([], {hour:'numeric', minute:'2-digit'}), seen: false});
+  notes = notes.slice(0, 30);
+  const b = $('bell'); b.classList.remove('ring'); void b.offsetWidth; b.classList.add('ring');
+  $('live').textContent = title + '. ' + text;
+  paintBell();
+}
+function openBell() { $('bellPanel').classList.remove('hide'); $('bell').setAttribute('aria-expanded', 'true'); notes.forEach(n => n.seen = true); paintBell(); }
+function closeBell() { $('bellPanel').classList.add('hide'); $('bell').setAttribute('aria-expanded', 'false'); }
+$('bell').onclick = () => ($('bellPanel').classList.contains('hide') ? openBell() : closeBell());
+$('bellRead').onclick = () => { notes.forEach(n => n.seen = true); paintBell(); };
+document.addEventListener('mousedown', e => { if (!$('bellPanel').classList.contains('hide') && !$('bellPanel').contains(e.target) && !$('bell').contains(e.target)) closeBell(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('bellPanel').classList.contains('hide')) { closeBell(); $('bell').focus(); } });
+for (const [id, k] of [['prefAuto', 'auto'], ['prefDesktop', 'desktop'], ['prefSound', 'sound']]) {
+  $(id).checked = !!prefs[k];
+  $(id).onchange = () => { prefs[k] = $(id).checked; store.set('rt-prefs', prefs); if (k === 'desktop') askNotifyPermission(); if (k === 'sound') { unlockAudio(); ding(true); } };
+}
+
+/* a job we were watching just finished */
+function finished(e) {
+  if (e.status === 'done') {
+    const what = [e.base_name, e.pages === 1 ? '1 page' : e.pages + ' pages'].filter(Boolean).join(', ');
+    pushNote(e, true, 'Resume ready', `${e.label} (${what})`);
+    ding(true); desktopNotify('Resume ready', e.label, e.id);
+    if (prefs.auto && e.pdf_url) autoDownload(e.pdf_url);
+    if (!job) openJob(e.id);          // nothing open yet, so show the first one that finishes
+  } else if (e.status === 'failed' || e.status === 'error') {
+    pushNote(e, false, 'Resume failed', `${e.label}: ${(e.error || 'unknown error').slice(0, 140)}`);
+    ding(false); desktopNotify('Resume failed', e.label, null);
+  }
+}
+let firstPoll = true;
+function onQueue(list) {
+  for (const e of list) {
+    const prev = known.get(e.id);
+    if (prev !== undefined && ACTIVE(prev) && !ACTIVE(e.status)) finished(e);
+    known.set(e.id, e.status);
+  }
+  queue = list; renderQueue(); paintBell();
+  if (firstPoll) { firstPoll = false; const last = list.slice().reverse().find(e => e.status === 'done'); if (!job && last) openJob(last.id); }   // after a reload, show the latest finished resume
+}
+async function poll() {
+  try { const d = await api('/api/jobs'); clockOff = d.now - Date.now() / 1000; onQueue(d.jobs); } catch (e) {}
+  clearTimeout(pollTimer); pollTimer = setTimeout(poll, queue.some(e => ACTIVE(e.status)) ? 1500 : 6000);
+}
+function submitted(jobs) { jobs.forEach(j => known.set(j.id, j.status)); poll(); }
+
+function renderQueue() {
+  $('queueCard').classList.toggle('hide', queue.length === 0);
+  const act = queue.filter(e => ACTIVE(e.status)).length;
+  $('queueSub').textContent = act ? `${act} in progress` : 'all finished';
+  $('queueList').innerHTML = queue.slice().reverse().map(e => {
+    const st = e.status, t = nowS();
+    const dot = st === 'done' ? '✓' : st === 'failed' || st === 'error' ? '✕' : st === 'cancelled' ? '–' : '';
+    const sub = st === 'queued' ? 'Waiting for a free slot' : st === 'running' ? `Working, ${fmt(t - e.started)}`
+      : st === 'done' ? `${esc(e.base_name || '')} · ${e.pages} page${e.pages === 1 ? '' : 's'} · took ${fmt(e.finished - e.started)}`
+      : st === 'cancelled' ? 'Cancelled' : `<span class="err">${esc((e.error || 'Failed').slice(0, 160))}</span>`;
+    const btns = st === 'done' ? `<button type="button" data-open="${e.id}">Open</button><a href="${e.pdf_url}" download>PDF</a>`
+      : st === 'failed' ? `<button type="button" data-open="${e.id}">Open</button>`
+      : st === 'queued' ? `<button type="button" data-cancel="${e.id}">Cancel</button>` : '';
+    return `<div class="qrow ${job && job.job_id === e.id ? 'cur' : ''}"><span class="qdot ${st}" aria-hidden="true">${dot}</span><div class="qmain"><div class="qname">${esc(e.label)}</div><div class="qsub">${sub}</div></div><div class="qbtns">${btns}</div></div>`;
+  }).join('');
+  $('queueList').querySelectorAll('[data-open]').forEach(b => b.onclick = () => openJob(b.dataset.open));
+  $('queueList').querySelectorAll('[data-cancel]').forEach(b => b.onclick = async () => { try { await api(`/api/jobs/${b.dataset.cancel}/cancel`, {}); } catch (e) {} poll(); });
+}
+setInterval(() => { if (queue.some(e => e.status === 'running')) renderQueue(); }, 1000);   // keeps the elapsed timers moving
+$('queueClear').onclick = async () => { try { const d = await api('/api/jobs/clear', {}); onQueue(d.jobs); } catch (e) {} };
+
+async function openJob(id) {
+  try { job = await api('/api/jobs/' + id); dirty.tco = dirty.trole = false; jdMeta.company = (job.meta && job.meta.company) || ''; render(true); renderQueue(); window.scrollTo({top: 0, behavior: 'smooth'}); }
+  catch (e) { const m = $('genmsg'); m.className = 'msg err'; m.textContent = e.message; }
+}
+
 $('go').onclick = async () => {
   const m = $('genmsg'); $('fetchmsg').textContent = '';
-  if ($('jd').value.trim().length < 80) { m.className = 'msg err'; m.textContent = 'Paste the job description above first (at least a few sentences).'; return; }
-  m.className = 'msg'; m.textContent = 'Tailoring and compiling (can take up to a minute)...'; $('go').disabled = true;
-  try { job = await api('/api/generate', {base:$('base').value, jd:$('jd').value, mock:$('mock').checked, url:$('url').value}); m.textContent = ''; render(true); }
-  catch (e) { m.className = 'msg err'; m.textContent = e.message; }
-  $('go').disabled = false;
+  const jd = $('jd').value, url = $('url').value;
+  if (jd.trim().length < 80 && !url.trim()) { m.className = 'msg err'; m.textContent = 'Paste the job description above first (at least a few sentences), or a job link.'; return; }
+  unlockAudio(); askNotifyPermission();
+  try {
+    const d = await api('/api/batch', {items: [{jd, url, base: $('base').value}], mock: $('mock').checked});
+    submitted(d.jobs);
+    m.className = 'msg okc'; m.textContent = 'Added to the queue. Paste the next job whenever you like.';
+    $('jd').value = ''; $('url').value = ''; $('metahint').textContent = ''; dirty.tco = dirty.trole = false;   // ready for the next one
+  } catch (e) { m.className = 'msg err'; m.textContent = e.message; }
 };
 
+$('bulkGo').onclick = async () => {
+  const m = $('bulkmsg'), urls = $('bulk').value.split(/\n+/).map(x => x.trim()).filter(Boolean);
+  if (!urls.length) { m.className = 'msg err'; m.textContent = 'Paste one job link per line.'; return; }
+  unlockAudio(); askNotifyPermission();
+  try {
+    const d = await api('/api/batch', {items: urls.map(u => ({jd: '', url: u, base: $('base').value})), mock: $('mock').checked});
+    submitted(d.jobs); $('bulk').value = '';
+    m.className = 'msg okc'; m.textContent = `Queued ${d.jobs.length} job${d.jobs.length === 1 ? '' : 's'}.`;
+  } catch (e) { m.className = 'msg err'; m.textContent = e.message; }
+};
+poll(); paintBell();
+
 function render(fresh) {
+  document.querySelector('main').classList.add('has-job');
   $('trackCard').classList.remove('hide');
   if (fresh) applyMeta(job.meta, 'generate');   // a new resume always refreshes the boxes (unless you already typed in them)
   $('report').classList.remove('hide'); $('slotsCard').classList.remove('hide');
@@ -348,6 +566,7 @@ function renderAts() {
 function showPdf() {
   const ok = job.ok;
   $('pdf').src = ok ? `/api/pdf/${job.job_id}?v=${job.v}` : 'about:blank';
+  $('pdf').classList.remove('hide'); $('pdfEmpty').classList.add('hide');
   for (const id of ['dl', 'dltex']) $(id).classList.toggle('hide', !ok);
   setDl();
 }

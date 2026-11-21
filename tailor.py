@@ -7,11 +7,14 @@ against the Master Doc before it is rendered into the untouched template.
 from __future__ import annotations
 
 import json
+import logging
 import os
 import re
 import shutil
 import subprocess
 import tempfile
+import threading
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -19,6 +22,10 @@ import ats as ATS
 import tex_slots as T
 
 ROOT = Path(__file__).parent
+_LOG = logging.getLogger("resume_tailor")
+DEFAULT_MAX_ATTEMPTS = 2  # was 3. Each attempt is a full model call; caching and short answers make the second one cheap
+FAST_PICK_MIN_HITS = 8  # keyword hits the winning base needs before the model is skipped when auto-picking
+FAST_PICK_RATIO = 2.5  # and it must beat the runner-up by this factor
 BASES = {
     "ds": dict(file="resumes/ds.tex", name="Data Science", blurb="IDX Exchange first, data and modeling focus"),
     "ml": dict(file="resumes/ml.tex", name="Machine Learning", blurb="Gemini pipeline, XGBoost, SightLine"),
@@ -136,6 +143,16 @@ def bank_id_for(pb, bank: dict) -> str | None:
     return next((b["id"] for b in bank.values() if b["title"] == pb.title), None)
 
 
+def bank_bullet_markup(ctx: Ctx, bank_id: str | None) -> str:
+    """Approved wording for a bank bullet id, so the model can answer with just the id."""
+    if bank_id:
+        for p in ctx.bank.values():
+            for b in p["bullets"]:
+                if b["id"] == bank_id:
+                    return b["markup"]
+    return ""
+
+
 def plain_label(label: str) -> str:
     return label.replace("\\&", "&")
 
@@ -166,9 +183,9 @@ def build_plan(parsed: T.Parsed, proposal: dict, ctx: Ctx, base_key: str) -> dic
             text = (b.get("text") or "").strip()
             fi = b.get("from_index")
             srcs = b.get("source") or []
-            if isinstance(fi, int) and 0 <= fi < len(orig) and text == orig[fi] and fi not in used:
+            if isinstance(fi, int) and 0 <= fi < len(orig) and text in ("", orig[fi]) and fi not in used:  # no text = keep as is
                 used.add(fi)
-                new.append({"markup": text, "orig_idx": fi, "kind": "same" if fi == pos else "moved", "sources": []})
+                new.append({"markup": orig[fi], "orig_idx": fi, "kind": "same" if fi == pos else "moved", "sources": []})
                 continue
             errs = check_bullet_text(text, ctx, max_len)
             ok, details = verify_sources(srcs, ctx)
@@ -279,7 +296,7 @@ def build_plan(parsed: T.Parsed, proposal: dict, ctx: Ctx, base_key: str) -> dic
                     errs.append(f"{bank['title']}: needs 1 to {MAX_PROJECT_BULLETS} bullets")
                     break
                 for b in p["bullets"]:
-                    text = (b.get("text") or "").strip()
+                    text = (b.get("text") or "").strip() or bank_bullet_markup(ctx, b.get("bank_id"))
                     if norm_loose(text) in approved and not check_bullet_text(text, ctx, 10_000):
                         bl.append({"markup": text, "kind": "approved", "sources": []})
                         continue
@@ -465,13 +482,13 @@ SYSTEM = """You tailor a student's one-page resume to a job description.
 
 HARD RULES
 1. Use ONLY facts from the MASTER DOC. Never invent a skill, tool, number, outcome, title, or date. If the job asks for something the Master Doc does not support, do NOT add it; list it under "gaps" so the student can see the honest mismatch.
-2. Every bullet you rewrite or add must carry "source": 1 to 3 verbatim snippets (10+ characters each) copied exactly from the MASTER DOC that support every fact in the bullet. Bullets are rejected without checkable quotes.
+2. Every bullet you rewrite or add must carry "source": 1 to 3 verbatim snippets (10+ characters each) copied exactly from the MASTER DOC that support every fact in the bullet. Bullets are rejected without checkable quotes. A bullet you keep exactly as given needs only "from_index": leave out "text" and "source" for it (this keeps the answer short and fast).
 3. Numbers must already appear in the Master Doc or the original resume. Do not compute new ones.
 4. Bullet format is the XYZ method: "Accomplished [X] as measured by [Y] by doing [Z]". X is the achievement, Y is a measurable result that is already in the Master Doc (a number, scale, percent, count of tests, sources, records), and Z is the method or tools used. Write it as natural plain English, not a fill-in template (for example "Cut a simpler model's error from **29%** to **15%** by engineering a school district feature"). If the Master Doc has no real metric for a bullet, use a concrete, checkable outcome instead (what it enabled, how many cases it handled). Never invent a number.
    Voice: plain, direct, short. Start with a strong action verb (Built, Developed, Engineered, Implemented, Designed, Taught). Bold (**...**) the numbers and the job's key technical terms that the bullet truly demonstrates, at most 3 per bullet. No em dashes, no en dashes, no "--", no filler (leveraged, spearheaded, passionate). Use ² for superscript 2 and × for times. Nothing else: no backslashes, braces, ^, ~ or backticks.
    ATS wording: when the student really did the thing, use the job's exact term (REST APIs, not "web endpoints"; spell out "machine learning" where the job says it). Never use a job term the student did not earn.
 5. Facts to respect: CS 61A is "taught" sections (never "ran", never Gradescope or autograders). Guang Labs work is merged to main; say "merged" unless the Master Doc says otherwise. The classifier is a Gemini-based classification service, not a custom-trained LLM. IDX is a preprocessing and modeling pipeline. SightLine is in progress: say \"building\", never \"built\" or \"deployed\", and give no accuracy or speed numbers, because the Master Doc has none. The CLIP ViT-B/32 embedding stage with cosine-similarity neighbor checks is the documented work. 200+ is the 61A class size, not a caseload. Fung Fellowship: only what is documented as done.
-6. The CS 61A entry is locked: return its bullets unchanged (from_index, identical text). It already says the sections were taught in Python, Scheme, and SQL, reinforcing linked lists, trees, lists, and dictionaries. The CDSS 198 entry must keep saying the student supports transfer students 6 hours a week through exam reviews and practice worksheets for CS and DS classes. Always write "DS classes", never "data science classes", and never mention resume feedback. Keep each entry's bullet count exactly as given and each bullet within about 25% of the original length, so the resume stays one full page. Do not touch headings, dates, titles, or GPA.
+6. The CS 61A entry is locked and is not in the input: do not return it. It already says the sections were taught in Python, Scheme, and SQL, reinforcing linked lists, trees, lists, and dictionaries. The CDSS 198 entry must keep saying the student supports transfer students 6 hours a week through exam reviews and practice worksheets for CS and DS classes. Always write "DS classes", never "data science classes", and never mention resume feedback. Keep each entry's bullet count exactly as given and each bullet within about 25% of the original length, so the resume stays one full page. Do not touch headings, dates, titles, or GPA.
 
 ATS RULES (the resume must pass automated screening AND read well to a person)
 A. Keywords: list the 8 to 15 hard-skill terms the job uses, exactly as written, in "keywords". Each one the Master Doc supports must appear verbatim in the Skills lines AND be shown in at least one bullet. The first Skills line should lead with the job's own languages and tools.
@@ -485,7 +502,7 @@ HOW TO TAILOR
 - Rewrite bullets into XYZ form (see rule 4) whenever the Master Doc gives you a real Y (number, scale, count) or a concrete outcome, and use the job's exact keywords where they are true. Improve at least half of the experience and project bullets this way. Keep a bullet exactly as given (same text, from_index set) only when it already reads as XYZ or the Master Doc has nothing more to add.
 - Evidence: every skill you list should be demonstrated in at least one bullet or project when the Master Doc supports it, so skills are shown, not just listed. Prefer skills that appear in the bullets.
 - Skills: reorder so the job's keywords come first; drop low-value items to make room; only add items that appear in the Master Doc. Keep each line under 110 characters including its label.
-- Projects: pick the same number of projects as the base resume (never more than 3) from the PROJECT BANK, most relevant to the job. Prefer the approved bullets (give bank_id and the exact text). Use 2 or 3 bullets per project (1 only when the bank has just one approved bullet).
+- Projects: pick the same number of projects as the base resume (never more than 3) from the PROJECT BANK, most relevant to the job. Prefer the approved bullets: give just the bank_id and leave out "text" and "source" (the approved text is filled in for you). Use 2 or 3 bullets per project (1 only when the bank has just one approved bullet).
 - Product and program management jobs (pm base): lead with discovery and product work (The After Collective interviews and concepts, Hindsight's product role, SightLine's cross-team work), then cross-functional and documentation work. Hindsight is a product-and-vision contribution built with Claude, never a backend you wrote.
 - Coursework: choose from ALLOWED COURSES only, no more courses than the base has. The resume shows ONE plain list with no \"In progress\" label anywhere, so courses the student is taking next may be listed like any other course.
 - Return your answer by calling the tool."""
@@ -514,7 +531,7 @@ TAILOR_TOOL = {
                                     "text": {"type": "string"},
                                     "source": {"type": "array", "items": {"type": "string"}},
                                 },
-                                "required": ["from_index", "text", "source"],
+                                "required": ["from_index"],  # unchanged bullet: from_index alone is enough
                             },
                         },
                     },
@@ -542,7 +559,7 @@ TAILOR_TOOL = {
                             "items": {
                                 "type": "object",
                                 "properties": {"bank_id": {"type": ["string", "null"]}, "text": {"type": "string"}, "source": {"type": "array", "items": {"type": "string"}}},
-                                "required": ["text", "source"],
+                                "required": [],  # an approved bank bullet is just {bank_id}; new wording needs text and source
                             },
                         },
                     },
@@ -570,6 +587,7 @@ def describe_base(parsed: T.Parsed, ctx: Ctx) -> dict:
         "entries": [
             {"entry_id": e.id, "company": e.company, "role": e.role, "bullets": [{"index": i, "text": b.markup} for i, b in enumerate(e.bullets)]}
             for e in parsed.entries
+            if not is_locked_entry(e)
         ],
         "skills": [{"label": plain_label(s.label), "items": s.items} for s in parsed.skills],
         "coursework": {"completed": parsed.coursework.completed, "in_progress": parsed.coursework.in_progress},
@@ -580,52 +598,82 @@ def describe_base(parsed: T.Parsed, ctx: Ctx) -> dict:
     }
 
 
-def build_user_prompt(parsed: T.Parsed, ctx: Ctx, jd: str, feedback: str | None = None) -> str:
+def build_prompt_parts(parsed: T.Parsed, ctx: Ctx, jd: str, feedback: str | None = None) -> tuple[str, str, str]:
+    """(shared, base, dynamic). What never changes between jobs comes first, the job text last, so the API can
+    cache the long prefix (the Master Doc is about 15k tokens) across retries and across a whole batch."""
     bank = [
         {"project_id": p["id"], "title": p["title"], "stack": p["stack"], "approved_bullets": [{"bank_id": b["id"], "text": b["markup"]} for b in p["bullets"]]}
         for p in ctx.bank.values()
     ]
-    parts = [
-        "## JOB DESCRIPTION\n" + jd.strip()[:12000],
-        "## BASE RESUME (editable slots)\n" + json.dumps(describe_base(parsed, ctx), indent=1, ensure_ascii=False),
+    shared = "\n\n".join([
         "## PROJECT BANK\n" + json.dumps(bank, indent=1, ensure_ascii=False),
         "## ALLOWED COURSES\n" + json.dumps(ctx.courses, indent=1),
         "## MASTER DOC (the only source of facts)\n" + ctx.master,
-    ]
+    ])
+    base = "## BASE RESUME (editable slots)\n" + json.dumps(describe_base(parsed, ctx), indent=1, ensure_ascii=False)
+    dynamic = "## JOB DESCRIPTION\n" + jd.strip()[:12000]
     if feedback:
-        parts.append("## FEEDBACK ON YOUR LAST ATTEMPT (fix these)\n" + feedback)
-    return "\n\n".join(parts)
+        dynamic += "\n\n## FEEDBACK ON YOUR LAST ATTEMPT (fix these)\n" + feedback
+    return shared, base, dynamic
+
+
+def build_user_prompt(parsed: T.Parsed, ctx: Ctx, jd: str, feedback: str | None = None) -> str:
+    return "\n\n".join(build_prompt_parts(parsed, ctx, jd, feedback))
+
+
+PICK_SYSTEM = "Pick the base resume that best fits the job. ds = data scientist / analyst / analytics. ml = machine learning engineer / applied ML / research engineering. swe = software engineer / backend / full-stack / data engineer. pm = product manager / program manager / technical program manager / project coordination."
 
 
 class AnthropicProvider:
     name = "anthropic"
 
-    def __init__(self, model: str | None = None):
+    def __init__(self, model: str | None = None, pick_model: str | None = None):
         import anthropic
 
-        self.client = anthropic.Anthropic()
+        self.client = anthropic.Anthropic()  # thread-safe: one client (and one connection pool) serves every parallel job
         self.model = model or os.environ.get("RESUME_MODEL", "claude-sonnet-5-5")
+        self.pick_model = pick_model or os.environ.get("RESUME_PICK_MODEL", "claude-haiku-5-5")  # picking a base is easy, so a small model is enough
 
-    def _call(self, system: str, user: str, tool: dict) -> dict:
+    def _call(self, system: str, user: str, tool: dict, model: str | None = None, cached: tuple[str, str, str] | None = None) -> dict:
+        if cached:  # two cache breakpoints: the part shared by every job, then the part shared by every job on this base
+            content = [{"type": "text", "text": cached[0], "cache_control": {"type": "ephemeral"}},
+                       {"type": "text", "text": cached[1], "cache_control": {"type": "ephemeral"}},
+                       {"type": "text", "text": cached[2]}]
+        else:
+            content = user
         resp = self.client.messages.create(
-            model=self.model,
+            model=model or self.model,
             max_tokens=8000,
             system=system,
-            messages=[{"role": "user", "content": user}],
+            messages=[{"role": "user", "content": content}],
             tools=[tool],
             tool_choice={"type": "tool", "name": tool["name"]},
         )
+        u = getattr(resp, "usage", None)
+        if u is not None:
+            _LOG.info("model=%s in=%s cache_read=%s cache_write=%s out=%s", model or self.model, getattr(u, "input_tokens", "?"),
+                      getattr(u, "cache_read_input_tokens", 0), getattr(u, "cache_creation_input_tokens", 0), getattr(u, "output_tokens", "?"))
         for block in resp.content:
             if block.type == "tool_use":
                 return dict(block.input)
         raise RuntimeError("model returned no tool call")
 
     def pick_base(self, jd: str) -> dict:
-        sys = "Pick the base resume that best fits the job. ds = data scientist / analyst / analytics. ml = machine learning engineer / applied ML / research engineering. swe = software engineer / backend / full-stack / data engineer. pm = product manager / program manager / technical program manager / project coordination."
-        return self._call(sys, "## JOB DESCRIPTION\n" + jd.strip()[:8000], PICK_TOOL)
+        fast = pick_base_fast(jd)
+        if fast:
+            return fast
+        user = "## JOB DESCRIPTION\n" + jd.strip()[:8000]
+        try:
+            return self._call(PICK_SYSTEM, user, PICK_TOOL, model=self.pick_model)
+        except Exception as e:
+            if self.pick_model == self.model:
+                raise
+            _LOG.warning("pick model %s failed (%s: %s); using %s", self.pick_model, type(e).__name__, e, self.model)
+            return self._call(PICK_SYSTEM, user, PICK_TOOL)
 
     def tailor(self, parsed, ctx, jd, feedback=None) -> dict:
-        return self._call(SYSTEM, build_user_prompt(parsed, ctx, jd, feedback), TAILOR_TOOL)
+        parts = build_prompt_parts(parsed, ctx, jd, feedback)
+        return self._call(SYSTEM, "", TAILOR_TOOL, cached=parts)
 
 
 class ClaudeCodeProvider:
@@ -633,14 +681,16 @@ class ClaudeCodeProvider:
 
     name = "claude-code"
 
-    def __init__(self, model: str | None = None):
+    def __init__(self, model: str | None = None, pick_model: str | None = None):
         self.model = model or os.environ.get("RESUME_CLAUDE_MODEL")  # e.g. sonnet, opus
+        self.pick_model = pick_model or os.environ.get("RESUME_CLAUDE_PICK_MODEL", "haiku")
 
-    def _call(self, system: str, user: str, tool: dict) -> dict:
+    def _call(self, system: str, user: str, tool: dict, model: str | None = None) -> dict:
         cmd = ["claude", "-p", "--output-format", "json", "--json-schema", json.dumps(tool["input_schema"]),
                "--system-prompt", system, "--no-session-persistence", "--tools", ""]
-        if self.model:
-            cmd += ["--model", self.model]
+        model = model or self.model
+        if model:
+            cmd += ["--model", model]
         with tempfile.TemporaryDirectory() as td:  # empty cwd so no project files or CLAUDE.md leak in
             try:
                 r = subprocess.run(cmd, input=user, capture_output=True, text=True, timeout=420, cwd=td)
@@ -661,8 +711,17 @@ class ClaudeCodeProvider:
         return out
 
     def pick_base(self, jd: str) -> dict:
-        sys = "Pick the base resume that best fits the job. ds = data scientist / analyst / analytics. ml = machine learning engineer / applied ML / research engineering. swe = software engineer / backend / full-stack / data engineer. pm = product manager / program manager / technical program manager / project coordination."
-        return self._call(sys, "## JOB DESCRIPTION\n" + jd.strip()[:8000], PICK_TOOL)
+        fast = pick_base_fast(jd)
+        if fast:
+            return fast
+        user = "## JOB DESCRIPTION\n" + jd.strip()[:8000]
+        try:
+            return self._call(PICK_SYSTEM, user, PICK_TOOL, model=self.pick_model)
+        except Exception as e:
+            if not self.pick_model or self.pick_model == self.model:
+                raise
+            _LOG.warning("pick model %s failed (%s); using the default model", self.pick_model, e)
+            return self._call(PICK_SYSTEM, user, PICK_TOOL)
 
     def tailor(self, parsed, ctx, jd, feedback=None) -> dict:
         return self._call(SYSTEM, build_user_prompt(parsed, ctx, jd, feedback), TAILOR_TOOL)
@@ -711,14 +770,34 @@ class MockProvider:
         }
 
 
+def pick_base_fast(jd: str) -> dict | None:
+    """Auto-pick without a model call when the job text is clearly about one kind of role.
+    Returns None when it is not clear, and the caller asks the model instead."""
+    if os.environ.get("RESUME_FAST_PICK", "1") == "0":
+        return None
+    low = jd.lower()
+    score = {k: sum(low.count(w) for w in ws) for k, ws in KEYWORDS.items() if k in BASES}
+    ranked = sorted(score.values(), reverse=True)
+    if len(ranked) < 2 or ranked[0] < FAST_PICK_MIN_HITS or ranked[0] < FAST_PICK_RATIO * max(ranked[1], 1):
+        return None
+    return {"base": max(score, key=score.get), "reason": f"keyword counts {score} (clear match, no model call needed)"}
+
+
+_PROVIDERS: dict = {}
+_PROVIDERS_LOCK = threading.Lock()
+
+
 def get_provider(force_mock: bool = False):
     if force_mock:
         return MockProvider()
-    if os.environ.get("ANTHROPIC_API_KEY"):
-        return AnthropicProvider()
-    if shutil.which("claude"):
-        return ClaudeCodeProvider()
-    return MockProvider()
+    kind = provider_kind()
+    if kind == "none":
+        return MockProvider()
+    key = (kind, os.environ.get("RESUME_MODEL"), os.environ.get("RESUME_CLAUDE_MODEL"), os.environ.get("RESUME_PICK_MODEL"), os.environ.get("RESUME_CLAUDE_PICK_MODEL"))
+    with _PROVIDERS_LOCK:  # one provider (one API client) reused by every request and every queued job
+        if key not in _PROVIDERS:
+            _PROVIDERS[key] = AnthropicProvider() if kind == "api" else ClaudeCodeProvider()
+        return _PROVIDERS[key]
 
 
 def provider_kind() -> str:
@@ -777,12 +856,18 @@ def revert_to_fit(parsed: T.Parsed, plan: dict, outdir: Path, reverted: set[str]
     return built, reverted
 
 
-def generate(base_key: str, jd: str, outdir: Path, provider=None, max_attempts: int = 3) -> dict:
+def generate(base_key: str, jd: str, outdir: Path, provider=None, max_attempts: int | None = None) -> dict:
+    t_start = time.perf_counter()
     provider = provider or get_provider()
+    if max_attempts is None:
+        max_attempts = int(os.environ.get("RESUME_MAX_ATTEMPTS", DEFAULT_MAX_ATTEMPTS))
+    timings: dict = {"pick_base": 0.0, "llm": [], "compile": [], "total": 0.0}
     ctx = make_ctx()
     reason = None
     if base_key == "auto":
+        t = time.perf_counter()
         pick = provider.pick_base(jd)
+        timings["pick_base"] = round(time.perf_counter() - t, 2)
         base_key, reason = pick["base"], pick["reason"]
         if base_key not in BASES:
             base_key = "swe" if "swe" in BASES else next(iter(BASES))
@@ -791,11 +876,15 @@ def generate(base_key: str, jd: str, outdir: Path, provider=None, max_attempts: 
     plan = built = None
     reverted: set[str] = set()
     log: list[str] = []
-    for attempt in range(max_attempts):
+    for attempt in range(max(1, max_attempts)):
+        t = time.perf_counter()
         proposal = provider.tailor(parsed, ctx, jd, feedback)
+        timings["llm"].append(round(time.perf_counter() - t, 2))
         plan = build_plan(parsed, proposal, ctx, base_key)
         tex = render_tex(parsed, plan, set())
+        t = time.perf_counter()
         built = compile_tex(tex, outdir, "resume", skills_check_pairs(parsed, plan, set()))
+        timings["compile"].append(round(time.perf_counter() - t, 2))
         if not built.ok:
             feedback = "LaTeX failed to compile: " + built.log[-600:]
             continue
@@ -814,8 +903,13 @@ def generate(base_key: str, jd: str, outdir: Path, provider=None, max_attempts: 
     if built and built.ok and built.gap_issues:
         log.append("Layout check: uneven blank gap after: " + "; ".join(built.gap_issues[:4]) + ". Reword that bullet a little and rebuild.")
     if built and built.ok and built.pages > 1:
+        t = time.perf_counter()
         built, reverted = revert_to_fit(parsed, plan, outdir, reverted, built, log)
-    return {"jd": jd, "base": base_key, "base_reason": reason, "plan": plan, "built": built, "reverted": reverted, "log": log, "parsed": parsed, "provider": provider.name}
+        timings["compile"].append(round(time.perf_counter() - t, 2))
+    timings["total"] = round(time.perf_counter() - t_start, 2)
+    timings["attempts"] = len(timings["llm"])
+    _LOG.info("tailor %s base=%s timings=%s", provider.name, base_key, timings)
+    return {"jd": jd, "base": base_key, "base_reason": reason, "plan": plan, "built": built, "reverted": reverted, "log": log, "parsed": parsed, "provider": provider.name, "timings": timings}
 
 
 def ats_for(base_key: str, plan: dict, built: "Built", jd: str, reverted: set[str]) -> dict | None:
@@ -839,7 +933,7 @@ if __name__ == "__main__":
     import argparse
 
     ap = argparse.ArgumentParser(description="Tailor a base resume to a job description from the command line.")
-    ap.add_argument("--base", default="auto", choices=["auto", "ds", "ml", "swe"])
+    ap.add_argument("--base", default="auto", choices=["auto", "ds", "ml", "swe", "pm"])
     ap.add_argument("--jd-file", required=True)
     ap.add_argument("--out", default="out/cli")
     ap.add_argument("--mock", action="store_true")
@@ -851,3 +945,5 @@ if __name__ == "__main__":
         print(" -", w)
     print("changed:", changed_slots(r["plan"]))
     print("pdf:", b.pdf)
+    t = r["timings"]
+    print(f"time: {t['total']}s total (pick base {t['pick_base']}s, model calls {t['llm']}, compiles {t['compile']})")

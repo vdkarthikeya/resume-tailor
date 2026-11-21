@@ -1,10 +1,14 @@
 """Local resume tailor. Run: uvicorn app:app --port 8000"""
 from __future__ import annotations
 
+import os
 import re
+import threading
 import time
 import uuid
+from concurrent.futures import Future, ThreadPoolExecutor
 from pathlib import Path
+from urllib.parse import quote
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
@@ -22,6 +26,15 @@ app = FastAPI(title="Resume Tailor")
 JOBS: dict[str, dict] = {}
 PROVIDER_OVERRIDE = None  # tests set this
 
+# Batch queue. Jobs wait here, a small pool of worker threads runs them side by side, and the page polls /api/jobs.
+# Keep the pool at 3 on a Claude subscription (each model call is a separate `claude -p` process); raise it with an API key.
+WORKERS = max(1, int(os.environ.get("RESUME_WORKERS", "3")))
+EXEC = ThreadPoolExecutor(max_workers=WORKERS, thread_name_prefix="tailor")
+QUEUE: dict[str, dict] = {}  # job_id -> queue entry, in submit order
+FUTURES: dict[str, Future] = {}
+QLOCK = threading.Lock()
+MAX_BATCH = 25
+
 
 class FetchReq(BaseModel):
     url: str
@@ -37,6 +50,17 @@ class GenReq(BaseModel):
 class MetaReq(BaseModel):
     text: str
     url: str = ""
+
+
+class BatchItem(BaseModel):
+    jd: str = ""    # pasted job text, or leave empty and give a url (the worker fetches it)
+    url: str = ""
+    base: str = "auto"
+
+
+class BatchReq(BaseModel):
+    items: list[BatchItem]
+    mock: bool = False
 
 
 class RevertReq(BaseModel):
@@ -76,6 +100,7 @@ def payload(job_id: str) -> dict:
         "warnings": plan["warnings"] + j["log"], "gaps": plan["gaps"], "keywords": plan["keywords"], "summary": plan["summary"],
         "slots": slots_view(plan, j["reverted"]), "ats": T.ats_for(j["base"], plan, b, j["jd"], j["reverted"]), "v": int(time.time() * 1000),
         "meta": jdmod.extract_meta(j["jd"], j.get("url", "")),
+        "timings": j.get("timings"),
     }
 
 
@@ -108,6 +133,114 @@ def generate(req: GenReq):
     r["url"] = req.url
     JOBS[job_id] = r
     return payload(job_id)
+
+
+def _entry_view(e: dict) -> dict:
+    return dict(e)
+
+
+def _update(job_id: str, **kw) -> None:
+    with QLOCK:
+        QUEUE[job_id].update(kw)
+
+
+def _guess_label(jd: str, url: str) -> tuple[str, str, str]:
+    """Company, role and a short label for the queue row, from whatever text or link we have right now."""
+    try:
+        m = jdmod.extract_meta(jd, url) if (jd.strip() or url.strip()) else {"company": "", "role": ""}
+    except Exception:
+        m = {"company": "", "role": ""}
+    company, role = m.get("company") or "", m.get("role") or ""
+    label = ": ".join(x for x in (company, role) if x) or (url.strip()[:70] if url.strip() else (jd.strip().splitlines() or [""])[0][:70]) or "Job"
+    return company, role, label
+
+
+def _run_job(job_id: str, jd: str, url: str, base: str, mock: bool) -> None:
+    _update(job_id, status="running", started=time.time())
+    try:
+        if not jd.strip():  # a link only: fetch it here so many links fetch in parallel too
+            f = jdmod.fetch_jd(url)
+            jd = (f["title"] + (" at " + f["company"] if f.get("company") else "") + "\n\n" if f.get("title") else "") + f["text"]
+            url = f.get("url") or url
+        if len(jd.strip()) < 80:
+            raise ValueError("The job description is too short.")
+        provider = PROVIDER_OVERRIDE or T.get_provider(mock)
+        r = T.generate(base, jd, OUT / job_id, provider)
+        r["url"] = url
+        JOBS[job_id] = r
+        b = r["built"]
+        meta = jdmod.extract_meta(jd, url)
+        company, role = meta.get("company") or "", meta.get("role") or ""
+        _update(job_id, status="done" if b.ok else "failed", finished=time.time(), company=company, role=role,
+                label=": ".join(x for x in (company, role) if x) or QUEUE[job_id]["label"], base=r["base"], base_name=T.BASES[r["base"]]["name"],
+                ok=b.ok, pages=b.pages, fill_pct=round(100 * b.bottom / 745) if b.ok else 0, timings=r.get("timings"),
+                error=None if b.ok else (b.log or "LaTeX failed")[-300:],
+                pdf_url=f"/api/pdf/{job_id}?download=true&company={quote(company)}" if b.ok else None)
+    except jdmod.JDError as e:
+        _update(job_id, status="error", finished=time.time(), error=str(e))
+    except Exception as e:  # API errors, timeouts, etc. One bad job never stops the rest of the queue
+        _update(job_id, status="error", finished=time.time(), error=f"{type(e).__name__}: {e}"[:400])
+
+
+@app.post("/api/batch")
+def batch(req: BatchReq):
+    if not req.items:
+        raise HTTPException(400, "Nothing to queue.")
+    if len(req.items) > MAX_BATCH:
+        raise HTTPException(400, f"At most {MAX_BATCH} jobs at a time.")
+    for it in req.items:
+        if it.base not in ("auto", *T.BASES):
+            raise HTTPException(400, "unknown base resume")
+        if len(it.jd.strip()) < 80 and not it.url.strip():
+            raise HTTPException(400, "Each job needs a link or at least a few sentences of job text.")
+    out = []
+    for it in req.items:
+        job_id = uuid.uuid4().hex[:10]
+        company, role, label = _guess_label(it.jd, it.url)
+        entry = {"id": job_id, "status": "queued", "label": label, "company": company, "role": role, "url": it.url.strip(), "requested_base": it.base,
+                 "base": None, "base_name": None, "created": time.time(), "started": None, "finished": None, "error": None,
+                 "ok": None, "pages": None, "fill_pct": None, "pdf_url": None, "timings": None}
+        with QLOCK:
+            QUEUE[job_id] = entry
+            FUTURES[job_id] = EXEC.submit(_run_job, job_id, it.jd, it.url.strip(), it.base, req.mock)
+        out.append(_entry_view(entry))
+    return {"jobs": out, "workers": WORKERS}
+
+
+@app.get("/api/jobs")
+def jobs():
+    with QLOCK:
+        return {"jobs": [_entry_view(e) for e in QUEUE.values()], "workers": WORKERS, "now": time.time()}
+
+
+@app.get("/api/jobs/{job_id}")
+def job_result(job_id: str):
+    """The full review payload for a finished queue job (same shape /api/generate returns)."""
+    if job_id not in QUEUE:
+        raise HTTPException(404, "unknown job")
+    if job_id not in JOBS:
+        raise HTTPException(409, "not finished yet")
+    return payload(job_id)
+
+
+@app.post("/api/jobs/{job_id}/cancel")
+def job_cancel(job_id: str):
+    with QLOCK:
+        e, fut = QUEUE.get(job_id), FUTURES.get(job_id)
+        if not e:
+            raise HTTPException(404, "unknown job")
+        if e["status"] == "queued" and fut is not None and fut.cancel():
+            e.update(status="cancelled", finished=time.time())
+        return _entry_view(e)
+
+
+@app.post("/api/jobs/clear")
+def jobs_clear():
+    """Forget finished, failed and cancelled rows (the resumes stay available if you still have them open)."""
+    with QLOCK:
+        for k in [k for k, e in QUEUE.items() if e["status"] in ("done", "failed", "error", "cancelled")]:
+            QUEUE.pop(k, None); FUTURES.pop(k, None)
+        return {"jobs": [_entry_view(e) for e in QUEUE.values()]}
 
 
 @app.post("/api/revert")
@@ -171,7 +304,7 @@ def track(req: TrackReq):
 @app.get("/api/status")
 def status():
     import os
-    return {"tracker": "google" if tracker.google_ready() else "local", "sheet_url": tracker.SHEET_URL, "folder_url": tracker.FOLDER_URL, "api_key": T.provider_kind() != "none", "provider": T.provider_kind(), "latex": bool(T._engine()), "bases": {k: v["name"] for k, v in T.BASES.items()}, "base_info": {k: {"name": v["name"], "blurb": v.get("blurb", "")} for k, v in T.BASES.items()}}
+    return {"tracker": "google" if tracker.google_ready() else "local", "sheet_url": tracker.SHEET_URL, "folder_url": tracker.FOLDER_URL, "api_key": T.provider_kind() != "none", "provider": T.provider_kind(), "latex": bool(T._engine()), "workers": WORKERS, "bases": {k: v["name"] for k, v in T.BASES.items()}, "base_info": {k: {"name": v["name"], "blurb": v.get("blurb", "")} for k, v in T.BASES.items()}}
 
 
 app.mount("/", StaticFiles(directory=ROOT / "static", html=True), name="static")

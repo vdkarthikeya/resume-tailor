@@ -371,3 +371,169 @@ def test_resume_tailor_never_a_resume_project():
     for v in ("ml", "ds", "swe", "pm"):
         tex = (T.ROOT / f"resumes/{v}.tex").read_text()
         assert "textbf{Resume Tailor}" not in tex, v
+
+
+# ---------------------------------------------------------------- speed: short answers, cacheable prompt, cheap base pick
+def test_unchanged_bullets_need_only_from_index():
+    p = parsed("ml")
+    prop = T.MockProvider().tailor(p, ctx, "")
+    for e in prop["entries"]:
+        e["bullets"] = [{"from_index": b["from_index"]} for b in e["bullets"]]  # no text, no source
+    plan = T.build_plan(p, prop, ctx, "ml")
+    assert not any(s.startswith("entry:") for s in T.changed_slots(plan)), T.changed_slots(plan)
+    assert not any("entry" in w.lower() or "bullet" in w.lower() for w in plan["warnings"]), plan["warnings"]
+    # a reorder is also just indexes
+    e0 = next(e for e in prop["entries"] if len(e["bullets"]) >= 2 and not T.is_locked_entry(next(x for x in p.entries if x.id == e["entry_id"])))
+    e0["bullets"][0], e0["bullets"][1] = e0["bullets"][1], e0["bullets"][0]
+    plan2 = T.build_plan(p, prop, ctx, "ml")
+    assert f"entry:{e0['entry_id']}" in T.changed_slots(plan2)
+    assert [x["kind"] for x in plan2["entries"][e0["entry_id"]]["new"][:2]] == ["moved", "moved"]
+
+
+def test_bank_bullet_by_id_only():
+    assert T.bank_bullet_markup(ctx, "hindsight_1") == ctx.bank["hindsight"]["bullets"][0]["markup"]
+    assert T.bank_bullet_markup(ctx, "nope") == "" and T.bank_bullet_markup(ctx, None) == ""
+    p = parsed("ml")
+    prop = T.MockProvider().tailor(p, ctx, "")
+    prop["projects"] = [{"project_id": T.bank_id_for(pb, ctx.bank), "bullets": [{"bank_id": b["id"]} for b in ctx.bank[T.bank_id_for(pb, ctx.bank)]["bullets"][:len(pb.bullets)]]} for pb in p.projects.projects]
+    plan = T.build_plan(p, prop, ctx, "ml")
+    assert not any("verifiable" in w or "Projects" in w for w in plan["warnings"]), plan["warnings"]
+
+
+def test_locked_entry_not_sent_to_model():
+    p = parsed("swe")
+    sent = T.describe_base(p, ctx)["entries"]
+    assert len(sent) == sum(1 for e in p.entries if not T.is_locked_entry(e)) and len(sent) < len(p.entries)
+    assert not any("61A" in f"{e['company']} {e['role']}" for e in sent)
+
+
+def test_prompt_prefix_is_stable_for_caching():
+    p = parsed("ml")
+    a = T.build_prompt_parts(p, ctx, "Job A. " * 30)
+    b = T.build_prompt_parts(p, ctx, "A totally different job. " * 30, feedback="- too long")
+    assert a[0] == b[0] and a[1] == b[1] and a[2] != b[2]  # only the last block changes between jobs and retries
+    assert "MASTER DOC" in a[0] and "JOB DESCRIPTION" not in a[0] + a[1] and "JOB DESCRIPTION" in a[2]
+    assert T.build_user_prompt(p, ctx, "Job A. " * 30) == "\n\n".join(a)
+
+
+def test_fast_pick(monkeypatch):
+    ml = "We train deep learning models in PyTorch. Machine learning, NLP, LLM, embedding, inference, neural networks, computer vision. " * 2
+    assert T.pick_base_fast(ml)["base"] == "ml"
+    assert T.pick_base_fast("We need a great teammate. Apply now.") is None            # unclear: the model decides
+    assert T.pick_base_fast(ml + " product manager roadmap stakeholder " * 8) is None  # close call: the model decides
+    monkeypatch.setenv("RESUME_FAST_PICK", "0")
+    assert T.pick_base_fast(ml) is None
+
+
+def test_timings_and_attempt_cap(tmp_path):
+    calls = []
+    class Always(Fake):
+        def tailor(s, parsed, ctx, jd, feedback=None):
+            calls.append(feedback); return super().tailor(parsed, ctx, jd, feedback)
+    def edit(prop):  # shrink every skills line to one item so the page is under-filled and a retry is wanted every time
+        for sk in prop["skills"]: sk["items"] = sk["items"][:1]
+    r = T.generate("ml", "Machine learning job. " * 20, tmp_path, Always(edit))
+    t = r["timings"]
+    assert len(calls) <= T.DEFAULT_MAX_ATTEMPTS and t["attempts"] == len(calls) and t["total"] >= sum(t["llm"])
+    assert len(t["llm"]) == len(t["compile"]) or len(t["compile"]) == len(t["llm"]) + 1  # +1 only when revert_to_fit recompiled
+
+
+# ---------------------------------------------------------------- batch queue
+import time as _time, threading as _th
+from concurrent.futures import ThreadPoolExecutor as _Pool
+from types import SimpleNamespace as _NS
+
+
+def _client(tmp_path, monkeypatch, workers=3):
+    from fastapi.testclient import TestClient
+    import app as A
+    monkeypatch.setattr(A, "OUT", tmp_path)
+    monkeypatch.setattr(A, "EXEC", _Pool(max_workers=workers))
+    monkeypatch.setattr(A, "QUEUE", {}); monkeypatch.setattr(A, "FUTURES", {})
+    return A, TestClient(A.app)
+
+
+def _fake_result(jd, base="ml"):
+    return {"jd": jd, "base": base, "base_reason": None, "plan": None, "built": _NS(ok=True, pages=1, bottom=720.0, log="", pdf=None),
+            "reverted": set(), "log": [], "parsed": None, "provider": "fake", "timings": {"total": 0.1}}
+
+
+def _wait_idle(c, timeout=60):
+    end = _time.time() + timeout
+    while _time.time() < end:
+        jobs = c.get("/api/jobs").json()["jobs"]
+        if jobs and not any(j["status"] in ("queued", "running") for j in jobs):
+            return jobs
+        _time.sleep(0.05)
+    raise AssertionError("queue did not finish: " + str(c.get("/api/jobs").json()))
+
+
+JD = "Machine learning engineer intern. We use PyTorch, embeddings and LightGBM to build models. " * 3
+
+
+def test_batch_validation(tmp_path, monkeypatch):
+    A, c = _client(tmp_path, monkeypatch)
+    assert c.post("/api/batch", json={"items": []}).status_code == 400
+    assert c.post("/api/batch", json={"items": [{"jd": "short"}]}).status_code == 400
+    assert c.post("/api/batch", json={"items": [{"jd": JD, "base": "nope"}]}).status_code == 400
+    assert c.post("/api/batch", json={"items": [{"jd": JD}] * (A.MAX_BATCH + 1)}).status_code == 400
+    assert c.get("/api/jobs/doesnotexist").status_code == 404
+
+
+def test_batch_runs_jobs_in_parallel(tmp_path, monkeypatch):
+    A, c = _client(tmp_path, monkeypatch, workers=3)
+    live, peak, lock = [0], [0], _th.Lock()
+    def slow(base, jd, outdir, provider, **k):
+        with lock: live[0] += 1; peak[0] = max(peak[0], live[0])
+        _time.sleep(0.4)
+        with lock: live[0] -= 1
+        return _fake_result(jd)
+    monkeypatch.setattr(A.T, "generate", slow)
+    t0 = _time.time()
+    r = c.post("/api/batch", json={"items": [{"jd": JD, "base": "ml"}] * 3, "mock": True})
+    assert r.status_code == 200 and len(r.json()["jobs"]) == 3 and all(j["status"] == "queued" for j in r.json()["jobs"])
+    jobs = _wait_idle(c)
+    assert peak[0] >= 2 and _time.time() - t0 < 1.1  # three 0.4 s jobs finish in about 0.4 s, not 1.2 s
+    assert [j["status"] for j in jobs] == ["done"] * 3 and all(j["pdf_url"].startswith("/api/pdf/") and "download=true" in j["pdf_url"] for j in jobs)
+
+
+def test_batch_one_failure_does_not_stop_the_rest(tmp_path, monkeypatch):
+    A, c = _client(tmp_path, monkeypatch)
+    def gen(base, jd, outdir, provider, **k):
+        if "BOOM" in jd: raise RuntimeError("model exploded")
+        return _fake_result(jd)
+    monkeypatch.setattr(A.T, "generate", gen)
+    def fetch(url): raise A.jdmod.JDError("That site needs a login, so I can't read it.")
+    monkeypatch.setattr(A.jdmod, "fetch_jd", fetch)
+    c.post("/api/batch", json={"items": [{"jd": JD + "BOOM"}, {"jd": JD}, {"url": "https://www.linkedin.com/jobs/view/1"}], "mock": True})
+    jobs = _wait_idle(c)
+    by = {j["status"]: j for j in jobs}
+    assert sorted(j["status"] for j in jobs) == ["done", "error", "error"]
+    assert any("model exploded" in (j["error"] or "") for j in jobs) and any("needs a login" in (j["error"] or "") for j in jobs)
+
+
+def test_batch_cancel_queued_job(tmp_path, monkeypatch):
+    A, c = _client(tmp_path, monkeypatch, workers=1)
+    gate = _th.Event()
+    def gen(base, jd, outdir, provider, **k):
+        gate.wait(5); return _fake_result(jd)
+    monkeypatch.setattr(A.T, "generate", gen)
+    ids = [j["id"] for j in c.post("/api/batch", json={"items": [{"jd": JD}, {"jd": JD}], "mock": True}).json()["jobs"]]
+    assert c.post(f"/api/jobs/{ids[1]}/cancel").json()["status"] == "cancelled"
+    assert c.post(f"/api/jobs/{ids[0]}/cancel").json()["status"] in ("queued", "running")  # already running: cannot be cancelled
+    gate.set()
+    jobs = _wait_idle(c)
+    assert {j["id"]: j["status"] for j in jobs} == {ids[0]: "done", ids[1]: "cancelled"}
+    assert len(c.post("/api/jobs/clear").json()["jobs"]) == 0
+
+
+def test_batch_end_to_end_with_real_pdf(tmp_path, monkeypatch):
+    A, c = _client(tmp_path, monkeypatch)
+    r = c.post("/api/batch", json={"items": [{"jd": JD, "base": "auto"}, {"jd": JD.replace("Machine learning", "Backend software"), "base": "swe"}], "mock": True})
+    assert r.status_code == 200
+    jobs = _wait_idle(c)
+    assert [j["status"] for j in jobs] == ["done", "done"], [j.get("error") for j in jobs]
+    for j in jobs:
+        d = c.get(f"/api/jobs/{j['id']}").json()
+        assert d["ok"] and d["pages"] == 1 and d["job_id"] == j["id"] and d["timings"]["total"] >= 0
+        assert c.get(j["pdf_url"]).content[:4] == b"%PDF"

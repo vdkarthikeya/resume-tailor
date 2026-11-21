@@ -80,6 +80,12 @@ export ANTHROPIC_API_KEY=sk-ant-...      # optional, see AI backend below
 
 No key: the dry run box only reorders skills (free), good for checking the pipeline.
 
+## Queue, speed and alerts
+- **Queue.** "Tailor my resume" adds the job to a queue and returns at once, so you can paste the next one. A pool of workers (`RESUME_WORKERS`, default 3) runs them side by side. "Queue several links at once" takes one link per line.
+- **Auto-download and bell.** When a resume finishes, the PDF downloads (named with the company), the bell shows a badge, and you get an optional desktop alert and sound. Each of the three can be switched off from the bell panel. Chrome asks once to allow multiple downloads.
+- **Layout.** Input and queue on the left, the PDF with the Add to tracker bar (sticky) in the middle, results and edits on the right.
+- **Speed.** The prompt puts the Master Doc first so the API can cache it (retries and batches reuse it); unchanged bullets are returned as just an index; the locked CS 61A entry is not sent; auto-pick skips the model when the job text is clearly one role and otherwise uses a small model (`RESUME_PICK_MODEL`, `RESUME_CLAUDE_PICK_MODEL`, turn the shortcut off with `RESUME_FAST_PICK=0`); at most 2 attempts (`RESUME_MAX_ATTEMPTS`). Every run records per-stage timings (shown by the CLI and returned in the API as `timings`).
+
 ## Running it, not hosting it
 
 This is a local tool on purpose. It needs LaTeX installed, it reads a Master Doc full of personal details, and it spends model credits. Putting it on a public URL would expose all three, so it is meant to run on your own machine. The README and diagrams here are the showcase.
