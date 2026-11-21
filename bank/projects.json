@@ -559,12 +559,12 @@
     "bullets": [
       {
         "id": "next_step_1",
-        "markup": "Built a free site for the Fung Fellowship that helps wildfire survivors write one clear insurer letter in English, Spanish or Chinese.",
+        "markup": "Built a free site in about **3,000** lines of plain **JavaScript** for the Fung Fellowship that helps wildfire survivors write one clear insurer letter in **3** languages (English, Spanish, Chinese).",
         "from_resume": "swe"
       },
       {
         "id": "next_step_2",
-        "markup": "Grounded a hosted **Llama** model on **Cloudflare Workers AI** in **15** numbered source notes; the server removes citations that do not exist, and nothing is stored server-side.",
+        "markup": "Grounded a hosted **Llama** model on **Cloudflare Workers AI** in **15** numbered source notes; the server removes citations that do not exist, and **34** browser checks cover the app.",
         "from_resume": "swe"
       },
       {

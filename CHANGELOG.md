@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-11-20 (Next Step numbers)
+- Next Step bank bullets and the Master Doc entry now carry counted numbers from the repo: about 3,000 lines, 15 source notes, 3 languages, 34 browser checks, 27 commits.
+
 ## 2026-11-20 (later): Resume Tailor back in the bank
 - Re-added `resume_tailor` to `bank/projects.json` (4 bullets), emptied `NEVER_LIST_PROJECTS`, replaced the ban test with two tests (in the bank, and pickable for a job), updated `master_doc.md` and the README. Base resumes unchanged. 68 tests pass.
 

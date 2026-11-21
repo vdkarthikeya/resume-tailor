@@ -189,11 +189,12 @@ Stack: Claude, FastAPI (Python), React, TypeScript, Vite, Supabase, Apify, Facto
 
 ### Next Step (Fung Fellowship prototype, Nov 2026, team project)
 
-Stack: plain HTML, CSS and JavaScript (no build step), Cloudflare Pages with Pages Functions, Cloudflare Workers AI. Live site: https://next-step-2fg.pages.dev. Repo: nextstep-wildfire/next-step (public as of Nov 14, 2026; 26 commits, all mine, Nov 12 to 13).
+Stack: plain HTML, CSS and JavaScript (no build step), Cloudflare Pages with Pages Functions, Cloudflare Workers AI. Live site: https://next-step-2fg.pages.dev. Repo: nextstep-wildfire/next-step (public as of Nov 14, 2026; 27 commits as of Nov 20, 2026, all mine).
 
 - What it is: a free website that helps California wildfire survivors write one clear letter to their insurer. A chat gives answers tied to numbered source notes, and a letter builder drafts the letter in English, Spanish or Chinese. Built through the Fung Fellowship with mentorship from TAC.
 - How it works: the AI is a hosted model (Llama 3.3 70B on Cloudflare Workers AI, with an optional smaller model and an optional Anthropic key path), not a model I trained. Answers are grounded in 15 numbered source notes in sources.json, and the server strips any citation number that does not exist. Prompts live on the server. Nothing is stored server-side: chats, letters and the contact log stay in the browser's localStorage.
 - Limits and testing: the free tier allows roughly 100 replies a day on the 70B model. A browser test script (tests/run.mjs, 34 checks per the README) and a dev server with a mock AI cover the app. The source notes were last updated Nov 7, 2026.
+- Numbers (counted from the repo Nov 20, 2026): about 3,000 lines of JavaScript, HTML and CSS (1,410 in app.js), 15 numbered source notes, 3 letter languages (English, Spanish, Chinese), 34 browser checks, 27 commits. Resume bullets may use these.
 - My part: built the site and its backend, and led the user sessions that shaped it. Say "hosted model" for the AI.
 - Accuracy notes: it is a student prototype, not legal or insurance advice. Say "grounded chat and letter generation on a hosted model", never "trained" or "ML model". No outcomes are claimed, and Bet 3 is untested. A few people who help survivors reviewed the prototype informally; the facts in the source notes have not had a formal expert check.
 
