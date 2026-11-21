@@ -208,17 +208,18 @@ def _run_job(job_id: str, jd: str, url: str, base: str, mock: bool, auto_track: 
         meta = jdmod.extract_meta(jd, url)
         company, role = meta.get("company") or "", meta.get("role") or ""
         dup = bool(b.ok and company and role and _already_logged(company, role, job_id))
-        _update(job_id, duplicate=dup, status="done" if b.ok else "failed", finished=time.time(), company=company, role=role,
+        tracked, track_error = False, None
+        if auto_track and b.ok and company and role and not dup:  # done only after this, so a finished row is final
+            try:
+                res = tracker.log_application(b.pdf, OUT / job_id / "resume.tex", company, role)
+                tracked, company, role = True, res.get("company") or company, res.get("role") or role
+            except Exception as e:  # the resume is still fine; the row says the log failed so the button can be used
+                track_error = f"{type(e).__name__}: {e}"[:200]
+        _update(job_id, duplicate=dup, tracked=tracked, track_error=track_error, status="done" if b.ok else "failed", finished=time.time(), company=company, role=role,
                 label=": ".join(x for x in (company, role) if x) or QUEUE[job_id]["label"], base=r["base"], base_name=T.BASES[r["base"]]["name"],
                 ok=b.ok, pages=b.pages, fill_pct=round(100 * b.bottom / 745) if b.ok else 0, timings=r.get("timings"),
                 error=None if b.ok else (b.log or "LaTeX failed")[-300:],
                 pdf_url=f"/api/pdf/{job_id}?download=true&company={quote(company)}" if b.ok else None)
-        if auto_track and b.ok and company and role and not dup:
-            try:
-                res = tracker.log_application(b.pdf, OUT / job_id / "resume.tex", company, role)
-                _update(job_id, tracked=True, company=res.get("company") or company, role=res.get("role") or role)
-            except Exception as e:  # the resume is still fine; the row says the log failed so the button can be used
-                _update(job_id, track_error=f"{type(e).__name__}: {e}"[:200])
     except jdmod.JDError as e:
         _update(job_id, status="error", finished=time.time(), error=str(e))
     except Exception as e:  # API errors, timeouts, etc. One bad job never stops the rest of the queue
