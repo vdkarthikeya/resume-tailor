@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-11-20 (later): Resume Tailor back in the bank
+- Re-added `resume_tailor` to `bank/projects.json` (4 bullets), emptied `NEVER_LIST_PROJECTS`, replaced the ban test with two tests (in the bank, and pickable for a job), updated `master_doc.md` and the README. Base resumes unchanged. 68 tests pass.
+
 ## 2026-11-20: queue, speed, alerts, layout
 
 ### What changed

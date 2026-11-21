@@ -148,6 +148,11 @@ The repo copy of `apps_script.gs` ships a placeholder token. Replace it with you
 Project headings can be either style: linked title with arrow (`\textbf{\href{url}{\uline{Title}}\lk}`) or plain bold title with an underlined GitHub link at the right edge (`\hfill \href{url}{\uline{GitHub}}`). The app reads both and writes back in the style your file uses. Experience headings can be linked or plain. Delete any base file from `resumes/` to hide that option in the app.
 
 ## Changelog
+### Nov 20, 2026 (Resume Tailor is back in the bank)
+- **Reverses the Nov 18 removal.** `resume_tailor` is in `bank/projects.json` again (Python, FastAPI, LaTeX, Claude API, pytest) with four bullets covering the tailoring and checks, the job queue, and prompt caching plus tests. No numbers beyond what the Master Doc and repo support; no speedup claim.
+- `NEVER_LIST_PROJECTS` in `tailor.py` is now an empty set (the mechanism stays). `test_resume_tailor_never_a_resume_project` is replaced by `test_resume_tailor_is_in_the_bank_again` (bullets clean, stack in the Master Doc, none of the four bases lists it) and `test_resume_tailor_can_be_picked_for_a_job` (a tailored resume can pick it and still build one page). 68 tests pass.
+- The Master Doc entry and the Claude Doc "Master Doc: Everything I've Done" describe the queue, caching, auto-download, bell, tracker tags and layout. The four base resumes are unchanged.
+
 ### Oct 21, 2026
 - **Four full bases** in `resumes/`: `swe.tex`, `ds.tex`, `ml.tex`, `pm.tex`. The tool picks the best one for the job (or you choose).
 - **At most 3 projects per resume** (`MAX_PROJECTS` in `tailor.py`), so each project gets 2 to 3 bullets (`MAX_PROJECT_BULLETS`). Weak projects are cut before weak bullets.

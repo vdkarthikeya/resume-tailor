@@ -362,15 +362,35 @@ def test_macros_have_no_trailing_whitespace_in_definition():
             assert re.search(r"\}%\n\}\n$", body), (f.name, name, "body must end with }% before the closing brace")
 
 
-def test_resume_tailor_never_a_resume_project():
-    import json
+def test_resume_tailor_is_in_the_bank_again():
+    """Nov 20, 2026: Resume Tailor is allowed as a project again (it was banned Nov 18). It lives in the bank so a tailored
+    resume can pick it; the four bases do not list it. Its bullets follow the same rules as every other project."""
     bank, _ = T.load_bank()
-    assert "resume_tailor" not in bank
-    raw = json.load(open(T.ROOT / "bank/projects.json"))
-    assert all(p["id"] not in T.NEVER_LIST_PROJECTS for p in raw)
+    rt = bank["resume_tailor"]
+    assert rt["title"] == "Resume Tailor" and rt["url"] == "https://github.com/vdkarthikeya/resume-tailor"
+    assert 2 <= len(rt["bullets"]) <= 4 and T.NEVER_LIST_PROJECTS == set()
+    for b in rt["bullets"]:
+        low = b["markup"].lower()
+        assert not T.check_bullet_text(b["markup"], ctx, 10_000), b["id"]
+        assert "built with claude" not in low and "co-created" not in low, b["id"]
+        assert "hindsight" not in low
+    master = ctx.master.lower()
+    assert all(t.lower() in master for t in rt["stack"]), [t for t in rt["stack"] if t.lower() not in master]
     for v in ("ml", "ds", "swe", "pm"):
-        tex = (T.ROOT / f"resumes/{v}.tex").read_text()
-        assert "textbf{Resume Tailor}" not in tex, v
+        assert "textbf{Resume Tailor}" not in (T.ROOT / f"resumes/{v}.tex").read_text(), v  # not on a base resume unless he adds it
+
+
+def test_resume_tailor_can_be_picked_for_a_job(tmp_path):
+    p = parsed("ml")
+    prop = T.MockProvider().tailor(p, ctx, "")
+    last = p.projects.projects[-1]
+    n = len(last.bullets)
+    prop["projects"][-1] = {"project_id": "resume_tailor", "bullets": [{"bank_id": b["id"]} for b in ctx.bank["resume_tailor"]["bullets"][:n]]}
+    plan = T.build_plan(p, prop, ctx, "ml")
+    assert not any("Projects" in w for w in plan["warnings"]), plan["warnings"]
+    assert "projects" in T.changed_slots(plan) and plan["projects"]["new"][-1]["id"] == "resume_tailor"
+    b = T.rebuild("ml", plan, tmp_path, set())
+    assert b.ok and b.pages == 1 and "Resume Tailor" in "\n".join(pg.get_text() for pg in __import__("pymupdf").open(b.pdf))
 
 
 # ---------------------------------------------------------------- speed: short answers, cacheable prompt, cheap base pick

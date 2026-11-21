@@ -41,6 +41,41 @@
     ]
   },
   {
+    "id": "resume_tailor",
+    "title": "Resume Tailor",
+    "url": "https://github.com/vdkarthikeya/resume-tailor",
+    "stack": [
+      "Python",
+      "FastAPI",
+      "LaTeX",
+      "Claude API",
+      "pytest"
+    ],
+    "suffix": "",
+    "bullets": [
+      {
+        "id": "resume_tailor_1",
+        "markup": "Built a **Python** and **FastAPI** app that tailors a one-page **LaTeX** resume to a job posting, replacing only bullet text, skills and project picks so the layout never changes.",
+        "from_resume": "swe"
+      },
+      {
+        "id": "resume_tailor_2",
+        "markup": "Wrote checks that reject any **Claude API** rewrite that lacks a verbatim quote from my own records or uses a number not found in them, then compile the PDF and test page fit and ATS parsing.",
+        "from_resume": "swe"
+      },
+      {
+        "id": "resume_tailor_3",
+        "markup": "Added a **FastAPI** job queue that runs 3 resumes at once on worker threads, fetches job links in the background and downloads each finished PDF automatically.",
+        "from_resume": "swe"
+      },
+      {
+        "id": "resume_tailor_4",
+        "markup": "Reordered the **Claude API** prompt so its long, unchanging prefix can be cached, and tested the pipeline with **pytest**, including parallel runs and failed jobs.",
+        "from_resume": "swe"
+      }
+    ]
+  },
+  {
     "id": "movie_genre",
     "title": "Movie Genre Classification",
     "url": "https://github.com/vdkarthikeya/movie-genre-classification-nlp",

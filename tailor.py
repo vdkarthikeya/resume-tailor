@@ -70,8 +70,9 @@ def numbers_in(s: str) -> set[str]:
     return {m.group(0).rstrip(",") for m in NUM_RE.finditer(s)}
 
 
-# Never listed as a resume project (his rule, Nov 18, 2026): filtered out even if someone re-adds it to the bank.
-NEVER_LIST_PROJECTS = {"resume_tailor"}
+# Project ids that are filtered out of the bank at load time. Empty since Nov 20, 2026: Resume Tailor was banned here on
+# Nov 18 and is allowed again (it is in bank/projects.json). Add an id to ban a project from every tailored resume.
+NEVER_LIST_PROJECTS: set[str] = set()
 
 
 def load_bank():
