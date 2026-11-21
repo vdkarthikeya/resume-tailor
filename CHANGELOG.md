@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-20 (measurements)
+- Real LaTeX builds with a simulated 6 s model delay, 6 jobs: 47.1 s with 1 worker, 16.2 s with 3 workers (2.9x, 66% less).
+- User prompt per call: about 82,000 to 86,300 characters (+5%), 92% cacheable. Answer ceilings per base: 1,160 to 1,380 chars of entry bullets, 650 to 1,060 chars of project bullets.
+- Tests 55 to 77, endpoints 8 to 15. Real-model timings still not measured (the sandbox Claude CLI is not signed in).
+
 ## 2026-11-20 (later still): retry, auto-track, duplicates, saved queue, email, sync check
 See the README entry of the same name. 9 new tests, 77 in total.
 
