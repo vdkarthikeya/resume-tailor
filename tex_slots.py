@@ -249,8 +249,9 @@ def parse(text: str) -> Parsed:
     # coursework
     coursework = None
     for b in _bullets_in(text, doc, len(text)):
-        if b.latex.startswith("\\textbf{Relevant Coursework:}"):
-            rest = b.latex[len("\\textbf{Relevant Coursework:}") :].strip()
+        lab = next((x for x in ("\\textbf{Relevant Coursework:}", "Relevant Coursework:") if b.latex.startswith(x)), None)
+        if lab:
+            rest = b.latex[len(lab) :].strip()
             if "\\textit{In progress:}" in rest:
                 done_part, prog_part = re.split(r"[;\s]*\\textit\{In progress:\}\s*", rest, maxsplit=1)
                 done_part = re.sub(r"[;,\s]*(?:\$\\cdot\$)?\s*$", "", done_part)
@@ -291,7 +292,7 @@ def parse(text: str) -> Parsed:
 def render_coursework(completed: list[str], in_progress: list[str]) -> str:
     """One plain list. Never writes an "In progress:" label (resume rule); in-progress courses
     are listed after the completed ones, like any other course."""
-    return "\\textbf{Relevant Coursework:} " + ", ".join(names_to_latex_list(completed + in_progress))
+    return "Relevant Coursework: " + ", ".join(names_to_latex_list(completed + in_progress))
 
 
 def render_projects(projs: list[dict]) -> str:
