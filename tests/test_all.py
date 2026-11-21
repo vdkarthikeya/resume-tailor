@@ -537,3 +537,18 @@ def test_batch_end_to_end_with_real_pdf(tmp_path, monkeypatch):
         d = c.get(f"/api/jobs/{j['id']}").json()
         assert d["ok"] and d["pages"] == 1 and d["job_id"] == j["id"] and d["timings"]["total"] >= 0
         assert c.get(j["pdf_url"]).content[:4] == b"%PDF"
+
+
+def test_queue_row_shows_tracked_flag(tmp_path, monkeypatch):
+    import tracker
+    A, c = _client(tmp_path / "o", monkeypatch)
+    monkeypatch.setattr(tracker, "LOCAL_DIR", tmp_path / "apps"); monkeypatch.setattr(tracker, "google_ready", lambda: False)
+    c.post("/api/batch", json={"items": [{"jd": JD, "base": "ml"}, {"jd": JD, "base": "swe"}], "mock": True})
+    jobs = _wait_idle(c)
+    assert [j["tracked"] for j in jobs] == [False, False]
+    r = c.post("/api/track", json={"job_id": jobs[0]["id"], "company": "Acme", "role": "ML Intern"})
+    assert r.status_code == 200
+    rows = {j["id"]: j for j in c.get("/api/jobs").json()["jobs"]}
+    assert rows[jobs[0]["id"]]["tracked"] is True and rows[jobs[0]["id"]]["company"] == "Acme" and rows[jobs[0]["id"]]["role"] == "ML Intern"
+    assert rows[jobs[1]["id"]]["tracked"] is False
+    assert c.post("/api/track", json={"job_id": jobs[1]["id"], "company": "", "role": ""}).status_code in (200, 400)  # blank boxes: falls back to the job text, else a clear error

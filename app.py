@@ -199,7 +199,7 @@ def batch(req: BatchReq):
         company, role, label = _guess_label(it.jd, it.url)
         entry = {"id": job_id, "status": "queued", "label": label, "company": company, "role": role, "url": it.url.strip(), "requested_base": it.base,
                  "base": None, "base_name": None, "created": time.time(), "started": None, "finished": None, "error": None,
-                 "ok": None, "pages": None, "fill_pct": None, "pdf_url": None, "timings": None}
+                 "ok": None, "pages": None, "fill_pct": None, "pdf_url": None, "timings": None, "tracked": False}
         with QLOCK:
             QUEUE[job_id] = entry
             FUTURES[job_id] = EXEC.submit(_run_job, job_id, it.jd, it.url.strip(), it.base, req.mock)
@@ -294,7 +294,11 @@ def track(req: TrackReq):
         m = jdmod.extract_meta(j["jd"], j.get("url", ""))
         company, role = company or m["company"], role or m["role"]
     try:
-        return tracker.log_application(j["built"].pdf, OUT / req.job_id / "resume.tex", company, role)
+        res = tracker.log_application(j["built"].pdf, OUT / req.job_id / "resume.tex", company, role)
+        with QLOCK:  # the queue row shows a "Tracked" tag, whether it was added from the row or from the tracker bar
+            if req.job_id in QUEUE:
+                QUEUE[req.job_id].update(tracked=True, company=res.get("company") or company, role=res.get("role") or role)
+        return res
     except ValueError as e:
         raise HTTPException(400, str(e))
     except Exception as e:

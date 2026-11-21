@@ -124,6 +124,9 @@
   .bell-set { border-top:1px solid var(--line); margin-top:8px; padding-top:6px; }
   .bell-set label { display:flex; gap:8px; align-items:center; margin:6px 6px; font:500 13px var(--ui); color:var(--ink); }
   .sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+  .tag { display:inline-block; padding:0 9px; border-radius:99px; border:1px solid; font:600 11px/18px var(--ui); margin-left:6px; white-space:nowrap; }
+  .tag.ok { border-color:var(--okbd); color:var(--ok); background:var(--add); } .tag.no { border-color:var(--warnbd); color:var(--warn); background:var(--del); }
+  .qrow { flex-wrap:wrap; }
   .qrow { display:flex; align-items:center; gap:10px; padding:9px 0; border-top:1px dashed var(--line); } .qrow:first-child { border-top:0; }
   .qrow.cur { box-shadow:inset 3px 0 0 var(--acc); padding-left:8px; }
   .qdot { flex:0 0 auto; width:22px; height:22px; display:grid; place-items:center; font:700 13px var(--ui); border-radius:50%; border:1.5px solid var(--line); color:var(--mute); }
@@ -133,6 +136,8 @@
   @media (prefers-reduced-motion:reduce) { .qdot.running, #bell.ring svg { animation:none; } }
   .qmain { flex:1; min-width:0; } .qname { font:600 13.5px/1.3 var(--ui); overflow-wrap:anywhere; } .qsub { font:500 12px/1.4 var(--ui); color:var(--mute); overflow-wrap:anywhere; }
   .qbtns { flex:0 0 auto; display:flex; gap:6px; } .qbtns button, .qbtns a { padding:4px 11px; font:600 12px var(--ui); border-radius:10px; }
+  .qrow .qbtns { flex:1 0 100%; padding-left:32px; flex-wrap:wrap; margin-top:-2px; }   /* buttons sit on their own line under the text */
+  .qname { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
   .qbtns a { text-decoration:none; border:1px solid var(--tan); color:var(--head); }
   details.bulk { margin:10px 0 0; } details.bulk summary { cursor:pointer; font:600 12.5px var(--ui); color:var(--mute); } details.bulk textarea { min-height:90px; margin-top:8px; }
   @media (max-width:980px) { #bell { right:68px; top:18px; } .bell-panel { right:16px; top:68px; } }
@@ -460,21 +465,28 @@ function renderQueue() {
     const st = e.status, t = nowS();
     const dot = st === 'done' ? '✓' : st === 'failed' || st === 'error' ? '✕' : st === 'cancelled' ? '–' : '';
     const sub = st === 'queued' ? 'Waiting for a free slot' : st === 'running' ? `Working, ${fmt(t - e.started)}`
-      : st === 'done' ? `${esc(e.base_name || '')} · ${e.pages} page${e.pages === 1 ? '' : 's'} · took ${fmt(e.finished - e.started)}`
+      : st === 'done' ? `${esc(e.base_name || '')} · ${e.pages} page${e.pages === 1 ? '' : 's'} · took ${fmt(e.finished - e.started)}<span class="tag ${e.tracked ? 'ok' : 'no'}">${e.tracked ? '✓ Tracked' : 'Not tracked'}</span>`
       : st === 'cancelled' ? 'Cancelled' : `<span class="err">${esc((e.error || 'Failed').slice(0, 160))}</span>`;
-    const btns = st === 'done' ? `<button type="button" data-open="${e.id}">Open</button><a href="${e.pdf_url}" download>PDF</a>`
+    const btns = st === 'done' ? `<button type="button" data-open="${e.id}">Open</button><a href="${e.pdf_url}" download>PDF</a>${e.tracked ? '' : `<button type="button" class="qtrack" data-track="${e.id}">Add to tracker</button>`}`
       : st === 'failed' ? `<button type="button" data-open="${e.id}">Open</button>`
       : st === 'queued' ? `<button type="button" data-cancel="${e.id}">Cancel</button>` : '';
     return `<div class="qrow ${job && job.job_id === e.id ? 'cur' : ''}"><span class="qdot ${st}" aria-hidden="true">${dot}</span><div class="qmain"><div class="qname">${esc(e.label)}</div><div class="qsub">${sub}</div></div><div class="qbtns">${btns}</div></div>`;
   }).join('');
   $('queueList').querySelectorAll('[data-open]').forEach(b => b.onclick = () => openJob(b.dataset.open));
+  $('queueList').querySelectorAll('[data-track]').forEach(b => b.onclick = async () => {   // log straight from the row, using the company and role we detected
+    const e = queue.find(x => x.id === b.dataset.track); if (!e) return;
+    b.disabled = true; b.textContent = 'Adding...';
+    try { await api('/api/track', {job_id: e.id, company: e.company || '', role: e.role || ''}); }
+    catch (err) { await openJob(e.id); const m = $('trackmsg'); m.className = 'msg err'; m.textContent = err.message + ' Fill in the company and role, then press Add to tracker.'; $('tco').focus(); }
+    poll();
+  });
   $('queueList').querySelectorAll('[data-cancel]').forEach(b => b.onclick = async () => { try { await api(`/api/jobs/${b.dataset.cancel}/cancel`, {}); } catch (e) {} poll(); });
 }
 setInterval(() => { if (queue.some(e => e.status === 'running')) renderQueue(); }, 1000);   // keeps the elapsed timers moving
 $('queueClear').onclick = async () => { try { const d = await api('/api/jobs/clear', {}); onQueue(d.jobs); } catch (e) {} };
 
 async function openJob(id) {
-  try { job = await api('/api/jobs/' + id); dirty.tco = dirty.trole = false; jdMeta.company = (job.meta && job.meta.company) || ''; render(true); renderQueue(); window.scrollTo({top: 0, behavior: 'smooth'}); }
+  try { job = await api('/api/jobs/' + id); dirty.tco = dirty.trole = false; jdMeta.company = (job.meta && job.meta.company) || ''; render(true); renderQueue(); const q = queue.find(x => x.id === id); if (q && q.tracked) { $('trackmsg').className = 'msg okc'; $('trackmsg').textContent = 'Already added to your tracker.'; } window.scrollTo({top: 0, behavior: 'smooth'}); }
   catch (e) { const m = $('genmsg'); m.className = 'msg err'; m.textContent = e.message; }
 }
 
@@ -586,7 +598,7 @@ $('track').onclick = async () => {
   try {
     const r = await api('/api/track', {job_id: job.job_id, company: $('tco').value, role: $('trole').value});
     $('tco').value = r.company || $('tco').value; $('trole').value = r.role || $('trole').value; setDl();
-    m.className = 'msg okc';
+    m.className = 'msg okc'; poll();
     m.innerHTML = r.mode === 'google' ? `Added ${esc(r.company)}: ${esc(r.role)}. <a href="${r.drive_url}" target="_blank">Resume PDF</a> · <a href="${r.sheet_url}" target="_blank">Open sheet</a>` : `Saved locally: ${esc(r.job)}`;
   } catch (e) { m.className = 'msg err'; m.textContent = e.message; }
   $('track').disabled = false;
