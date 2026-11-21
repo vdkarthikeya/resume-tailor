@@ -60,7 +60,7 @@
       },
       {
         "id": "resume_tailor_2",
-        "markup": "Rejects any Claude API rewrite whose quote or number is not in my records, then checks page fit and ATS parsing.",
+        "markup": "Rejects any Claude API rewrite with a quote or number missing from the Master Doc, then checks page fit and ATS parsing.",
         "from_resume": "swe"
       },
       {

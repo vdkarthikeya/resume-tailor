@@ -726,3 +726,18 @@ def test_no_bold_in_bullets():
             if m and "Relevant Coursework" not in line:
                 mk = TS.latex_to_markup(m.group(1))
                 assert "textbf" not in m.group(1) and "**" not in mk, (v, mk[:70])
+
+
+def test_nov21_resume_rules():
+    """Nov 21, 2026: Guang Labs and IDX Exchange have the same number of bullets on every version, CDSS is spelled out, every GitHub link is underlined."""
+    import re
+    def bullets(tex, org):
+        m = re.search(r"\\resumeCompactHeading\s*\{" + re.escape(org) + r"\}.*?\\resumeItemListEnd", tex, re.S)
+        return len(re.findall(r"\\resumeItem\{", m.group(0))) if m else None
+    for v in ("ml", "ds", "swe", "pm"):
+        tex = (T.ROOT / f"resumes/{v}.tex").read_text()
+        g, i = bullets(tex, "Guang Labs"), bullets(tex, "IDX Exchange")
+        assert g is None or i is None or g == i, (v, "Guang Labs", g, "IDX", i)
+        assert "{UC Berkeley CDSS}" not in tex and "UC Berkeley College of Computing, Data Science, and Society" in tex, v
+        for m in re.finditer(r"(\\uline\{)?GitHub\}", tex):
+            assert m.group(1), (v, "GitHub link is not underlined")

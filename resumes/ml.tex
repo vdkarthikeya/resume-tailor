@@ -112,7 +112,7 @@
 
 \newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
-\newcommand{\resumeItemListStart}{\begin{itemize}[itemsep=2.5pt, topsep=1pt]}
+\newcommand{\resumeItemListStart}{\begin{itemize}[itemsep=2pt, topsep=1pt]}
 \newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-4pt}}
 
 %-------------------------------------------
@@ -163,9 +163,10 @@
     \resumeCompactHeading
         {Guang Labs}{Engineering Intern}{Remote}{May 2026 - Aug 2026}
         \resumeItemListStart
-             \resumeItem{Engineered a service for an AI video startup that sorts images and videos by content type (sports, gaming, talking, music) using Gemini, retrying uncertain or malformed responses.}
+             \resumeItem{Engineered a service for an AI video startup that sorts images and videos into 6 content types using Gemini, retrying uncertain long-video results up to 10 times.}
+             \resumeItem{Stored each label, confidence score, and reasoning in a PostgreSQL table so the team can audit every result.}
              \resumeItem{Validated the service end to end with real video clips after code review, and expanded the automated test suite from 38 to 86 tests using Pydantic schemas and a deterministic fake provider.}
-             \resumeItem{Developed an in-app notification bell that alerts users when their video finishes processing or fails.}
+             \resumeItem{Developed an in-app notification bell with 6 notification types that alerts users when their video finishes processing or fails.}
         \resumeItemListEnd
 
     \resumeCompactHeading

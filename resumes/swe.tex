@@ -112,7 +112,7 @@
 
 \newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
-\newcommand{\resumeItemListStart}{\begin{itemize}[itemsep=2.5pt, topsep=1pt]}
+\newcommand{\resumeItemListStart}{\begin{itemize}[itemsep=2pt, topsep=1pt]}
 \newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-4pt}}
 
 %-------------------------------------------
@@ -153,17 +153,18 @@
     \resumeCompactHeading
         {Guang Labs}{Engineering Intern}{Remote}{May 2026 - Aug 2026}
         \resumeItemListStart
-             \resumeItem{Engineered a backend REST API service for an AI video startup that classifies a user's image or video by content type (sports, gaming, talking) using the Gemini API.}
+             \resumeItem{Engineered a REST API service for an AI video startup that sorts images and videos into 6 content types using Gemini.}
              \resumeItem{Architected an asynchronous submit-and-poll workflow that processes long videos in the background rather than blocking users (FastAPI, PostgreSQL, Auth0).}
              \resumeItem{Delivered the service end to end after code review, supporting uploads from 4 sources (local, S3, web links) and validating it with 86 automated tests.}
-             \resumeItem{Developed an in-app notification bell, from the database to the React interface, that alerts users when their video finishes processing or fails, and ensured failures never disrupt processing or send duplicate alerts on retries.}
+             \resumeItem{Developed an in-app notification bell (6 notification types, database to React interface) that alerts users when videos finish or fail, without disrupting processing or duplicating alerts on retries.}
         \resumeItemListEnd
 
     \resumeCompactHeading
         {IDX Exchange}{Data Science Intern}{Remote}{Jun 2026 - Aug 2026}
         \resumeItemListStart
             \resumeItem{Engineered a pipeline predicting California home prices from 143K records, typically within 8.6\% of actual price.}
-            \resumeItem{Benchmarked four model types and selected a tuned XGBoost (R\textsuperscript{2} of 0.88), resolving a data leakage bug and cutting a simpler model's error from 29\% to 15\% with a school district feature.}
+            \resumeItem{Benchmarked four model types and selected a tuned XGBoost (R\textsuperscript{2} of 0.88), resolving a data leakage bug that had invalidated early results.}
+            \resumeItem{Cut a simpler model's error from 29\% to 15\% by adding a school district feature (spatial join of 937 districts).}
             \resumeItem{Found weak spots by price band: luxury homes (13\% error vs. 6.5\% mid-priced) and low-sales towns.}
         \resumeItemListEnd
 
@@ -198,7 +199,7 @@
             {\textbf{Resume Tailor} $|$ \emph{Python, FastAPI, LaTeX, Claude API, pytest} \hfill \href{https://github.com/vdkarthikeya/resume-tailor}{\uline{GitHub}}}
         \resumeItemListStart
             \resumeItem{Built a Python and FastAPI app that tailors a one-page LaTeX resume to a job posting; 92\% of its Claude API prompt is cacheable and 77 pytest tests cover it.}
-            \resumeItem{Rejects any Claude API rewrite whose quote or number is not in my records, then checks page fit and ATS parsing.}
+            \resumeItem{Rejects any Claude API rewrite with a quote or number missing from the Master Doc, then checks page fit and ATS parsing.}
             \resumeItem{Added a job queue (25 jobs, 3 at a time) with auto-download and a notification bell; 8 test jobs took 47\% less time.}
         \resumeItemListEnd
 

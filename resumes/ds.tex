@@ -112,7 +112,7 @@
 
 \newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
-\newcommand{\resumeItemListStart}{\begin{itemize}[itemsep=2.5pt, topsep=1pt]}
+\newcommand{\resumeItemListStart}{\begin{itemize}[itemsep=2pt, topsep=1pt]}
 \newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-4pt}}
 
 %-------------------------------------------
@@ -164,8 +164,9 @@
         {Guang Labs}{Engineering Intern}{Remote}{May 2026 - Aug 2026}
         \resumeItemListStart
              \resumeItem{Engineered a service for an AI video startup that classifies videos and images by type (sports, gaming, talking) using Gemini, retrying uncertain or malformed responses on different clips, up to 10 attempts.}
+             \resumeItem{Built an asynchronous submit-and-poll API that processes long videos in the background, so users get a job ID right away instead of waiting.}
              \resumeItem{Stored each label, confidence score, and reasoning in a PostgreSQL table for auditing, backed by 86 tests.}
-             \resumeItem{Developed an in-app notification bell that alerts users when their video finishes processing or fails.}
+             \resumeItem{Developed an in-app notification bell with 6 notification types that alerts users when their video finishes processing or fails.}
         \resumeItemListEnd
 
         \resumeCompactHeading
