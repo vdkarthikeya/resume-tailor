@@ -739,5 +739,6 @@ def test_nov21_resume_rules():
         g, i = bullets(tex, "Guang Labs"), bullets(tex, "IDX Exchange")
         assert g is None or i is None or g == i, (v, "Guang Labs", g, "IDX", i)
         assert "{UC Berkeley CDSS}" not in tex and "UC Berkeley College of Computing, Data Science, and Society" in tex, v
+        assert "UC Berkeley EECS" not in tex and ("CS 61A" not in tex or "UC Berkeley Electrical Engineering and Computer Sciences" in tex), v  # EECS spelled out for context
         for m in re.finditer(r"(\\uline\{)?GitHub\}", tex):
             assert m.group(1), (v, "GitHub link is not underlined")
