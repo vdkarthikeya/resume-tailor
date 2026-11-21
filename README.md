@@ -148,6 +148,11 @@ The repo copy of `apps_script.gs` ships a placeholder token. Replace it with you
 Project headings can be either style: linked title with arrow (`\textbf{\href{url}{\uline{Title}}\lk}`) or plain bold title with an underlined GitHub link at the right edge (`\hfill \href{url}{\uline{GitHub}}`). The app reads both and writes back in the style your file uses. Experience headings can be linked or plain. Delete any base file from `resumes/` to hide that option in the app.
 
 ## Changelog
+### Nov 20, 2026 (Next Step speed update recorded)
+- `master_doc.md` Next Step entry now covers the Nov 20 speed update (streaming replies, only the matching source notes sent, paid-path caching, repeat-answer caching skipped on purpose) with its numbers: prompt 2,761 to 1,941 tokens on 30 test questions (29.7% fewer; 39.1% on the 23 that match a topic), first words 1.43 s (27%) earlier on a mock at Cloudflare's published speed, about 109 to 142 to 158 chat replies a day (computed). Counts re-verified from the repo: 129 browser checks (the old 34 was stale), 28 commits, about 3,400 lines.
+- Bank bullets for Next Step use 3,400 lines, streaming, 30% smaller prompt on 30 test questions, and 129 checks. Base resumes are unchanged (their Next Step bullets are still true). The website line says chat replies stream.
+- The timing claims rest on a published benchmark, not on the live site; `master_doc.md` says not to quote a live time saving until it is timed in the browser.
+
 ### Nov 20, 2026 (later: retry, auto-track, duplicates, saved queue, email, sync check)
 - **Retry** button on failed, errored and cancelled queue rows (`POST /api/jobs/{id}/retry`, re-runs from the saved `out/<id>/job.json`).
 - **Auto-track** switch (`auto_track` on `/api/batch`): finished resumes are logged to the tracker without a click; a company and role already logged is skipped and tagged "Already logged". The Add to tracker button asks before logging a duplicate (`force` on `/api/track`).

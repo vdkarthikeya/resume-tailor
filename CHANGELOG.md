@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-11-20 (Next Step update recorded)
+- Master Doc, bank and README updated for the Next Step speed update (commit 962452a in nextstep-wildfire/next-step). 129 checks, 28 commits, about 3,400 lines, prompt 29.7% smaller on 30 test questions.
+
 ## 2026-11-20 (measurements)
 - Real LaTeX builds with a simulated 6 s model delay, 6 jobs: 47.1 s with 1 worker, 16.2 s with 3 workers (2.9x, 66% less).
 - User prompt per call: about 82,000 to 86,300 characters (+5%), 92% cacheable. Answer ceilings per base: 1,160 to 1,380 chars of entry bullets, 650 to 1,060 chars of project bullets.
