@@ -2,7 +2,7 @@
 
 Running log of what we do in each **Cursor / Claude Code** session on this repo (same idea as the website and Fung Fellowship agent projects). **Newest entry at the top.**
 
-Required by [`CLAUDE.md`](../CLAUDE.md): skim at session start; append at session end via [session-log](../.claude/skills/session-log/SKILL.md).
+Required by [`CLAUDE.md`](../CLAUDE.md): read at session start; when the user says **wrap up**, append via [session-log](../.claude/skills/session-log/SKILL.md).
 
 ---
 

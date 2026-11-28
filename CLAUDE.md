@@ -18,11 +18,11 @@ Local tool: paste a job → tailor a one-page LaTeX resume using only facts from
 
 ## Session log (every chat)
 
-Same habit as the website and Fung Fellowship agent projects: keep a running log of what we did in the coding tool so the next session is not cold.
+Same habit as the website and Fung Fellowship agent projects. The log file is [`docs/RUNNING_NOTES.md`](docs/RUNNING_NOTES.md) — **always look there** for prior context.
 
-1. **Start of session:** skim [`docs/RUNNING_NOTES.md`](docs/RUNNING_NOTES.md) (at least the newest entry).
-2. **End of session** (or after a big decision): append a new entry via the [session-log](.claude/skills/session-log/SKILL.md) skill — Context / Done / Decisions / Open.
-3. Commit the note with the rest of the work.
+1. **Start of every session:** read [`docs/RUNNING_NOTES.md`](docs/RUNNING_NOTES.md) (at least the newest entry) before doing other work, so you know what we already decided and what is still open.
+2. **When the user says "wrap up"** (or equivalent end-of-chat): append a new entry at the top of that file via the [session-log](.claude/skills/session-log/SKILL.md) skill — Context / Done / Decisions / Open. Commit it with any other unfinished changes.
+3. Mid-session: also append after a major decision if the chat will continue later.
 
 ## Hard rules (always)
 
