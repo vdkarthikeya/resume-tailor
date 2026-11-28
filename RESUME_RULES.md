@@ -6,16 +6,40 @@ Do **not** commit or send until all four steps pass. Run them in **one chat**, i
 
 Adapted from [Sabrina Ramonov’s 4-prompt chain](https://substack.com/@sabrinaramonov/note/c-241937172). Honesty, Master Doc evidence, and layout rules below are this project’s.
 
+## Target bases (decision)
+
+Keep **two** public / maintained tracks — not four:
+
+| Base | Use for | Status |
+|---|---|---|
+| **SWE** (`resumes/swe.tex`) | Software engineer, backend, full-stack, infra | Keep |
+| **ML/DS** (merge of today’s `ml.tex` + `ds.tex`) | ML engineer, applied ML, data scientist, analytics | Keep as one track |
+| **PM** (`resumes/pm.tex`) | Product / program | **Retire** — not a target path |
+
+**Do not keep separate hosted ML and DS resumes.** One strong technical ML/DS base is enough: lead ML-first (models, PyTorch, SightLine, IDX) and let Resume Tailor reorder bullets / swap bank projects toward stats or analytics when the JD is a pure DS role. Splitting ML vs DS only adds maintenance and dilutes the brand when the goal is to look technically deep, not product-shaped.
+
+Until the merge lands in code, still keep `ml.tex` and `ds.tex` in sync with each other on shared facts; do not invest in new PM content.
+
+## Content sync (always with wording changes)
+
+When you (or an agent) update resume content, update **all** of these in the same change set — not “later”:
+
+1. **`master_doc.md`** — every new real fact, metric, tool, or wording decision goes here first (and into the Claude Doc “Master Doc: Everything I've Done”). No resume line may cite a number that is missing from the Master Doc.
+2. **Bases / bank** — `resumes/*.tex`, `bank/projects.json`, `bank/courses.json` as needed.
+3. **Website** — [vdkarthikeya.github.io](https://github.com/vdkarthikeya/vdkarthikeya.github.io): copy matching `resumes/src/resume_*.tex`, rebuild hosted PDFs under `resumes/`, and update site project copy in `data.js` when titles/bullets change. Verify with `python scripts/sync_check.py --site <clone of vdkarthikeya.github.io>`.
+
+Skip the website only for pure tool-code changes with zero resume wording change.
+
 ## When it applies
 
-| Change | Gate required? |
-|---|---|
-| Base resume bullets / skills / coursework (`resumes/*.tex`) | Yes |
-| Project bank bullets (`bank/projects.json`) | Yes |
-| Course bank (`bank/courses.json`) when names affect resume wording | Yes |
-| Post-tailor review before apply / tracker / send | Yes |
-| Master Doc fact sync with no resume wording change | No (still keep facts honest) |
-| Code-only tool changes (`tailor.py`, `ats.py`, …) | No |
+| Change | Gate required? | Also sync Master Doc + site? |
+|---|---|---|
+| Base resume bullets / skills / coursework (`resumes/*.tex`) | Yes | Yes |
+| Project bank bullets (`bank/projects.json`) | Yes | Yes |
+| Course bank (`bank/courses.json`) when names affect resume wording | Yes | Yes (Master Doc; site if hosted copy shows it) |
+| Post-tailor review before apply / tracker / send | Yes | Master Doc if new facts; site only if a base/PDF changed |
+| Master Doc fact sync with no resume wording change | No (still keep facts honest) | Master Doc only |
+| Code-only tool changes (`tailor.py`, `ats.py`, …) | No | No |
 
 ## Non-negotiables
 
@@ -171,19 +195,22 @@ Be blunt. Do not soften a no.
 
 Complete in order before `git commit` / send:
 
-1. **Master Doc:** Add any newly confirmed real metrics or facts from clarifying answers to `master_doc.md` (and the Claude Doc source).
-2. **Bases / bank:** Apply accepted before/after wording to the right `resumes/*.tex` and/or `bank/projects.json` (approved bullets only; keep one page; ≤3 projects).
+1. **Master Doc:** Add any newly confirmed real metrics or facts from clarifying answers to `master_doc.md` (and the Claude Doc source). **Required on every content update** — not optional / later.
+2. **Bases / bank:** Apply accepted before/after wording to the active bases (`swe` + ML/DS track) and/or `bank/projects.json` (approved bullets only; keep one page; ≤3 projects). Do not add new PM-only content.
 3. **Skills / coursework:** Only Master Doc–supported items; coursework from `bank/courses.json` only; no “In progress” labels.
-4. **Tests:** `pytest tests` (needs LaTeX). Fix failures before commit.
-5. **Tailor for this JD:** Run Resume Tailor so the automated gate (evidence quotes, banned claims, page fit, ATS parse) still passes.
-6. **Final skim:** Re-read the compiled PDF plain text once. If Step 4’s doubt is still visible, do not send.
+4. **Website:** Sync `vdkarthikeya.github.io` (`resumes/src/`, hosted PDFs, `data.js` if project copy changed). Run `python scripts/sync_check.py --site <site clone>`.
+5. **Tests:** `pytest tests` (needs LaTeX). Fix failures before commit.
+6. **Tailor for this JD:** Run Resume Tailor so the automated gate (evidence quotes, banned claims, page fit, ATS parse) still passes.
+7. **Final skim:** Re-read the compiled PDF plain text once. If Step 4’s doubt is still visible, do not send.
 
 ```text
 [ ] Steps 1–4 passed in one chat for this JD
 [ ] Score ≥ 80% (or true-gap ceiling documented)
 [ ] Hiring manager = interview yes (doubt fixed)
-[ ] Master Doc updated for any new real facts
+[ ] master_doc.md (+ Claude Doc) updated for any new real facts
 [ ] resumes/*.tex and/or bank/ updated
+[ ] vdkarthikeya.github.io src + PDFs (+ data.js if needed) synced
+[ ] sync_check.py --site green
 [ ] pytest green
 [ ] Tailored PDF reviewed; ready to send
 ```
@@ -193,7 +220,8 @@ Complete in order before `git commit` / send:
 | Layer | Role |
 |---|---|
 | `RESUME_RULES.md` (this file) | Human/agent QA before wording is trusted |
-| `master_doc.md` | Only allowed facts |
+| `master_doc.md` | Only allowed facts; must stay in lockstep with resume edits |
+| `vdkarthikeya.github.io` | Public hosted bases/PDFs; must match repo after wording changes |
 | `tailor.py` SYSTEM + validators | Automated evidence, bans, XYZ, one-page fit |
 | `ats.py` | Keyword coverage + PDF parse check after compile |
 

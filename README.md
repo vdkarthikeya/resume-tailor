@@ -94,10 +94,10 @@ This is a local tool on purpose. It needs LaTeX installed, it reads a Master Doc
 ---
 
 ## Keeping it up to date (GitHub workflow)
-0. **Every resume wording change must pass [`RESUME_RULES.md`](RESUME_RULES.md)** (map company language → rewrite → score ≥80% → 10-second hiring-manager skim) before you commit or send. Applies to base `.tex`, bank bullets, and tailored PDFs you are about to apply with.
-1. Change something real in your life, update the Claude Doc "Master Doc: Everything I've Done".
-2. Export it as Markdown and replace `master_doc.md` (or ask Claude: "sync the tool's master_doc.md with the Master Doc").
-3. Edit the matching base in `resumes/*.tex` (keep it one page) and any new project in `bank/projects.json`.
+0. **Every resume wording change must pass [`RESUME_RULES.md`](RESUME_RULES.md)** (map company language → rewrite → score ≥80% → 10-second hiring-manager skim) before you commit or send. Applies to base `.tex`, bank bullets, and tailored PDFs you are about to apply with. Target lineup: **SWE + one ML/DS track**; retire PM; do not keep separate hosted ML and DS resumes long-term.
+1. Change something real in your life, update the Claude Doc "Master Doc: Everything I've Done", then export/replace `master_doc.md` in the same change set as the resume edit (agents must not leave Master Doc stale).
+2. Edit the matching base in `resumes/*.tex` (keep it one page) and any new project in `bank/projects.json`.
+3. Sync the website repo [vdkarthikeya.github.io](https://github.com/vdkarthikeya/vdkarthikeya.github.io): copy `resumes/src/resume_*.tex`, rebuild hosted PDFs, update `data.js` if project copy changed. Check with `python scripts/sync_check.py --site <site clone>`.
 4. `pytest tests` (needs LaTeX). It fails if a base is over 3 projects, spills to 2 pages, has an ATS parse problem, or a bank bullet breaks a rule.
 5. `git add -A && git commit -m "..." && git push`. CI runs the same tests.
 
