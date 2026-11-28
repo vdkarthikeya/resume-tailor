@@ -69,6 +69,7 @@ These screenshots are a real run against a sample ML internship posting.
 | `ats.py` | Keyword match and PDF parse checks |
 | `tracker.py`, `apps_script.gs` | Application tracker |
 | `master_doc.md`, `bank/` | Your evidence and approved projects and courses |
+| `RESUME_RULES.md` | Mandatory QA gate (4-step prompts) before any resume wording change is committed or sent |
 
 ## Quick start
 
@@ -93,6 +94,7 @@ This is a local tool on purpose. It needs LaTeX installed, it reads a Master Doc
 ---
 
 ## Keeping it up to date (GitHub workflow)
+0. **Every resume wording change must pass [`RESUME_RULES.md`](RESUME_RULES.md)** (map company language → rewrite → score ≥80% → 10-second hiring-manager skim) before you commit or send. Applies to base `.tex`, bank bullets, and tailored PDFs you are about to apply with.
 1. Change something real in your life, update the Claude Doc "Master Doc: Everything I've Done".
 2. Export it as Markdown and replace `master_doc.md` (or ask Claude: "sync the tool's master_doc.md with the Master Doc").
 3. Edit the matching base in `resumes/*.tex` (keep it one page) and any new project in `bank/projects.json`.
