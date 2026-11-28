@@ -71,7 +71,8 @@ These screenshots are a real run against a sample ML internship posting.
 | `master_doc.md`, `bank/` | Your evidence and approved projects and courses |
 | `RESUME_RULES.md` | Mandatory QA gate (4-step prompts) before any resume wording change is committed or sent |
 | `CLAUDE.md` | Always-on session brief for Cursor and Claude Code; links to `.claude/skills/` |
-| `.claude/skills/` | On-demand skills (`resume-qa`, `resume-content-sync`) |
+| `.claude/skills/` | On-demand skills (`session-log`, `resume-qa`, `resume-content-sync`) |
+| `docs/RUNNING_NOTES.md` | Per-session agent work log (newest first); append every chat |
 
 ## Quick start
 

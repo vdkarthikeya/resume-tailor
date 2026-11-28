@@ -13,7 +13,16 @@ Local tool: paste a job → tailor a one-page LaTeX resume using only facts from
 | `bank/` | Approved projects and courses |
 | `tailor.py` | Model prompt, bans, fit loop |
 | `RESUME_RULES.md` | Mandatory 4-step QA gate before wording ships |
+| `docs/RUNNING_NOTES.md` | Running log of every agent coding session (newest first) |
 | `vdkarthikeya.github.io` | Hosted resumes/PDFs — must stay in sync |
+
+## Session log (every chat)
+
+Same habit as the website and Fung Fellowship agent projects: keep a running log of what we did in the coding tool so the next session is not cold.
+
+1. **Start of session:** skim [`docs/RUNNING_NOTES.md`](docs/RUNNING_NOTES.md) (at least the newest entry).
+2. **End of session** (or after a big decision): append a new entry via the [session-log](.claude/skills/session-log/SKILL.md) skill — Context / Done / Decisions / Open.
+3. Commit the note with the rest of the work.
 
 ## Hard rules (always)
 
@@ -23,6 +32,7 @@ Local tool: paste a job → tailor a one-page LaTeX resume using only facts from
 - Job keywords only when earned; true gaps stay gaps.
 - One page; evidence quotes for rewrites; `pytest` before commit.
 - Every resume **wording** change updates `master_doc.md` **and** the website in the same change set.
+- Every agent session updates `docs/RUNNING_NOTES.md`.
 
 ## Skills (read when relevant)
 
@@ -30,6 +40,7 @@ Skills live under [`.claude/skills/`](.claude/skills/). Cursor and Claude Code d
 
 | Skill | When to use |
 |---|---|
+| [session-log](.claude/skills/session-log/SKILL.md) | End of every session — append to `docs/RUNNING_NOTES.md` |
 | [resume-qa](.claude/skills/resume-qa/SKILL.md) | Any resume wording change, base/bank edit, or pre-send review — run the 4-step gate |
 | [resume-content-sync](.claude/skills/resume-content-sync/SKILL.md) | After accepted wording: sync Master Doc, bases/bank, and `vdkarthikeya.github.io` |
 
