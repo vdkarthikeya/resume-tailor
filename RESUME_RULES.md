@@ -6,6 +6,8 @@ Do **not** commit or send until all four steps pass. Run them in **one chat**, i
 
 Adapted from [Sabrina Ramonov’s 4-prompt chain](https://substack.com/@sabrinaramonov/note/c-241937172). Honesty, Master Doc evidence, and layout rules below are this project’s.
 
+Session entrypoint for Cursor / Claude Code: [`CLAUDE.md`](CLAUDE.md) (always loaded). On-demand skill: [`.claude/skills/resume-qa/SKILL.md`](.claude/skills/resume-qa/SKILL.md).
+
 ## Target bases (decision)
 
 Keep **two** public / maintained tracks — not four:

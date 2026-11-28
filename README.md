@@ -70,6 +70,8 @@ These screenshots are a real run against a sample ML internship posting.
 | `tracker.py`, `apps_script.gs` | Application tracker |
 | `master_doc.md`, `bank/` | Your evidence and approved projects and courses |
 | `RESUME_RULES.md` | Mandatory QA gate (4-step prompts) before any resume wording change is committed or sent |
+| `CLAUDE.md` | Always-on session brief for Cursor and Claude Code; links to `.claude/skills/` |
+| `.claude/skills/` | On-demand skills (`resume-qa`, `resume-content-sync`) |
 
 ## Quick start
 
